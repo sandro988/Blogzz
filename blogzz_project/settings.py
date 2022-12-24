@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Local
     "accounts.apps.AccountsConfig",
+    "blogs.apps.BlogsConfig",
 ]
 
 # A model that will be used in this project instead of default User model
