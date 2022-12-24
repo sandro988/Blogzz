@@ -3,5 +3,5 @@ from .views import HomePageView, BlogsDetailView
 
 urlpatterns = [
     path("", HomePageView.as_view(), name="home"),
-    path("<uuid:pk>/", BlogsDetailView.as_view(), "book_detail"),
+    path("<uuid:pk>/", BlogsDetailView.as_view(), name="blog_detail"),
 ]

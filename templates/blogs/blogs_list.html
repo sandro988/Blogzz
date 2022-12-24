@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Blogzz{% endblock title %}
+
+{% block content %}
+
+    <h1>Blogs</h1>
+
+    {% for blog in blog_list %}
+        <h2><a href="{{ blog.get_absolute_url }}">{{ blog.blog_title }}</a></h2>
+        <small>@{{ blog.author }} | {{ blog.blog_created|timesince }}</small>
+        <p>{{ blog.blog_body }}</p>
+    {% empty %}
+        <h2>No blogs yet</h2>
+    {% endfor %}
+{% endblock content %}
