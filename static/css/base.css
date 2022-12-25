@@ -1,3 +1,139 @@
-h1 {
-    color: red;
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
 }
+
+body {
+    background-color: #f1f1f1;
+    font-family: "Poppins", sans-serif;
+}
+
+.hidden {
+    display: none;
+    
+}
+
+.flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+a {
+    text-decoration: none;
+    color: black
+}
+
+nav {
+    padding: 20px 8vw;
+    background-color: #f1f1f1;
+}
+
+.blogzz-logo {
+    gap: 15px;
+}
+
+.blogzz-logo p {
+    font-family: "Limelight", cursive;
+    font-size: 25px;
+}
+
+.hamburger-div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+}
+
+.hamburger-div:hover {
+    cursor: pointer;
+}
+
+.middle-links {
+    width: 100%;
+}
+
+.hamburger-line {
+    display: block;
+    width: 50px;
+    height: 2px;
+    background-color: black;
+    transition: .20s width ease-in-out;
+}
+
+.shrink-second-line,
+.shrink-fourth-line {
+    width: 40px;
+    transition: .25s width ease-in-out;
+}
+
+.shrink-third-line {
+    width: 30px;
+    transition: .20s width ease-in-out;
+}
+
+.burger-clicked {
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 20vh;
+}
+
+
+/* underline effect on navbar link hover */
+
+.nav-link {
+    position: relative;
+    display: inline-block;
+}
+
+.nav-link:after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: black;
+    transform-origin: bottom right;
+    transition: transform 0.20s ease-out;
+}
+
+.nav-link:hover:after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+.left-links, .right-links {
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    font-size: 20px;
+}
+
+.black-btn {
+    background-color: black;
+    color: white;
+    border: 2px solid black;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    transition: 0.20s background-color ease-in-out,
+                0.25s color ease-in-out;
+}
+
+.black-btn:hover {
+    background-color: white;
+    color: black;
+    cursor: pointer;
+}
+
+
+
+

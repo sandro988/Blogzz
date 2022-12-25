@@ -33,7 +33,7 @@ class BlogTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Intermediate Python")
-        self.assertTemplateUsed(response, "blogs/blogs_list.html")
+        self.assertTemplateUsed(response, "blogs/home.html")
     
     def test_blogs_detail_view(self):
         response = self.client.get(self.blog.get_absolute_url())

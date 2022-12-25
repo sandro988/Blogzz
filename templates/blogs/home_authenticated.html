@@ -1,9 +1,6 @@
-{% extends 'base.html' %}
 
-{% block title %}Blogzz{% endblock title %}
 
 {% block content %}
-
     <h1>Blogs</h1>
 
     {% for blog in blog_list %}
@@ -13,4 +10,4 @@
     {% empty %}
         <h2>No blogs yet</h2>
     {% endfor %}
-{% endblock content %}
+{% endblock content %}  

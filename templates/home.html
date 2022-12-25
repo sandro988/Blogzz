@@ -1,8 +1,20 @@
 {% extends 'base.html' %}
 
-{% block title %}Blogzz{% endblock title %}
+{% block title %}
+
+    {% if user.is_authenticated %}
+        Blogzz | Home
+    {% else %}
+        Blogzz
+    {% endif %}
+
+{% endblock title %}
 
 {% block content %}
-    <h1>Homepage</h1>
+    {% if user.is_authenticated %}
+        {% include 'blogs/home_authenticated.html' %}
+    {% else %}
+        {% include 'home_not_authenticated.html' %}
+    {% endif %}
 {% endblock content %}
 
