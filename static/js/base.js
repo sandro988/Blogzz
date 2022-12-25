@@ -42,7 +42,20 @@ hamburgerMenu.addEventListener("click", function () {
 
 
 window.addEventListener("resize", function () {
-    if (window.innerWidth >= 850) {
+    
+    if (window.innerWidth > 1100) {
         navbar.classList.remove("burger-clicked");
+        leftNavLinks.classList.remove("hidden");
+        rightNavLinks.classList.remove("hidden")
+        leftNavLinks.style.display = "flex"
+        rightNavLinks.style.display = "flex"
+    } else {
+        if (!navbar.classList.contains("burger-clicked")) {
+            navbar.classList.remove("burger-clicked");
+            leftNavLinks.classList.add("hidden");
+            rightNavLinks.classList.add("hidden");
+            leftNavLinks.style.display = "none"
+            rightNavLinks.style.display = "none"
+        }
     }
 })

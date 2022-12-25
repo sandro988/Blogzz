@@ -1,35 +1,62 @@
-{% extends 'base.html' %}
-{% load static %}
+{% extends 'base.html' %} 
+{% load static %} 
 
 {% block content %}
-    <header>
-        <nav class="navbar flex">
-            <div class="left-links hidden">
-                <a href="#" class="nav-link">About</a>
-                <a href="#" class="nav-link">Featured</a>
-                <a href="#" class="nav-link">Contact</a>
+<header>
+    <nav class="navbar flex">
+        <div class="left-links hidden">
+            <a href="#" class="nav-link">About</a>
+            <a href="#" class="nav-link">Featured</a>
+            <a href="#" class="nav-link">Contact</a>
+        </div>
+        <div class="middle-links flex">
+            <div>
+                <a href="/" class="blogzz-logo flex">
+                    <img
+                        src="{% static 'images/blogzz-logo.svg' %}"
+                        alt="Blogzz logo"
+                    />
+                    <p>Blogzz</p>
+                </a>
             </div>
-            <div class="middle-links flex">
-                <div>
-                    <a href="/" class="blogzz-logo flex">
-                        <img src="{% static 'images/blogzz-logo.svg' %}" alt="Blogzz logo">
-                        <p>Blogzz</p>
-                    </a>
-                </div>
-                <div class="hamburger-div">
-                    <span class="hamburger-1 hamburger-line"></span>
-                    <span class="hamburger-2 hamburger-line"></span>
-                    <span class="hamburger-3 hamburger-line"></span>
-                    <span class="hamburger-4 hamburger-line"></span>
-                    <span class="hamburger-5 hamburger-line"></span>
-                </div>
+            <div class="hamburger-div">
+                <span class="hamburger-1 hamburger-line"></span>
+                <span class="hamburger-2 hamburger-line"></span>
+                <span class="hamburger-3 hamburger-line"></span>
+                <span class="hamburger-4 hamburger-line"></span>
+                <span class="hamburger-5 hamburger-line"></span>
             </div>
+        </div>
 
-            <div class="right-links hidden">
-                <a href="{% url 'account_login' %}" class="nav-link">Sign In</a>
-                <a href="{% url 'account_signup' %}" class="black-btn">Get Started</a>
-            </div>
+        <div class="right-links hidden">
+            <a href="{% url 'account_login' %}" class="nav-link">Sign In</a>
+            <a href="{% url 'account_signup' %}" class="black-btn"
+                >Get Started</a
+            >
+        </div>
+    </nav>
+</header>
 
-        </nav>
-    </header>
+<main>
+    <section class="hero-section">
+        <div class="hero-left">
+            <h1>Stay curious and enjoy writing</h1>
+            <p>
+                Discover stories, thinking and expertise from writers on any
+                topic
+            </p>
+            <div>
+                <a href="{% url 'account_signup' %}" class="black-btn">Start Creating</a>
+            </div>
+        </div>
+        <div class="hero-right">
+            <img src="{% static 'images/hero-page-cards.png' %}" />
+        </div>
+
+        <div class="circle-div hidden">
+            <img src="{% static 'images/arrow.svg' %}" class="arrow-svg">
+            <img src="{% static 'images/circle.svg' %}" class="circle-svg">
+        </div>
+    </section>
+</main>
 {% endblock content %}

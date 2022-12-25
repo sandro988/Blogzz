@@ -11,7 +11,6 @@ body {
 
 .hidden {
     display: none;
-    
 }
 
 .flex {
@@ -22,12 +21,13 @@ body {
 
 a {
     text-decoration: none;
-    color: black
+    color: black;
 }
 
 nav {
-    padding: 20px 8vw;
+    padding: 25px 8vw;
     background-color: #f1f1f1;
+    top: 0;
 }
 
 .blogzz-logo {
@@ -36,7 +36,11 @@ nav {
 
 .blogzz-logo p {
     font-family: "Limelight", cursive;
-    font-size: 25px;
+    font-size: clamp(14px, 2.5vw, 25px);
+}
+
+.middle-links img {
+    width: clamp(40px, 1.5vw, 100px);
 }
 
 .hamburger-div {
@@ -60,18 +64,18 @@ nav {
     width: 50px;
     height: 2px;
     background-color: black;
-    transition: .20s width ease-in-out;
+    transition: 0.2s width ease-in-out;
 }
 
 .shrink-second-line,
 .shrink-fourth-line {
     width: 40px;
-    transition: .25s width ease-in-out;
+    transition: 0.25s width ease-in-out;
 }
 
 .shrink-third-line {
     width: 30px;
-    transition: .20s width ease-in-out;
+    transition: 0.2s width ease-in-out;
 }
 
 .burger-clicked {
@@ -80,9 +84,8 @@ nav {
     position: fixed;
     flex-direction: column;
     justify-content: flex-start;
-    gap: 20vh;
+    gap: 15vh;
 }
-
 
 /* underline effect on navbar link hover */
 
@@ -101,7 +104,7 @@ nav {
     left: 0;
     background-color: black;
     transform-origin: bottom right;
-    transition: transform 0.20s ease-out;
+    transition: transform 0.2s ease-out;
 }
 
 .nav-link:hover:after {
@@ -109,7 +112,8 @@ nav {
     transform-origin: bottom left;
 }
 
-.left-links, .right-links {
+.left-links,
+.right-links {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
@@ -126,18 +130,18 @@ nav {
 }
 
 .right-links {
-    order: 3
+    order: 3;
 }
 
 .black-btn {
     background-color: black;
     color: white;
-    border: 2px solid black;
-    padding: 10px 20px;
+    border: 1px solid black;
     border-radius: 15px;
+    padding: 5px 20px;
+    font-size: clamp(1rem, 1.25vw, 3rem);
     font-weight: bold;
-    transition: 0.20s background-color ease-in-out,
-                0.25s color ease-in-out;
+    transition: 0.2s background-color ease-in-out, 0.25s color ease-in-out;
 }
 
 .black-btn:hover {
@@ -146,25 +150,97 @@ nav {
     cursor: pointer;
 }
 
-@media only screen and (min-width: 850px) {
+/* hero page styling */
+
+main {
+    width: 80%;
+    margin: 0 auto;
+}
+
+section,
+.hero-left,
+.hero-right,
+.hero-right img {
+    width: 100%;
+}
+
+.hero-left {
+    text-align: center;
+    margin-top: 5vh;
+}
+
+h1 {
+    font-family: "Limelight", cursive;
+    font-size: clamp(3rem, 5vw, 15rem);
+    font-weight: normal;
+    margin-bottom: 20px;
+}
+
+.hero-left p {
+    font-size: clamp(1rem, 1.5vw, 5rem);
+    color: #434343;
+}
+
+.hero-left p,
+.hero-left div {
+    margin-bottom: 30px;
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1100px) {
+    main {
+        width: 80%;
+    }
+
+    .hero-left {
+        text-align: left;
+    }
+
+    h1 {
+        font-size: clamp(3rem, 10vw, 10rem);
+    }
+
+    .hero-left p {
+        font-size: clamp(1rem, 3vw, 5rem);
+    }
+
+    .nav-link,
+    .black-btn {
+        font-size: clamp(1rem, 3vw, 5rem);
+    }
+
+    .navbar {
+        padding: 5vw 8vw 0 8vw;
+        
+    }
+
+    .burger-clicked {
+        gap: 20vh
+    }
+}
+
+@media only screen and (min-width: 1101px) {
+    /* navbar styling */
+
     .hamburger-div {
         display: none;
     }
 
     .navbar {
         justify-content: space-between;
-        padding: 2vw 8vw;
+        padding: 2vw 10%;
         position: relative;
     }
 
-    .left-links, .right-links {
+    .left-links,
+    .right-links {
         display: flex;
         flex-direction: row;
-        font-size: clamp(12px, 1.25vw, 20px)
+        font-size: clamp(12px, 1.25vw, 20px);
     }
 
     .left-links {
         order: 1;
+        gap: 30px;
     }
 
     .right-links {
@@ -182,18 +258,79 @@ nav {
         left: 50%;
         transform: translate(-50%);
         width: max-content;
-    
     }
 
     .middle-links p {
-        font-size: clamp(14px, 2.5vw, 25px)
+        font-size: clamp(14px, 2.5vw, 25px);
     }
 
     .middle-links img {
-        width: clamp(50px, 1.5vw, 100px)
+        width: clamp(50px, 1.5vw, 100px);
+    }
+
+    .black-btn {
+        padding: 7px 20px;
+    }
+
+    /* hero page styling */
+
+    .hero-section {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 85vh;
+        width: 100%;
+        gap: 10%;
+    }
+
+    .hero-left {
+        text-align: left;
+        width: 50%;
+        margin: 0;
+    }
+
+    .hero-right {
+        width: 55%;
+    }
+
+    .circle-div {
+        display: block;
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translate(-50%);
+        width: clamp(100px, 7vw, 500px);
+        overflow: hidden;
+    }
+
+    .arrow-svg {
+        position: absolute;
+        z-index: 1;
+        top: 47.5%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 12.5%;
+    }
+
+    .circle-svg {
+        width: 100%;
+        animation-name: rotating-circle;
+        animation-duration: 30s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+    }
+
+    .circle-div:hover .circle-svg {
+        animation-play-state: paused;
+    }
+
+    @keyframes rotating-circle {
+        from {
+            transform: rotate(-360deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
     }
 }
-
-
-
-
