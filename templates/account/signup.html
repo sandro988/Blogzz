@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load socialaccount %}
+
 {% block title %}Sign Up{% endblock title %}
 {% block content %}
     <h2>Sign Up</h2>
@@ -8,4 +10,8 @@
         {{ form.as_p }}
         <button type="submit">Sign Up</button>
     </form>
+
+    <p>Or Sign Up with: </p>
+    <a href="{% provider_login_url 'github' %}">Github</a>
+    <a href="{% provider_login_url 'google' %}">Google</a>
 {% endblock content %}
