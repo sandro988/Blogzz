@@ -117,12 +117,24 @@ nav {
     font-size: 20px;
 }
 
+.middle-links {
+    order: 1;
+}
+
+.left-links {
+    order: 2;
+}
+
+.right-links {
+    order: 3
+}
+
 .black-btn {
     background-color: black;
     color: white;
     border: 2px solid black;
     padding: 10px 20px;
-    border-radius: 10px;
+    border-radius: 15px;
     font-weight: bold;
     transition: 0.20s background-color ease-in-out,
                 0.25s color ease-in-out;
@@ -132,6 +144,54 @@ nav {
     background-color: white;
     color: black;
     cursor: pointer;
+}
+
+@media only screen and (min-width: 850px) {
+    .hamburger-div {
+        display: none;
+    }
+
+    .navbar {
+        justify-content: space-between;
+        padding: 2vw 8vw;
+        position: relative;
+    }
+
+    .left-links, .right-links {
+        display: flex;
+        flex-direction: row;
+        font-size: clamp(12px, 1.25vw, 20px)
+    }
+
+    .left-links {
+        order: 1;
+    }
+
+    .right-links {
+        display: flex;
+        justify-content: flex-end;
+        gap: 20px;
+        order: 3;
+        width: 50%;
+    }
+
+    .middle-links {
+        justify-content: center;
+        order: 2;
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%);
+        width: max-content;
+    
+    }
+
+    .middle-links p {
+        font-size: clamp(14px, 2.5vw, 25px)
+    }
+
+    .middle-links img {
+        width: clamp(50px, 1.5vw, 100px)
+    }
 }
 
 

@@ -27,11 +27,7 @@ hamburgerMenu.addEventListener("click", function () {
         leftNavLinks.classList.add("hidden");
         rightNavLinks.classList.add("hidden");
         
-        
-        leftNavLinks.style.order = 1;
         leftNavLinks.style.display = "none"
-        
-        rightNavLinks.style.order = 3;
         rightNavLinks.style.display = "none"
     } else {
         shrinkHamburger()
@@ -39,10 +35,14 @@ hamburgerMenu.addEventListener("click", function () {
         leftNavLinks.classList.remove("hidden");
         rightNavLinks.classList.remove("hidden")
         
-        leftNavLinks.style.order = 2;
         leftNavLinks.style.display = "flex"
-        
-        rightNavLinks.style.order = 3;
         rightNavLinks.style.display = "flex"
     }
 });
+
+
+window.addEventListener("resize", function () {
+    if (window.innerWidth >= 850) {
+        navbar.classList.remove("burger-clicked");
+    }
+})
