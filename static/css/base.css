@@ -163,16 +163,16 @@ main {
 
 .about-section,
 .hero-right img,
-.popular-topics-section {
+.popular-topics-section,
+.featured-blogs-section {
     width: 100%;
 }
 
-.hero-left, .hero-right {
+.hero-left,
+.hero-right {
     width: 90%;
     margin: 0 auto;
 }
-
-
 
 .hero-left {
     text-align: center;
@@ -203,7 +203,8 @@ h1 {
 }
 
 .about-header h2,
-.popular-topics-section h2 {
+.popular-topics-section h2,
+.featured-blogs-section h2 {
     text-align: center;
     font-family: "Limelight", cursive;
     font-size: clamp(2rem, 3vw, 8rem);
@@ -222,7 +223,7 @@ h1 {
     width: max-content;
 }
 
-.about-main{
+.about-main {
     background-color: black;
     color: white;
     padding: clamp(20px, 1.5vw, 30px);
@@ -237,14 +238,14 @@ h1 {
     padding: clamp(30px, 3vw, 50px);
     border: 1px solid white;
     color: black !important;
-    transition: .25s background-color ease-in-out
+    transition: 0.25s background-color ease-in-out;
 }
 
 .about-top:hover {
     background-color: #a5c1f0;
 }
 
-.about-top-footer{
+.about-top-footer {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -256,10 +257,9 @@ h1 {
     width: clamp(150px, 75%, 350px);
 }
 
-
 .about-bottom {
     border: 1px solid black;
-    transition: .25s background-color ease-in-out
+    transition: 0.25s background-color ease-in-out;
 }
 
 .about-bottom:hover {
@@ -272,7 +272,7 @@ h1 {
 }
 
 .about-top-header h3,
-.about-bottom-header h3, 
+.about-bottom-header h3,
 .about-top-header p,
 .about-bottom-header p {
     margin-bottom: 20px;
@@ -280,12 +280,14 @@ h1 {
     text-align: center;
 }
 
-.about-top-header p, .about-bottom-header p {
+.about-top-header p,
+.about-bottom-header p {
     color: #434343;
     font-size: clamp(1rem, 1.15vw, 2.5rem);
 }
 
-.about-top-header a, .about-bottom-header a {
+.about-top-header a,
+.about-bottom-header a {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -295,7 +297,8 @@ h1 {
     text-align: center;
 }
 
-.blue-btn, .green-btn{
+.blue-btn,
+.green-btn {
     background-color: #f1f1f1;
     color: black;
     border: 1px solid black;
@@ -307,14 +310,14 @@ h1 {
     margin: 0 auto;
 }
 
-.blue-btn:hover{
+.blue-btn:hover {
     background-color: black;
     color: white;
     cursor: pointer;
 }
 
 .green-btn {
-    font-size: clamp(.8rem, 1.25vw, 3rem);
+    font-size: clamp(0.8rem, 1.25vw, 3rem);
 }
 
 .green-btn:hover {
@@ -335,7 +338,8 @@ h1 {
     color: black;
 }
 
-.about-bottom-header, .about-bottom-footer {
+.about-bottom-header,
+.about-bottom-footer {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -357,7 +361,7 @@ h1 {
 /* styling popular topics section */
 
 .popular-topics-section {
-    margin: 75px 0
+    margin: clamp(75px, 10%, 200px) 0;
 }
 
 .blog-topics-container {
@@ -367,8 +371,8 @@ h1 {
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    gap: clamp(.6rem, 1vw, 2rem);
-    margin: 50px 0;
+    gap: clamp(0.6rem, 1vw, 2rem);
+    margin: clamp(50px, 10%, 150px) 0;
 }
 
 .topic-container {
@@ -380,9 +384,7 @@ h1 {
     width: max-content;
     padding: clamp(7px, 1vw, 15px);
     gap: 20px;
-    transition: 
-    .25s background-color ease-in-out,
-    .20s color ease-in-out;
+    transition: 0.25s background-color ease-in-out, 0.2s color ease-in-out;
 }
 
 .topic-color {
@@ -393,13 +395,104 @@ h1 {
 
 .topic-name {
     padding-right: 10px;
-    font-size: clamp(.8rem, 1.25vw, 2rem)
+    font-size: clamp(0.8rem, 1.25vw, 2rem);
 }
 
 .topic-container:hover {
     background-color: black;
     cursor: pointer;
     color: white;
+}
+
+/* styling featured section */
+
+.featured-blogs-section {
+    margin: clamp(75px, 10%, 200px) 0;
+    position: relative;
+}
+
+.featured-blogs-section h2 {
+    text-align: left;
+}
+
+.featured-blogs-container {
+    margin: 50px 0;
+    -webkit-overflow-scrolling: touch;
+}
+
+.featured-blogs-container-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    overflow: hidden;
+    width: 100%;
+    margin: clamp(50px, 10%, 150px) auto;
+    border-radius: 15px;
+}
+
+.featured-blogs-container-inner img {
+    flex-basis: clamp(250px, 15%, 600px);
+    flex-grow: 0;
+    flex-shrink: 0;
+    transition: 0.5s transform ease-in-out 0.5ms;
+    position: relative;
+    cursor: pointer;
+}
+
+.slider {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    margin: clamp(1.5rem, 1vw, 4rem) auto;
+}
+
+.slider-number-indicators {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+    gap: clamp(20px, 2vw, 50px);
+    font-family: "Limelight", cursive;
+    position: relative;
+}
+
+.indicator-middle-line {
+    width: clamp(150px, 10vw, 300px);
+    height: 2px;
+    background-color: black;
+    background-image: linear-gradient(
+        to right,
+        #a5c1f0 12.5%,
+        rgba(0, 0, 0, 0) 10%
+    );
+    transition: .5s background-image ease-in-out;
+}
+
+.slider-buttons {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.slider-buttons i {
+    font-size: clamp(2.5rem, 3vw, 5rem);
+}
+
+.slider-buttons i:hover {
+    cursor: pointer;
+}
+
+.slider-number-indicators p {
+    font-size: clamp(1rem, 2vw, 5rem);
+    transition: .5s ease-in-out;
+}
+
+@media only screen and (min-width: 320px) and (max-width: 350px) {
+    .featured-blogs-container-inner img {
+        width: 150px;
+    }
 }
 
 @media only screen and (min-width: 767px) and (max-width: 1100px) {
@@ -426,16 +519,17 @@ h1 {
 
     .navbar {
         padding: 5vw 8vw 0 8vw;
-        
     }
 
     .burger-clicked {
-        gap: 20vh
+        gap: 20vh;
     }
 
     /* about page styling */
 
-    .about-top-header h3, .about-top-header p, .blue-btn {
+    .about-top-header h3,
+    .about-top-header p,
+    .blue-btn {
         text-align: left;
     }
 
@@ -466,7 +560,6 @@ h1 {
         width: 50%;
     }
 
-    
     .about-bottom-footer {
         align-items: flex-end;
     }
@@ -485,8 +578,8 @@ h1 {
         width: clamp(50px, 30%, 150px);
     }
 
-
-    .about-top-header h3, .about-top-header p {
+    .about-top-header h3,
+    .about-top-header p {
         width: 70%;
     }
 
@@ -494,19 +587,17 @@ h1 {
         margin-bottom: 75px;
     }
 
-    .about-bottom-header h3, 
-    .about-bottom-header p{
+    .about-bottom-header h3,
+    .about-bottom-header p {
         text-align: left;
         justify-content: flex-start;
     }
-
 }
 
 @media only screen and (min-width: 1101px) {
-
     main {
         width: 80%;
-    } 
+    }
 
     /* navbar styling */
 
@@ -623,7 +714,6 @@ h1 {
         }
     }
 
-
     /* about section styling */
 
     .about-main-container {
@@ -641,7 +731,8 @@ h1 {
         height: 100%;
     }
 
-    .about-top, .about-bottom {
+    .about-top,
+    .about-bottom {
         width: 50%;
     }
 
@@ -664,7 +755,6 @@ h1 {
 
     .about-bottom-footer div {
         display: flex;
-
     }
 
     .about-bottom-footer-bottom img:first-child {
@@ -680,8 +770,7 @@ h1 {
         height: 100%;
     }
 
-
-    .about-bottom-footer img{
+    .about-bottom-footer img {
         width: clamp(100px, 45%, 500px);
     }
 
@@ -689,7 +778,7 @@ h1 {
         width: 50%;
     }
 
-    .about-bottom-footer-bottom img:first-child{
+    .about-bottom-footer-bottom img:first-child {
         width: 100%;
     }
 
@@ -712,5 +801,4 @@ h1 {
     .about-bottom-footer-bottom img:nth-child(2) {
         display: block;
     }
-
 }
