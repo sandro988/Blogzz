@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'django.contrib.sites',
+    "django.contrib.sites",
     # Third-party
     "allauth",
     "allauth.account",
@@ -64,11 +64,11 @@ LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
 ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
-ACCOUNT_USERNAME_REQUIRED = False 
+ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email"
-ACCOUNT_EMAIL_REQUIRED = True 
+ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
@@ -79,13 +79,7 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 # Social accounts configuration
 
 SOCIALACCOUNT_PROVIDERS = {
-    "google": {
-        "SCOPE": {
-            "profile",
-            "email"
-        },
-        "AUTH_PARAMS": {"access_type": "online"}
-    }
+    "google": {"SCOPE": {"profile", "email"}, "AUTH_PARAMS": {"access_type": "online"}}
 }
 
 

@@ -7,6 +7,7 @@ let navbar = document.querySelector(".navbar");
 let leftNavLinks = document.querySelector(".left-links");
 let rightNavLinks = document.querySelector(".right-links");
 let primaryNavLinks = document.querySelectorAll(".nav-link-primary");
+let popularTopicsContainer = document.querySelector(".blog-topics-container");
 const hamburgerMenu = document.querySelector(".hamburger-div");
 
 function shrinkHamburger() {
@@ -59,15 +60,60 @@ window.addEventListener("resize", function () {
 });
 
 for (let i = 0; i < 3; i++) {
-    primaryNavLinks[i].addEventListener('click', function () {
+    primaryNavLinks[i].addEventListener("click", function () {
         if (navbar.classList.contains("burger-clicked")) {
             unshrinkHamburger();
             navbar.classList.remove("burger-clicked");
             leftNavLinks.classList.add("hidden");
             rightNavLinks.classList.add("hidden");
-    
+
             leftNavLinks.style.display = "none";
             rightNavLinks.style.display = "none";
-        } 
+        }
     });
 }
+
+function createBlogTopics() {
+    const topicsAndColors = [
+        { topic: "Python", color: "#390099" },
+        { topic: "JavaScript", color: "#0466C8" },
+        { topic: "Self Development", color: "#FF0054" },
+        { topic: "UI/UX", color: "#FFBD00" },
+        { topic: "Interior Design", color: "#0EAD69" },
+        { topic: "Development", color: "#CEC2FF" },
+        { topic: "Psychology", color: "#FF5400" },
+        { topic: "Science", color: "#09BC8A" },
+        { topic: "Rlationships", color: "#FF99C8" },
+        { topic: "Music", color: "#70D6FF" },
+        { topic: "Artificial Inteligence", color: "#7678ED" },
+        { topic: "Finances", color: "#D00000" },
+        { topic: "Politics", color: "#2EC6BD" },
+        { topic: "Music", color: "#afd7b3" },
+        { topic: "History", color: "#a5c1f0" },
+        { topic: "Health", color: "#b42f83" },
+        { topic: "Art", color: "#fbc5c4" },
+        { topic: "Physics", color: "#fce440" },
+        { topic: "Networking", color: "#0000b5" },
+        { topic: "Education", color: "#b1aae6" },
+    ];
+
+    for (let i = 0; i < topicsAndColors.length; i++) {
+        let topicContainer = document.createElement("div");
+        let colorDiv = document.createElement("div");
+        let topicDiv = document.createElement("p");
+
+        topicContainer.classList.add(`topic-container`);
+        colorDiv.classList.add("topic-color");
+        topicDiv.classList.add("topic-name");
+
+        colorDiv.style.backgroundColor = topicsAndColors[i].color;
+        topicDiv.innerText = topicsAndColors[i].topic;
+
+        topicContainer.appendChild(colorDiv);
+        topicContainer.appendChild(topicDiv);
+        popularTopicsContainer.appendChild(topicContainer);
+    }
+}
+
+console.log(popularTopicsContainer);
+createBlogTopics();
