@@ -5,7 +5,7 @@
 <header>
     <nav class="navbar flex">
         <div class="left-links hidden">
-            <a href="#" class="nav-link">About</a>
+            <a href="#about" class="nav-link">About</a>
             <a href="#" class="nav-link">Featured</a>
             <a href="#" class="nav-link">Contact</a>
         </div>
@@ -54,8 +54,52 @@
         </div>
 
         <div class="circle-div hidden">
-            <img src="{% static 'images/arrow.svg' %}" class="arrow-svg">
+            <img src="{% static 'images/hero-arrow.svg' %}" class="hero-arrow-svg">
             <img src="{% static 'images/circle.svg' %}" class="circle-svg">
+        </div>
+    </section>
+
+    <section class="about-section">
+        
+        <div class="about-header">
+            <h2>About Blogzz</h2>
+        </div>
+        <div class="about-main" id="about">
+            <div class="about-main-container">
+                <div class="about-top">
+                    <div class="about-top-header">
+                        <h3>Read, write and share</h3>
+                        <p>Blogzz gives you an ability to read, write and share interesting ideas with others, Start expressing your thoughts and share them with other creators across the globe</p>
+                        <a href="{% url 'account_signup' %}" class="blue-btn">
+                            Get started <i class="ph-arrow-up-right-bold"></i>
+                        </a>
+                    </div>
+                    <div class="about-top-footer">
+                        <img src="{% static 'images/about-img1.png' %}">
+                        <img src="{% static 'images/about-img2.png' %}">
+                    </div>
+                </div>
+                
+                <div class="about-bottom">
+                    <div class="about-bottom-header">
+                        <h3>Get to know other creators</h3>
+                        <p>Read, share, comment and like other creators works that you find interesting, captivating and unique</p>
+                        <a href="{% url 'account_signup' %}" class="green-btn">
+                            Become creator <i class="ph-arrow-up-right-bold"></i>
+                        </a>
+                        <img src="{% static 'images/about-img5.svg' %}" class="hidden">
+                    </div>
+                    
+                    <div class="about-bottom-footer">
+                        <img src="{% static 'images/about-img3.png' %}">
+                        <img src="{% static 'images/about-img4.png' %}" class="stats-img hidden">
+                        <div class="about-bottom-footer-bottom hidden">
+                            <img src="{% static 'images/about-img4.png' %}">
+                            <img src="{% static 'images/about-img5.svg' %}" class="decorative-star-img hidden">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 </main>

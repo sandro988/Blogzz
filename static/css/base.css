@@ -4,6 +4,10 @@
     margin: 0;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     background-color: #f1f1f1;
     font-family: "Poppins", sans-serif;
@@ -186,7 +190,169 @@ h1 {
     margin-bottom: 30px;
 }
 
-@media only screen and (min-width: 768px) and (max-width: 1100px) {
+/* About page styling */
+
+.about-section {
+    width: 90%;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    margin: 10vh 0 10vh 0;
+}
+
+.about-header h2 {
+    text-align: center;
+    font-family: "Limelight", cursive;
+    font-size: clamp(2rem, 3vw, 8rem);
+    font-weight: normal;
+}
+
+.about-header {
+    color: black;
+    padding: 15px 30px;
+    text-align: right;
+    margin: 10px auto 10vh auto;
+    width: max-content;
+}
+
+.about-main{
+    background-color: black;
+    color: white;
+    padding: clamp(30px, 3vw, 50px);
+    border-radius: 20px;
+}
+
+.about-top {
+    background-color: #f0f0f0;
+    margin-bottom: 50px;
+    border-radius: 15px;
+    border: 1px solid black;
+    padding: clamp(30px, 3vw, 50px);
+    border: 1px solid white;
+    color: black !important;
+    transition: .25s background-color ease-in-out
+}
+
+.about-top:hover {
+    background-color: #a5c1f0;
+}
+
+.about-top-footer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.about-top-footer img {
+    width: clamp(150px, 75%, 350px);
+}
+
+
+.about-bottom {
+    border: 1px solid black;
+    transition: .25s background-color ease-in-out
+}
+
+.about-bottom:hover {
+    background-color: #afd7b6;
+}
+
+.about-to-header {
+    text-align: center !important;
+    margin: 0 auto;
+}
+
+.about-top-header h3,
+.about-bottom-header h3, 
+.about-top-header p,
+.about-bottom-header p {
+    margin-bottom: 20px;
+    font-size: clamp(1.3rem, 1.75vw, 5rem);
+    text-align: center;
+}
+
+.about-top-header p, .about-bottom-header p {
+    color: #434343;
+    font-size: clamp(1rem, 1.15vw, 2.5rem);
+}
+
+.about-top-header a, .about-bottom-header a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    width: max-content;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.blue-btn, .green-btn{
+    background-color: #f1f1f1;
+    color: black;
+    border: 1px solid black;
+    border-radius: 15px;
+    padding: 5px 20px;
+    font-size: clamp(1rem, 1.25vw, 3rem);
+    font-weight: bold;
+    transition: 0.2s background-color ease-in-out, 0.25s color ease-in-out;
+    margin: 0 auto;
+}
+
+.blue-btn:hover{
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+
+.green-btn {
+    font-size: clamp(.8rem, 1.25vw, 3rem);
+}
+
+.green-btn:hover {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+
+.about-bottom {
+    background-color: #f1f1f1;
+    border-radius: 15px;
+    padding: clamp(30px, 3vw, 50px);
+    color: black;
+    text-align: center;
+}
+
+.abbout-bottom-header p {
+    color: black;
+}
+
+.about-bottom-header, .about-bottom-footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.about-bottom-footer {
+    gap: 20px;
+}
+
+.about-bottom-footer img {
+    width: clamp(200px, 65%, 300px);
+}
+
+.about-bottom-footer img:nth-child(2) {
+    display: block;
+}
+
+
+
+
+
+
+@media only screen and (min-width: 767px) and (max-width: 1100px) {
     main {
         width: 80%;
     }
@@ -216,6 +382,74 @@ h1 {
     .burger-clicked {
         gap: 20vh
     }
+
+    /* about page styling */
+
+    .about-top-header h3, .about-top-header p, .blue-btn {
+        text-align: left;
+    }
+
+    .blue-btn {
+        margin: 20px 0;
+    }
+
+    .about-top-footer {
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: flex-start;
+    }
+
+    .about-top-footer img {
+        width: clamp(100px, 45%, 300px);
+    }
+
+    .about-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 50px;
+    }
+
+    .about-bottom-header {
+        align-items: flex-start;
+        text-align: left;
+        width: 50%;
+    }
+
+    
+    .about-bottom-footer {
+        align-items: flex-end;
+    }
+
+    .about-bottom-footer {
+        justify-self: flex-end;
+    }
+
+    .green-btn {
+        margin: 0 !important;
+    }
+
+    .about-bottom-header img {
+        display: block;
+        margin-top: 50px;
+        width: clamp(50px, 30%, 150px);
+    }
+
+
+    .about-top-header h3, .about-top-header p {
+        width: 70%;
+    }
+
+    .about-top-header a {
+        margin-bottom: 75px;
+    }
+
+    .about-bottom-header h3, 
+    .about-bottom-header p{
+        text-align: left;
+        justify-content: flex-start;
+    }
+
 }
 
 @media only screen and (min-width: 1101px) {
@@ -304,7 +538,7 @@ h1 {
         overflow: hidden;
     }
 
-    .arrow-svg {
+    .hero-arrow-svg {
         position: absolute;
         z-index: 1;
         top: 47.5%;
@@ -333,4 +567,91 @@ h1 {
             transform: rotate(360deg);
         }
     }
+
+
+    /* about section styling */
+
+    .about-main-container {
+        height: 75vh;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 50px;
+    }
+
+    .about-bottom {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+    }
+
+    .about-top, .about-bottom {
+        width: 50%;
+    }
+
+    .about-top {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .about-top-footer {
+        flex-direction: row;
+        align-items: flex-end;
+    }
+
+    .about-bottom-footer {
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .about-bottom-footer div {
+        display: flex;
+    }
+
+    .about-bottom-footer-bottom img:first-child {
+        display: block;
+    }
+
+    .about-bottom-footer-bottom {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 25px;
+        height: 100%;
+    }
+
+
+    .about-bottom-footer img{
+        width: clamp(100px, 45%, 500px);
+    }
+
+
+    .about-bottom-footer-bottom img:first-child{
+        width: 100%;
+    }
+
+    .about-top-footer img {
+        width: clamp(100px, 45%, 600px);
+    }
+
+    .about-section {
+        width: 100%;
+        position: relative;
+        left: 0;
+        transform: none;
+        margin: 10vh 0;
+    }
+
+    .about-bottom-footer img:nth-child(2) {
+        display: none;
+    }
+
+    .about-bottom-footer-bottom img:nth-child(2) {
+        display: block;
+    }
+
 }
