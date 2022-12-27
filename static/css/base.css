@@ -32,6 +32,11 @@ nav {
     padding: 25px 8vw;
     background-color: #f1f1f1;
     top: 0;
+    z-index: 1;
+}
+
+.lock-scroll {
+    overflow: hidden;
 }
 
 .blogzz-logo {
@@ -520,7 +525,6 @@ h1 {
     .hero-left p {
         font-size: clamp(1rem, 3vw, 5rem);
     }
-
 
     .nav-link,
     .black-btn {

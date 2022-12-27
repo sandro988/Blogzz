@@ -30,7 +30,16 @@ function unshrinkHamburger() {
     thirdLine.classList.remove("shrink-third-line");
     fourthLine.classList.remove("shrink-fourth-line");
 }
+
+function lockScroll() {
+    // Function for maing body element fixed so it wont scroll in the background
+    // when user is in the mobile menu.
+
+    document.body.classList.toggle("lock-scroll");
+}
+
 hamburgerMenu.addEventListener("click", function () {
+    lockScroll();
     if (navbar.classList.contains("burger-clicked")) {
         unshrinkHamburger();
         navbar.classList.remove("burger-clicked");
@@ -58,6 +67,7 @@ window.addEventListener("resize", function () {
         rightNavLinks.classList.remove("hidden");
         leftNavLinks.style.display = "flex";
         rightNavLinks.style.display = "flex";
+        document.body.classList.remove("lock-scroll");
     } else {
         if (!navbar.classList.contains("burger-clicked")) {
             navbar.classList.remove("burger-clicked");
@@ -151,10 +161,7 @@ rightSlider.addEventListener("click", function () {
     let widthOfElement = featureBlogsContainer.children[0].offsetWidth + 20;
     createGradient(sliderPosition);
 
-    if (
-        sliderPosition <= 7
-    
-    ) {
+    if (sliderPosition <= 7) {
         let featureBlogsContainer = document.querySelector(
             ".featured-blogs-container-inner"
         );
@@ -223,4 +230,3 @@ leftSlider.addEventListener("click", function () {
         translateXValue = "";
     }
 });
-
