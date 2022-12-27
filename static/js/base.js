@@ -89,6 +89,7 @@ for (let i = 0; i < 3; i++) {
 
             leftNavLinks.style.display = "none";
             rightNavLinks.style.display = "none";
+            document.body.classList.remove("lock-scroll");
         }
     });
 }
