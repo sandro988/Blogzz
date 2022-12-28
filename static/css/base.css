@@ -209,7 +209,8 @@ h1 {
 
 .about-header h2,
 .popular-topics-section h2,
-.featured-blogs-section h2 {
+.featured-blogs-section h2,
+.contact-section-headers h2 {
     text-align: center;
     font-family: "Limelight", cursive;
     font-size: clamp(2rem, 3vw, 8rem);
@@ -278,11 +279,18 @@ h1 {
 
 .about-top-header h3,
 .about-bottom-header h3,
+.contact-form h3,
 .about-top-header p,
-.about-bottom-header p {
+.about-bottom-header p,
+.contact-section-headers p {
     margin-bottom: 20px;
     font-size: clamp(1.3rem, 1.75vw, 5rem);
     text-align: center;
+}
+
+.contact-form h3 {
+    font-family: "Limelight", cursive;
+    margin-bottom: clamp(20px, 2.5vw, 50px);
 }
 
 .about-top-header p,
@@ -292,7 +300,8 @@ h1 {
 }
 
 .about-top-header a,
-.about-bottom-header a {
+.about-bottom-header a,
+.contact-section-headers p:last-child {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -409,7 +418,8 @@ h1 {
     color: white;
 }
 
-.all-topics-btn {
+.all-topics-btn,
+.contact-form button {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -503,16 +513,160 @@ h1 {
     transition: 0.5s ease-in-out;
 }
 
+/* styling contact section */
+
+.contact-section {
+    margin: clamp(75px, 10%, 200px) 0;
+}
+
+.contact-section-container {
+    border: 1px solid black;
+    border-radius: 15px;
+    padding: clamp(20px, 1.5vw, 30px);
+}
+
+.contact-section-headers p {
+    font-size: clamp(1rem, 1.25vw, 3rem);
+    color: #434343;
+}
+
+.contact-section-headers h2,
+.contact-section-headers p {
+    width: 80%;
+    margin: clamp(20px, 1vw, 50px) auto;
+}
+
+.contact-section-headers p:last-child {
+    color: black;
+    width: max-content;
+    font-weight: normal;
+    gap: 30px;
+}
+
+.contact-section-headers p:last-child {
+    font-size: clamp(0.7rem, 1vw, 1rem);
+}
+
+.contact-section-headers p:last-child i,
+.contact-form button i {
+    font-size: clamp(1rem, 1.5vw, 2rem);
+    background-color: #afd7b6;
+    border-radius: 50%;
+    padding: 10px;
+    transition: 0.25s color ease-in-out, 0.3s background-color ease-in-out;
+    color: black;
+    border: 1px solid black;
+}
+
+.contact-section-headers p:last-child i {
+    background-color: #fbc5c4;
+}
+
+.contact-submit i {
+    padding: 10px !important;
+}
+
+.contact-form button {
+    font-size: clamp(1rem, 1.2vw, 2rem) !important;
+    font-weight: normal;
+    gap: 30px;
+}
+
+.contact-section button:hover {
+    background-color: black;
+    color: white;
+}
+.contact-form button i {
+    background-color: white;
+}
+
+.contact-section-headers p:last-child:hover {
+    color: black;
+    background-color: #f1f1f1;
+    cursor: auto;
+}
+
+.contact-section-headers p:last-child:hover i {
+    color: black;
+    cursor: pointer;
+}
+
+.contact-form {
+    background-color: #fbc5c4;
+    padding: clamp(20px, 1.5vw, 30px);
+    border-radius: 15px;
+}
+
+.input-box {
+    position: relative;
+    width: clamp(200px, 100%, 600px);
+    margin: 0 auto;
+}
+
+.input-box input,
+.input-box textarea {
+    width: 100%;
+    padding: clamp(10px, 1vw, 30px);
+    border: 1px solid black;
+    border-radius: 5px;
+    outline: none;
+    color: black;
+    font-size: clamp(0.8rem, 1vw, 1.6rem);
+    background-color: #fbc5c4;
+    margin: 0 0 30px 0;
+    font-family: "Poppins", sans-serif;
+}
+
+textarea::-webkit-scrollbar {
+    display: none;
+}
+
+.input-box input {
+    height: 2.5rem;
+}
+
+.input-box textarea {
+    height: clamp(150px, 20vh, 250px);
+    resize: none;
+    /* overflow: hidden; */
+}
+
+.input-box span {
+    position: absolute;
+    left: 0;
+    padding: 10px;
+    pointer-events: none;
+    font-size: clamp(0.7rem, 0.7vw, 1.4rem);
+    color: black;
+    transition: 0.25s;
+}
+
+.input-box input:valid ~ span,
+.input-box input:focus ~ span,
+.input-box textarea:valid ~ span,
+.input-box textarea:focus ~ span {
+    color: black;
+    transform: translateX(clamp(10px, 1.25vw, 20px))
+        translateY(clamp(-7px, -1vw, -15px));
+    font-size: clamp(0.5rem, 0.5vw, 1rem);
+    padding: 0 10px;
+    background-color: #f1f1f1;
+    border: 1px solid black;
+    border-radius: 5px;
+    letter-spacing: 0.2em;
+}
+
+
+
+
 @media only screen and (min-width: 320px) and (max-width: 375px) {
     .featured-blogs-container-inner {
         border-radius: 0px;
     }
 
-    .featured-blogs-container-inner img{
+    .featured-blogs-container-inner img {
         width: 150px;
     }
-
-
 }
 
 @media only screen and (min-width: 767px) and (max-width: 1100px) {
@@ -612,6 +766,12 @@ h1 {
         text-align: left;
         justify-content: flex-start;
     }
+
+    /* contact section styling */
+    .contact-form {
+        width: 80%;
+        margin: 50px auto;
+    }
 }
 
 @media only screen and (min-width: 1101px) {
@@ -635,18 +795,18 @@ h1 {
     .right-links {
         display: flex;
         flex-direction: row;
-        font-size: clamp(12px, 1.25vw, 20px);
+        font-size: clamp(12px, 1.25vw, 28px);
+        gap: clamp(1.5rem, 4vw, 4rem) !important
     }
 
     .left-links {
         order: 1;
-        gap: 30px;
     }
 
     .right-links {
         display: flex;
         justify-content: flex-end;
-        gap: 20px;
+        gap: clamp(1.2rem, 4vw, 2.5rem) !important;
         order: 3;
         width: 50%;
     }
@@ -661,7 +821,7 @@ h1 {
     }
 
     .middle-links p {
-        font-size: clamp(14px, 2.5vw, 25px);
+        font-size: clamp(.8rem, 2vw, 3rem);
     }
 
     .middle-links img {
@@ -822,5 +982,116 @@ h1 {
         width: 0;
         flex-basis: clamp(250px, 20%, 800px);
     }
-}
 
+    /* contact section styling */
+
+    .contact-section-socials,
+    .contact-section-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .contact-section-container-inner {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-start;
+        height: 100%;
+        width: 50%;
+        gap: clamp(100px, 5vh, 300px);
+    }
+
+    .contact-section-socials i {
+        font-size: clamp(1rem, 2vw, 3rem);
+        border-radius: 15px;
+        border: 1px solid black;
+        padding: 7.5px;
+        transition: 0.2s background-color ease-in-out, 0.2s color ease-in-out;
+    }
+
+    .contact-section-socials {
+        gap: 20px;
+    }
+
+    .contact-section-socials i:hover {
+        background-color: black;
+        color: #f1f1f1;
+        cursor: pointer;
+    }
+
+    .contact-section-headers h2,
+    .contact-section-headers p {
+        margin: 0 0 30px 0;
+    }
+
+    .contact-section-headers h2,
+    .contact-section-headers p {
+        text-align: left;
+    }
+
+    .contact-section-container {
+        padding: clamp(50px, 5vw, 150px);
+    }
+
+    .contact-form {
+        position: relative;
+        /* box-shadow: clamp(50px, 1.5vw, 125px) clamp(-25px, 2vw, -75px) #a5c1f0,
+            clamp(100px, 1.5vw, 250px) clamp(-50px, 2vw, -125px) #afd7b6; */
+        right: clamp(100px, 1.5vw, 200px);
+        top: clamp(25px, 2vw, 50px);
+        z-index: 5;
+        background-color: #fbc5c4;
+    }
+
+    .contact-form form {
+        background-color: #fbc5c4;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+    }
+
+    .contact-bg-1,
+    .contact-bg-2 {
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        border-radius: 15px;
+        z-index: -2;
+        border: 1px solid black;
+    }
+
+    .contact-bg-1 {
+        left: 25px;
+        top: -25px;
+        background-color: #a5c1f0;
+    }
+
+    .contact-bg-2 {
+        left: 50px;
+        top: -50px;
+        background-color: #afd7b6;
+        z-index: -3;
+    }
+
+    .contact-form::before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: #fbc5c4;
+        top: 0;
+        left: 0;
+        border-radius: 15px;
+        z-index: -1;
+        border: 1px solid black;
+    }
+
+    .input-box input,
+    .input-box textarea {
+        font-size: clamp(0.8rem, 1vw, 1.4rem);
+    }
+}

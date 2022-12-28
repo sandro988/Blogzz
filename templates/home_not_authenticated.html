@@ -7,7 +7,7 @@
         <div class="left-links hidden">
             <a href="#about" class="nav-link nav-link-primary">About</a>
             <a href="#featured" class="nav-link nav-link-primary">Featured</a>
-            <a href="#" class="nav-link nav-link-primary">Contact</a>
+            <a href="#contact" class="nav-link nav-link-primary">Contact</a>
         </div>
         <div class="middle-links flex">
             <div>
@@ -50,12 +50,12 @@
             </div>
         </div>
         <div class="hero-right">
-            <img src="{% static 'images/hero-page-cards.png' %}" />
+            <img src="{% static 'images/hero-page-cards.png' %}" alt=""/>
         </div>
 
         <div class="circle-div hidden">
-            <img src="{% static 'images/hero-arrow.svg' %}" class="hero-arrow-svg">
-            <img src="{% static 'images/circle.svg' %}" class="circle-svg">
+            <img src="{% static 'images/hero-arrow.svg' %}" class="hero-arrow-svg" alt="">
+            <img src="{% static 'images/circle.svg' %}" class="circle-svg" alt="">
         </div>
     </section>
 
@@ -75,8 +75,8 @@
                         </a>
                     </div>
                     <div class="about-top-footer">
-                        <img src="{% static 'images/about-img1.png' %}">
-                        <img src="{% static 'images/about-img2.png' %}">
+                        <img src="{% static 'images/about-img1.png' %}" alt="">
+                        <img src="{% static 'images/about-img2.png' %}" alt="">
                     </div>
                 </div>
                 
@@ -87,15 +87,15 @@
                         <a href="{% url 'account_signup' %}" class="green-btn">
                             Become creator <i class="ph-arrow-up-right-bold"></i>
                         </a>
-                        <img src="{% static 'images/about-img5.svg' %}" class="hidden">
+                        <img src="{% static 'images/about-img5.svg' %}" class="hidden" alt="">
                     </div>
                     
                     <div class="about-bottom-footer">
-                        <img src="{% static 'images/about-img3.png' %}">
-                        <img src="{% static 'images/about-img4.png' %}" class="stats-img hidden">
+                        <img src="{% static 'images/about-img3.png' %}" alt="">
+                        <img src="{% static 'images/about-img4.png' %}" class="stats-img hidden" alt="">
                         <div class="about-bottom-footer-bottom hidden">
-                            <img src="{% static 'images/about-img4.png' %}">
-                            <img src="{% static 'images/about-img5.svg' %}" class="decorative-star-img hidden">
+                            <img src="{% static 'images/about-img4.png' %}" alt="">
+                            <img src="{% static 'images/about-img5.svg' %}" class="decorative-star-img hidden" alt="">
                         </div>
                     </div>
                 </div>
@@ -115,14 +115,14 @@
         <h2>Featured</h2>
         <div class="featured-blogs-container">
             <div class="featured-blogs-container-inner">
-                <img src="{% static 'images/featured-blogs-section-imgs/featured1.png' %}"  class="featured-blog">
-                <img src="{% static 'images/featured-blogs-section-imgs/featured2.png' %}"  class="featured-blog">
-                <img src="{% static 'images/featured-blogs-section-imgs/featured3.png' %}"  class="featured-blog">
-                <img src="{% static 'images/featured-blogs-section-imgs/featured4.png' %}"  class="featured-blog">
-                <img src="{% static 'images/featured-blogs-section-imgs/featured5.png' %}"  class="featured-blog">
-                <img src="{% static 'images/featured-blogs-section-imgs/featured6.png' %}"  class="featured-blog">
-                <img src="{% static 'images/featured-blogs-section-imgs/featured7.png' %}"  class="featured-blog">
-                <img src="{% static 'images/featured-blogs-section-imgs/featured8.png' %}"  class="featured-blog">
+                <img src="{% static 'images/featured-blogs-section-imgs/featured1.png' %}"  class="featured-blog" alt="Learning ThreeJS blog photo">
+                <img src="{% static 'images/featured-blogs-section-imgs/featured2.png' %}"  class="featured-blog" alt="Importance of colors blog photo">
+                <img src="{% static 'images/featured-blogs-section-imgs/featured3.png' %}"  class="featured-blog" alt="Future of AI blog photo">
+                <img src="{% static 'images/featured-blogs-section-imgs/featured4.png' %}"  class="featured-blog" alt="Music for mental health blog photo">
+                <img src="{% static 'images/featured-blogs-section-imgs/featured5.png' %}"  class="featured-blog" alt="3D objects in blender blog photo">
+                <img src="{% static 'images/featured-blogs-section-imgs/featured6.png' %}"  class="featured-blog" alt="Historical monuments blog photo">
+                <img src="{% static 'images/featured-blogs-section-imgs/featured7.png' %}"  class="featured-blog" alt="Sugar and health benefits blog photo">
+                <img src="{% static 'images/featured-blogs-section-imgs/featured8.png' %}"  class="featured-blog" alt="Become modern artist blog photo">
             </div>
 
             <div class="slider">
@@ -140,8 +140,37 @@
     </section>
 
     <section class="top-creators-section"></section>
-    <section class="contact-section">
-        {% include 'blogs/contact_form.html' %} 
+    <section class="contact-section" id="contact">
+        <div class="contact-section-container">
+            <div class="contact-section-container-inner">
+                <div class="contact-section-headers">
+                    <h2>We'd Love to Hear from You</h2>
+                    <p>Chat with us, our friendly team is always here to help you.</p>
+                    <p class="blue-btn website-email">blogzz988@gmail.com <i class="ph-copy"></i></p>
+                </div>
+                <div class="contact-section-socials hidden">
+                    <i class="ph-facebook-logo-fill"></i>
+                    <i class="ph-twitter-logo-fill"></i>
+                    <i class="ph-instagram-logo-fill"></i>
+                    <i class="ph-linkedin-logo-fill"></i>
+                    <i class="ph-youtube-logo-fill"></i>
+                </div>
+            </div>
+            <div class="contact-form">
+                <h3>Contact form</h3>
+                
+                <form method="POST" hx-post="{% url 'contact' %}" hx-target="#contact-target">
+                    <div id="contact-target">
+                        {% include 'blogs/contact_form.html' %}
+                    </div>
+                    <button type="submit" class="contact-submit black-btn">Send <i class="ph-paper-plane-tilt"></i></button>
+                </form>
+                
+                <div class="contact-bg-1 hidden"></div>
+                <div class="contact-bg-2 hidden"></div>
+
+            </div>
+        </div>
     </section>
 </main>
 {% endblock content %}

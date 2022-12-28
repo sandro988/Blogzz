@@ -1,7 +1,8 @@
-from django.views.generic import ListView, DetailView, FormView, TemplateView,CreateView
+from django.views.generic import ListView, DetailView, FormView
 from .models import Blog
 from .forms import ContactForm
 from django.urls import reverse_lazy
+
 
 
 class HomePageView(ListView):
@@ -14,6 +15,7 @@ class HomePageView(ListView):
         context['form'] = ContactForm()
         return context    
 
+
 class BlogsDetailView(DetailView):
     model = Blog
     context_object_name = "blog"
@@ -23,7 +25,8 @@ class BlogsDetailView(DetailView):
 class ContactFormView(FormView):
     template_name = 'blogs/contact_form.html'
     form_class = ContactForm
-    success_url = reverse_lazy("contact")
+    success_url = "/contact/"
+
 
     def form_valid(self, form):
         form.send_email()

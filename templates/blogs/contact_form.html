@@ -1,11 +1,18 @@
-{% extends 'base.html' %}
 
-{% block content %}
 
-    <form method="POST" hx-post="{% url 'contact' %}">
-        {% csrf_token %}
+<div>
+
+    {% csrf_token %}
+    {% for field in form %}
+        <div class="input-box">
+            {{ field }}
+            <span class="contact-{{ field.name }}-class">Your {{ field.name|title }}</span>
+        </div>
+    {% endfor %}
+</div>
         
-        {{ form.as_p }}
-        <button type="submit">Submit</button>
-    </form>
-{% endblock content %}
+        
+        
+
+
+

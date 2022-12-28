@@ -1,10 +1,3 @@
-"use strict";
-
-// HTMX
-document.body.addEventListener("htmx:configRequest", (e) => {
-    e.detail.headers["X-CSRFToken"] = "{{ csrf_token }}";
-});
-
 let secondLine = document.querySelector(".hamburger-2");
 let thirdLine = document.querySelector(".hamburger-3");
 let fourthLine = document.querySelector(".hamburger-4");
@@ -20,10 +13,24 @@ let featureBlogsContainer = document.querySelector(
 );
 let mainIndicator = document.querySelector(".main-indicator");
 let sliderIndicatorColor = document.querySelector(".indicator-middle-line");
+let websiteEmail = document.querySelector(".website-email");
+let copyBtn = document.querySelector(".ph-copy");
+let contactSubmitBtn = document.querySelector(".contact-submit");
+let contactSendBtn = document.querySelector(".ph-paper-plane-tilt");
+
+let contactName = document.getElementById("id_name");
+let email = document.getElementById("id_email");
+let message = document.getElementById("id_message");
+
 const hamburgerMenu = document.querySelector(".hamburger-div");
 
 let translateXValue = featureBlogsContainer.children[0].style.transform;
 let sliderPosition = 0;
+
+// HTMX
+document.body.addEventListener("htmx:configRequest", (e) => {
+    e.detail.headers["X-CSRFToken"] = "{{ csrf_token }}";
+});
 
 function shrinkHamburger() {
     secondLine.classList.add("shrink-second-line");
@@ -237,6 +244,62 @@ leftSlider.addEventListener("click", function () {
     }
 });
 
+function copyToClipboard(param) {
+    return navigator.clipboard.writeText(param.innerText);
+}
 
+copyBtn.addEventListener("click", function () {
+    copyToClipboard(websiteEmail);
+    copyBtn.style.color = "#fbc5c4";
 
+    setTimeout(() => {
+        copyBtn.style.color = "black";
+        copyBtn.style.backgroundColor = "#afd7b6";
+        websiteEmail.children[0].className = "ph-check";
+    }, "250");
 
+    setTimeout(() => {
+        copyBtn.style.color = "#afd7b6";
+        setTimeout(() => {
+            websiteEmail.children[0].className = "ph-check";
+        }, "250");
+        copyBtn.style.color = "black";
+    }, "500");
+
+    setTimeout(() => {
+        copyBtn.style.color = "#fbc5c4";
+        copyBtn.style.backgroundColor = "#fbc5c4";
+        setTimeout(() => {
+            websiteEmail.children[0].className = "ph-copy";
+            copyBtn.style.color = "black";
+        }, "250");
+    }, "1000");
+});
+
+contactSubmitBtn.addEventListener("click", function () {
+    let contactName = document.getElementById("id_name");
+    let email = document.getElementById("id_email");
+    let message = document.getElementById("id_message");
+    console.log("yes");
+
+    if (contactName.value && email.value && message.value) {
+        contactSendBtn.style.color = "white";
+
+        setTimeout(() => {
+            contactSendBtn.style.backgroundColor = "#afd7b6";
+            contactSendBtn.style.color = "black";
+            contactSubmitBtn.children[0].className = "ph-check";
+        }, "250");
+
+        setTimeout(() => {
+            contactSendBtn.style.backgroundColor = "#afd7b6";
+            contactSendBtn.style.color = "#afd7b6";
+            setTimeout(() => {
+                contactSubmitBtn.children[0].className = "ph-paper-plane-tilt";
+                contactSendBtn.style.backgroundColor = "white";
+                contactSendBtn.style.color = "black";
+            }, "250");
+        }, "2000");
+    }
+    console.log(contactSubmitBtn.className);
+});
