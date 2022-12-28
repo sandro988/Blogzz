@@ -51,7 +51,7 @@ function lockScroll() {
 }
 
 hamburgerMenu.addEventListener("click", function () {
-    lockScroll();
+    lockScroll()
     if (navbar.classList.contains("burger-clicked")) {
         unshrinkHamburger();
         navbar.classList.remove("burger-clicked");
@@ -248,7 +248,7 @@ function copyToClipboard(param) {
     return navigator.clipboard.writeText(param.innerText);
 }
 
-copyBtn.addEventListener("click", function () {
+websiteEmail.addEventListener("click", function () {
     copyToClipboard(websiteEmail);
     copyBtn.style.color = "#fbc5c4";
 

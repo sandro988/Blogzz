@@ -36,7 +36,8 @@ nav {
 }
 
 .lock-scroll {
-    overflow: hidden;
+    overflow-y: hidden;
+    position: fixed;
 }
 
 .blogzz-logo {
@@ -282,7 +283,8 @@ h1 {
 .contact-form h3,
 .about-top-header p,
 .about-bottom-header p,
-.contact-section-headers p {
+.contact-section-headers p,
+.contact-section-headers button {
     margin-bottom: 20px;
     font-size: clamp(1.3rem, 1.75vw, 5rem);
     text-align: center;
@@ -301,7 +303,7 @@ h1 {
 
 .about-top-header a,
 .about-bottom-header a,
-.contact-section-headers p:last-child {
+.contact-section-headers button{
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -531,23 +533,24 @@ h1 {
 }
 
 .contact-section-headers h2,
-.contact-section-headers p {
+.contact-section-headers p,
+.contact-section-headers button {
     width: 80%;
     margin: clamp(20px, 1vw, 50px) auto;
 }
 
-.contact-section-headers p:last-child {
+.contact-section-headers button {
     color: black;
     width: max-content;
-    font-weight: normal;
+    font-weight: bold;
     gap: 30px;
 }
 
-.contact-section-headers p:last-child {
+.contact-section-headers button{
     font-size: clamp(0.7rem, 1vw, 1rem);
 }
 
-.contact-section-headers p:last-child i,
+.contact-section-headers button i,
 .contact-form button i {
     font-size: clamp(1rem, 1.5vw, 2rem);
     background-color: #afd7b6;
@@ -558,7 +561,7 @@ h1 {
     border: 1px solid black;
 }
 
-.contact-section-headers p:last-child i {
+.contact-section-headers button i {
     background-color: #fbc5c4;
 }
 
@@ -580,13 +583,13 @@ h1 {
     background-color: white;
 }
 
-.contact-section-headers p:last-child:hover {
+.contact-section-headers button:hover {
     color: black;
     background-color: #f1f1f1;
-    cursor: auto;
+    cursor: pointer;
 }
 
-.contact-section-headers p:last-child:hover i {
+.contact-section-headers button:hover i {
     color: black;
     cursor: pointer;
 }
@@ -655,9 +658,6 @@ textarea::-webkit-scrollbar {
     border-radius: 5px;
     letter-spacing: 0.2em;
 }
-
-
-
 
 @media only screen and (min-width: 320px) and (max-width: 375px) {
     .featured-blogs-container-inner {
@@ -796,7 +796,7 @@ textarea::-webkit-scrollbar {
         display: flex;
         flex-direction: row;
         font-size: clamp(12px, 1.25vw, 28px);
-        gap: clamp(1.5rem, 4vw, 4rem) !important
+        gap: clamp(1.5rem, 4vw, 4rem) !important;
     }
 
     .left-links {
@@ -821,7 +821,7 @@ textarea::-webkit-scrollbar {
     }
 
     .middle-links p {
-        font-size: clamp(.8rem, 2vw, 3rem);
+        font-size: clamp(0.8rem, 2vw, 3rem);
     }
 
     .middle-links img {
@@ -1021,13 +1021,19 @@ textarea::-webkit-scrollbar {
     }
 
     .contact-section-headers h2,
-    .contact-section-headers p {
+    .contact-section-headers p,
+    .contact-section-headers button {
         margin: 0 0 30px 0;
     }
 
     .contact-section-headers h2,
-    .contact-section-headers p {
+    .contact-section-headers p,
+    .contact-section-headers button {
         text-align: left;
+    }
+
+    .contact-section-headers button {
+        margin: 30px 0 !important;
     }
 
     .contact-section-container {
@@ -1036,8 +1042,6 @@ textarea::-webkit-scrollbar {
 
     .contact-form {
         position: relative;
-        /* box-shadow: clamp(50px, 1.5vw, 125px) clamp(-25px, 2vw, -75px) #a5c1f0,
-            clamp(100px, 1.5vw, 250px) clamp(-50px, 2vw, -125px) #afd7b6; */
         right: clamp(100px, 1.5vw, 200px);
         top: clamp(25px, 2vw, 50px);
         z-index: 5;
