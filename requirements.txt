@@ -8,6 +8,7 @@ cryptography==38.0.4
 defusedxml==0.7.1
 Django==4.1.4
 django-allauth==0.51.0
+django-htmx==1.13.0
 environs==9.5.0
 idna==3.4
 marshmallow==3.19.0

@@ -1,5 +1,10 @@
 "use strict";
 
+// HTMX
+document.body.addEventListener("htmx:configRequest", (e) => {
+    e.detail.headers["X-CSRFToken"] = "{{ csrf_token }}";
+});
+
 let secondLine = document.querySelector(".hamburger-2");
 let thirdLine = document.querySelector(".hamburger-3");
 let fourthLine = document.querySelector(".hamburger-4");
@@ -231,3 +236,7 @@ leftSlider.addEventListener("click", function () {
         translateXValue = "";
     }
 });
+
+
+
+

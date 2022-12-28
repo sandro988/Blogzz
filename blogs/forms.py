@@ -43,7 +43,6 @@ class ContactForm(forms.Form):
                     reply_to=[data["email"]],
                 )
                 email.send()
-                print("it worked")
             except BadHeaderError:
                 return HttpResponse("Invalid header found.")
         

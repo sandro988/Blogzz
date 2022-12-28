@@ -141,12 +141,7 @@
 
     <section class="top-creators-section"></section>
     <section class="contact-section">
-        <form action="{% url 'contact' %}" method="POST">
-            {% csrf_token %}
-
-            {{ form.as_p }}
-            <button type="submit">Submit</button>
-        </form>
+        {% include 'blogs/contact_form.html' %} 
     </section>
 </main>
 {% endblock content %}
