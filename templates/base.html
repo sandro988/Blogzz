@@ -37,7 +37,12 @@
     {% block content %} {% endblock content%}
     
     <!-- JavaScript -->
-    <script src="{% static 'js/base.js' %}"></script>
+    <script src="{% static 'js/base.js' %}">
+        // HTMX
+        document.body.addEventListener("htmx:configRequest", (e) => {
+            e.detail.headers["X-CSRFToken"] = "{{ csrf_token }}";
+        });
+    </script>
 
 </body>
 </html>

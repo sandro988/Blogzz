@@ -40,8 +40,8 @@
 <main>
     <section class="hero-section">
         <div class="hero-left">
-            <h1>Stay curious and enjoy writing</h1>
-            <p>
+            <h1 class="hero-main-header">Stay curious and enjoy writing</h1>
+            <p class="hero-paragraph">
                 Discover stories, thinking and expertise from writers on any
                 topic
             </p>
@@ -50,17 +50,16 @@
             </div>
         </div>
         <div class="hero-right">
-            <img src="{% static 'images/hero-page-cards.png' %}" alt=""/>
+            <img class="hero-main-image" src="{% static 'images/hero-section-imgs/hero-page-cards.png' %}" alt=""/>
         </div>
 
-        <div class="circle-div hidden">
-            <img src="{% static 'images/hero-arrow.svg' %}" class="hero-arrow-svg" alt="">
-            <img src="{% static 'images/circle.svg' %}" class="circle-svg" alt="">
+        <div class="circle-div hidden hero-additional-image-div">
+            <img src="{% static 'images/hero-section-imgs/hero-arrow.svg' %}" class="hero-arrow-svg" alt="">
+            <img src="{% static 'images/hero-section-imgs/circle.svg' %}" class="hero-circle-svg" alt="">
         </div>
     </section>
 
-    <section class="about-section" id="about">
-        
+    <section class="about-section" id="about"> 
         <div class="about-header">
             <h2>About Blogzz</h2>
         </div>
@@ -75,8 +74,8 @@
                         </a>
                     </div>
                     <div class="about-top-footer">
-                        <img src="{% static 'images/about-img1.png' %}" alt="">
-                        <img src="{% static 'images/about-img2.png' %}" alt="">
+                        <img src="{% static 'images/about-section-imgs/about-img1.png' %}" alt="">
+                        <img src="{% static 'images/about-section-imgs/about-img2.png' %}" alt="">
                     </div>
                 </div>
                 
@@ -87,15 +86,15 @@
                         <a href="{% url 'account_signup' %}" class="green-btn">
                             Become creator <i class="ph-arrow-up-right-bold"></i>
                         </a>
-                        <img src="{% static 'images/about-img5.svg' %}" class="hidden" alt="">
+                        <img src="{% static 'images/about-section-imgs/about-img5.svg' %}" class="hidden" alt="">
                     </div>
                     
                     <div class="about-bottom-footer">
-                        <img src="{% static 'images/about-img3.png' %}" alt="">
-                        <img src="{% static 'images/about-img4.png' %}" class="stats-img hidden" alt="">
+                        <img src="{% static 'images/about-section-imgs/about-img3.png' %}" alt="">
+                        <img src="{% static 'images/about-section-imgs/about-img4.png' %}" class="stats-img hidden" alt="">
                         <div class="about-bottom-footer-bottom hidden">
-                            <img src="{% static 'images/about-img4.png' %}" alt="">
-                            <img src="{% static 'images/about-img5.svg' %}" class="decorative-star-img hidden" alt="">
+                            <img src="{% static 'images/about-section-imgs/about-img4.png' %}" alt="">
+                            <img src="{% static 'images/about-section-imgs/about-img5.svg' %}" class="decorative-star-img hidden" alt="">
                         </div>
                     </div>
                 </div>

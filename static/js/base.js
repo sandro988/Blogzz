@@ -1,3 +1,5 @@
+
+// navbar related
 let secondLine = document.querySelector(".hamburger-2");
 let thirdLine = document.querySelector(".hamburger-3");
 let fourthLine = document.querySelector(".hamburger-4");
@@ -5,32 +7,33 @@ let navbar = document.querySelector(".navbar");
 let leftNavLinks = document.querySelector(".left-links");
 let rightNavLinks = document.querySelector(".right-links");
 let primaryNavLinks = document.querySelectorAll(".nav-link-primary");
+const hamburgerMenu = document.querySelector(".hamburger-div");
+
+// popular topics section related
 let popularTopicsContainer = document.querySelector(".blog-topics-container");
 let leftSlider = document.querySelector(".left-slider");
 let rightSlider = document.querySelector(".right-slider");
+
+// featured blogs section related
 let featureBlogsContainer = document.querySelector(
     ".featured-blogs-container-inner"
 );
 let mainIndicator = document.querySelector(".main-indicator");
 let sliderIndicatorColor = document.querySelector(".indicator-middle-line");
+let translateXValue = featureBlogsContainer.children[0].style.transform;
+let sliderPosition = 0;
+
+// contact section related
 let websiteEmail = document.querySelector(".website-email");
 let copyBtn = document.querySelector(".ph-copy");
 let contactSubmitBtn = document.querySelector(".contact-submit");
 let contactSendBtn = document.querySelector(".ph-paper-plane-tilt");
-
 let contactName = document.getElementById("id_name");
 let email = document.getElementById("id_email");
 let message = document.getElementById("id_message");
 
-const hamburgerMenu = document.querySelector(".hamburger-div");
 
-let translateXValue = featureBlogsContainer.children[0].style.transform;
-let sliderPosition = 0;
-
-// HTMX
-document.body.addEventListener("htmx:configRequest", (e) => {
-    e.detail.headers["X-CSRFToken"] = "{{ csrf_token }}";
-});
+// navbar related
 
 function shrinkHamburger() {
     secondLine.classList.add("shrink-second-line");
@@ -98,13 +101,14 @@ for (let i = 0; i < 3; i++) {
             navbar.classList.remove("burger-clicked");
             leftNavLinks.classList.add("hidden");
             rightNavLinks.classList.add("hidden");
-
             leftNavLinks.style.display = "none";
             rightNavLinks.style.display = "none";
             document.body.classList.remove("lock-scroll");
         }
     });
 }
+
+// popular topics section related
 
 function createBlogTopics() {
     const topicsAndColors = [
@@ -147,8 +151,9 @@ function createBlogTopics() {
         popularTopicsContainer.appendChild(topicContainer);
     }
 }
-
 createBlogTopics();
+
+// featured blogs section related
 
 function createGradient(param) {
     let gradient = `linear-gradient(to right, #a5c1f0 ${
@@ -243,6 +248,8 @@ leftSlider.addEventListener("click", function () {
         translateXValue = "";
     }
 });
+
+// contact section related
 
 function copyToClipboard(param) {
     return navigator.clipboard.writeText(param.innerText);

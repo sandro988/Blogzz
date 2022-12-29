@@ -28,6 +28,8 @@ a {
     color: black;
 }
 
+/* navbar styling */
+
 nav {
     padding: 25px 8vw;
     background-color: #f1f1f1;
@@ -185,19 +187,19 @@ main {
     margin-top: 5vh;
 }
 
-h1 {
+.hero-main-header {
     font-family: "Limelight", cursive;
     font-size: clamp(3rem, 5vw, 15rem);
     font-weight: normal;
     margin-bottom: 20px;
 }
 
-.hero-left p {
+.hero-paragraph {
     font-size: clamp(1rem, 1.5vw, 5rem);
     color: #434343;
 }
 
-.hero-left p,
+.hero-paragraph,
 .hero-left div {
     margin-bottom: 30px;
 }
@@ -678,11 +680,11 @@ textarea::-webkit-scrollbar {
         text-align: center;
     }
 
-    h1 {
+    hero-main-header {
         font-size: clamp(3rem, 9vw, 10rem);
     }
 
-    .hero-left p {
+    .hero-paragraph {
         font-size: clamp(1rem, 3vw, 5rem);
     }
 
@@ -831,10 +833,10 @@ textarea::-webkit-scrollbar {
     /* hero page styling */
 
     .hero-section {
-        position: relative;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        position: relative;
         height: 85vh;
         width: 100%;
         gap: 10%;
@@ -869,7 +871,7 @@ textarea::-webkit-scrollbar {
         width: 12.5%;
     }
 
-    .circle-svg {
+    .hero-circle-svg {
         width: 100%;
         animation-name: rotating-circle;
         animation-duration: 30s;
@@ -877,7 +879,7 @@ textarea::-webkit-scrollbar {
         animation-timing-function: linear;
     }
 
-    .circle-div:hover .circle-svg {
+    .circle-div:hover .hero-circle-svg {
         animation-play-state: paused;
     }
 
