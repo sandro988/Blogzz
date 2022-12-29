@@ -47,7 +47,7 @@ function unshrinkHamburger() {
 }
 
 function lockScroll() {
-    // Function for maing body element fixed so it wont scroll in the background
+    // Function for making body element fixed so it wont scroll in the background
     // when user is in the mobile menu.
 
     document.body.classList.toggle("lock-scroll");
@@ -58,18 +58,23 @@ hamburgerMenu.addEventListener("click", function () {
     if (navbar.classList.contains("burger-clicked")) {
         unshrinkHamburger();
         navbar.classList.remove("burger-clicked");
+        leftNavLinks.classList.remove('increase-font')
         leftNavLinks.classList.add("hidden");
         rightNavLinks.classList.add("hidden");
 
+
         leftNavLinks.style.display = "none";
+        leftNavLinks.style.fontFamily = '"Poppins", sans-serif';
         rightNavLinks.style.display = "none";
     } else {
         shrinkHamburger();
         navbar.classList.add("burger-clicked");
+        leftNavLinks.classList.add('increase-font')
         leftNavLinks.classList.remove("hidden");
         rightNavLinks.classList.remove("hidden");
 
         leftNavLinks.style.display = "flex";
+        leftNavLinks.style.fontFamily = '"Limelight", cursive';
         rightNavLinks.style.display = "flex";
     }
 });
@@ -80,7 +85,9 @@ window.addEventListener("resize", function () {
         navbar.classList.remove("burger-clicked");
         leftNavLinks.classList.remove("hidden");
         rightNavLinks.classList.remove("hidden");
+        leftNavLinks.classList.remove("increase-font")
         leftNavLinks.style.display = "flex";
+        leftNavLinks.style.fontFamily = '"Poppins", sans-serif';
         rightNavLinks.style.display = "flex";
         document.body.classList.remove("lock-scroll");
     } else {

@@ -97,7 +97,10 @@ nav {
     flex-direction: column;
     justify-content: flex-start;
     gap: 15vh;
+    background-color: #f1f1f1;
+    transition: .5s color ease-in-out
 }
+
 
 /* underline effect on navbar link hover */
 
@@ -131,6 +134,14 @@ nav {
     align-items: center;
     gap: 20px;
     font-size: 20px;
+}
+
+.increase-font a {
+    font-size: clamp(1.2rem, 2rem, 3rem)
+}
+
+.increase-font {
+    gap: 5vh;
 }
 
 .middle-links {
@@ -294,7 +305,7 @@ main {
 
 .contact-form h3 {
     font-family: "Limelight", cursive;
-    margin-bottom: clamp(20px, 2.5vw, 50px);
+    margin-bottom: clamp(1.5rem, 2vw, 3.5vw);
 }
 
 .about-top-header p,
@@ -671,6 +682,16 @@ textarea::-webkit-scrollbar {
     }
 }
 
+@media only screen and (max-width: 321px) {
+    .increase-font a {
+        font-size: 20px
+    }
+
+    /* .increase-font {
+        gap: 15px;
+    } */
+}
+
 @media only screen and (min-width: 767px) and (max-width: 1100px) {
     main {
         width: 80%;
@@ -688,9 +709,18 @@ textarea::-webkit-scrollbar {
         font-size: clamp(1rem, 3vw, 5rem);
     }
 
+    
     .nav-link,
     .black-btn {
         font-size: clamp(1rem, 3vw, 5rem);
+    }
+
+    .increase-font a {
+        font-size: clamp(1.2rem, 3rem, 10rem)
+    }
+
+    .increase-font {
+        gap: 50px;
     }
 
     .navbar {
