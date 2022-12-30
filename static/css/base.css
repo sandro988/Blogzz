@@ -334,20 +334,20 @@ main {
     padding: clamp(0.4rem, 1vw, 0.5rem) clamp(1.3rem, 1vw, 1.9rem);
     font-size: clamp(1rem, 1.25vw, 3rem);
     font-weight: bold;
-    transition: 0.2s background-color ease-in-out, 
-    0.25s color ease-in-out;
+    transition: 0.2s background-color ease-in-out, 0.25s color ease-in-out;
     margin: 0 auto;
 }
 
 .blue-btn svg,
 .green-btn svg,
 .all-topics-btn svg {
-    width: clamp(.9rem, 1.2vw, 3rem);
-    height: clamp(.9rem, 1.2vw, 3rem)
+    width: clamp(0.9rem, 1.2vw, 3rem);
+    height: clamp(0.9rem, 1.2vw, 3rem);
 }
 
-.blue-btn path, .green-btn path {
-    transition: 0.2s stroke ease-in-out
+.blue-btn path,
+.green-btn path {
+    transition: 0.2s stroke ease-in-out;
 }
 
 .blue-btn:hover {
@@ -464,7 +464,7 @@ main {
 
 .all-topics-btn path {
     stroke: white;
-    transition: stroke .25s ease-in-out
+    transition: stroke 0.25s ease-in-out;
 }
 
 .all-topics-btn:hover path {
@@ -626,7 +626,6 @@ main {
     fill: #e755af;
 }
 
-
 /* slider styling */
 
 .slider {
@@ -727,7 +726,6 @@ main {
     border: 1px solid black;
 }
 
-
 .contact-section-headers button svg {
     background-color: #fbc5c4;
 }
@@ -826,6 +824,132 @@ textarea::-webkit-scrollbar {
     letter-spacing: 0.2em;
 }
 
+/* footer styling */
+
+footer {
+    width: 100%;
+    height: max-content;
+    background-color: black;
+    color: #f1f1f1;
+    padding: clamp(50px, 5vh, 100px) 0;
+}
+
+footer a,
+footer p {
+    color: #bababa;
+    font-size: clamp(0.8rem, 1vw, 2.5rem);
+    display: block;
+    margin-bottom: 15px;
+}
+
+footer a svg {
+    width: clamp(0.8rem, 1vw, 2.5rem);
+    height: clamp(0.8rem, 1vw, 2.5rem);
+}
+
+footer a {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: 0.25s color ease-in-out;
+}
+
+footer a svg path {
+    stroke: #bababa;
+    transition: 0.25s stroke ease-in-out;
+}
+
+footer a:hover,
+footer a:hover svg path {
+    color: white;
+    cursor: pointer;
+    stroke: white;
+}
+
+.footer-container-inner {
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+}
+
+.about-project-main,
+.footer-links-container {
+    margin-bottom: clamp(30px, 5vh, 75px);
+}
+
+.about-project-main h3 {
+    font-family: "limelight", cursive;
+    font-weight: normal;
+    font-size: clamp(1.5rem, 2vw, 5rem);
+    margin-bottom: 20px;
+}
+
+.about-project-main p {
+    font-size: clamp(0.8rem, 1vw, 2.5rem);
+    /* width: clamp(500px, 35vw, 45vw); */
+    color: #bababa;
+}
+
+.about-project-container {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(100px, 30%, 300px);
+}
+
+.about-project-container small {
+    position: absolute;
+    display: block;
+    text-align: center;
+    bottom: 0;
+    color: #bababa;
+    width: 100%;
+}
+
+.footer-links-container-main h4 {
+    font-size: clamp(1.25rem, 1.25vw, 4rem);
+    margin-bottom: 20px;
+}
+
+.back-to-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: max-content;
+    margin: clamp(40px, 5vh, 75px) auto;
+    text-align: center;
+    padding: clamp(0.4rem, 1vw, 0.5rem) clamp(1.3rem, 1vw, 1.9rem);
+    border-radius: 15px;
+    background-color: #a5c1f0;
+    color: black;
+    font-weight: bold;
+    transition: 0.25s background-color ease-in-out, 0.25s color ease-in-out;
+}
+
+.back-to-top svg path {
+    stroke: black;
+}
+
+.back-to-top svg {
+    transition: 0.25s transform ease-in-out;
+}
+
+.back-to-top:hover {
+    background-color: white;
+    color: black;
+    cursor: pointer;
+}
+
+.back-to-top:hover svg path {
+    stroke: black;
+}
+
+.back-to-top:hover svg {
+    transform: rotate(-45deg);
+}
+
 @media only screen and (min-width: 320px) and (max-width: 375px) {
     .featured-blogs-container-inner {
         border-radius: 0px;
@@ -845,9 +969,8 @@ textarea::-webkit-scrollbar {
     }
 
     .likes-count {
-        font-size: .6rem
+        font-size: 0.6rem;
     }
-
 
     .ph-heart {
         width: 12px;
@@ -976,6 +1099,37 @@ textarea::-webkit-scrollbar {
         width: 80%;
         margin: 50px auto;
     }
+
+    /* footer styling */
+    .footer-container-inner {
+        flex-direction: row;
+        gap: clamp(50px, 10vw, 200px);
+    }
+
+    .about-project-container small {
+        position: relative;
+        text-align: left;
+        display: block;
+        width: fit-content;
+    }
+
+    .about-project-container,
+    .footer-links-container {
+        height: 100%;
+    }
+
+    .about-project-main p {
+        width: clamp(300px, 80%, 400px);
+    }
+
+    .footer-links-container,
+    .back-to-top {
+        margin-bottom: 0;
+    }
+
+    .back-to-top {
+        bottom: 0;
+    }
 }
 
 @media only screen and (min-width: 1101px) {
@@ -1002,8 +1156,6 @@ textarea::-webkit-scrollbar {
         font-size: clamp(12px, 1.1vw, 28px);
         gap: clamp(1.5rem, 4vw, 4rem) !important;
     }
-
-    
 
     .middle-links {
         order: 1;
@@ -1043,7 +1195,7 @@ textarea::-webkit-scrollbar {
         height: 85vh;
         width: 100%;
         gap: 10%;
-        padding-top: clamp(100px, 15vh, 20vh)
+        padding-top: clamp(100px, 15vh, 20vh);
     }
 
     .hero-left {
@@ -1195,7 +1347,6 @@ textarea::-webkit-scrollbar {
         flex-basis: clamp(325px, 22.5%, 500px);
     }
 
-
     .indicator-middle-line {
         height: clamp(3px, 1vw, 5px);
         border-radius: 5px;
@@ -1215,11 +1366,15 @@ textarea::-webkit-scrollbar {
 
     /* contact section styling */
 
-    .contact-section-socials,
+    .contact-section-socials-icons,
     .contact-section-container {
         display: flex;
         justify-content: space-between;
         align-items: center;
+    }
+
+    .contact-section-socials {
+        display: block;
     }
 
     .contact-section-container-inner {
@@ -1232,30 +1387,37 @@ textarea::-webkit-scrollbar {
         gap: clamp(100px, 5vh, 300px);
     }
 
-    .contact-section-socials svg {
+    .contact-section-socials-icons svg {
         /* font-size: clamp(1rem, 2vw, 3rem); */
         width: clamp(1.2rem, 2.5vw, 3.5rem);
         height: clamp(1.2rem, 2.5vw, 3.5rem);
-        border-radius: 15px;
+        border-radius: 50%;
         border: 1px solid black;
         padding: 7.5px;
-        transition: 0.2s background-color ease-in-out,
-        0.2s color ease-in-out;
+        transition: 0.2s background-color ease-in-out, 0.2s color ease-in-out;
     }
 
-    .contact-section-socials svg path {
-        transition: 0.2s fill ease-in-out
+    .contact-section-socials-icons svg path {
+        transition: 0.2s fill ease-in-out;
     }
 
-    .contact-section-socials {
-        gap: 20px;
+    .contact-section-socials div {
+        gap: 15px;
+        position: relative;
     }
 
     .contact-section-socials svg:hover,
-    .contact-section-socials svg:hover path{
+    .contact-section-socials svg:hover path {
         background-color: black;
         cursor: pointer;
         fill: white;
+    }
+
+    .contact-section-socials small {
+        display: block;
+        color: #838383;
+        margin-top: 10px;
+        text-decoration: underline;
     }
 
     .contact-section-headers h2,
@@ -1335,5 +1497,59 @@ textarea::-webkit-scrollbar {
     .input-box input,
     .input-box textarea {
         font-size: clamp(0.8rem, 1vw, 1.4rem);
+    }
+
+    /* footer styling */
+
+    /* footer {
+        height: 40vh;
+    } */
+
+    .footer-container-inner {
+        flex-direction: row;
+        height: 40vh        
+    }
+
+    .about-project-container {
+        display: block;
+        position: relative;
+    }
+
+    .about-project-container small {
+        position: absolute;
+        text-align: left;
+        display: block;
+        width: fit-content;
+        bottom: 0;
+        font-size: clamp(.6rem, .8vw, 1.5rem)
+    }
+
+    .about-project-container,
+    .footer-links-container {
+        height: 100%;
+    }
+
+    .about-project-main p {
+        width: clamp(300px, 80%, 400px);
+    }
+
+    .about-project-container,
+    .footer-links-container {
+        width: 50%;
+        height: 100%;
+    }
+
+
+    .footer-links-container {
+        position: relative;
+    }
+    .back-to-top {
+        position: absolute;
+        bottom: 0;
+        margin: 0;
+    }
+
+    .about-project-main p {
+        width: 80%;
     }
 }
