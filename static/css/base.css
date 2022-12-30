@@ -465,7 +465,7 @@ main {
     gap: 20px;
     overflow: hidden;
     width: 100%;
-    margin: clamp(50px, 10%, 150px) auto;
+    margin: clamp(50px, 5%, 100px) auto;
 }
 
 /* individual-blog styling */
@@ -802,6 +802,25 @@ textarea::-webkit-scrollbar {
     .featured-blog {
         width: 225px;
     }
+
+    .featured-blog {
+        width: clamp(225px, 15vw, 600px);
+        height: clamp(325px, 15vh, 700px);
+    }
+
+    .featured-blog-content-container {
+        padding-bottom: 20px;
+    }
+
+    .likes-count {
+        font-size: .6rem
+    }
+
+
+    .ph-heart {
+        width: 12px;
+        height: 12px;
+    }
 }
 
 @media only screen and (max-width: 321px) {
@@ -1135,6 +1154,10 @@ textarea::-webkit-scrollbar {
         width: 0;
         height: clamp(450px, 45vh, 700px);
         flex-basis: clamp(325px, 22.5%, 500px);
+    }
+
+    .featured-blogs-container-inner {
+        
     }
 
     .indicator-middle-line {
