@@ -1025,10 +1025,6 @@ textarea::-webkit-scrollbar {
 
     .middle-links {
         justify-content: center;
-        /* order: 2; */
-        /* position: absolute;
-        left: 50%;
-        transform: translate(-50%); */
         width: max-content;
     }
 
@@ -1072,13 +1068,13 @@ textarea::-webkit-scrollbar {
         overflow: hidden;
     }
 
-    .hero-arrow-svg {
+    .hero-star-svg {
         position: absolute;
         z-index: 1;
         top: 47.5%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 12.5%;
+        width: 30%;
     }
 
     .hero-circle-svg {
