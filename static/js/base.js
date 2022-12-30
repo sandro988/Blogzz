@@ -1,4 +1,3 @@
-
 // navbar related
 let secondLine = document.querySelector(".hamburger-2");
 let thirdLine = document.querySelector(".hamburger-3");
@@ -21,6 +20,7 @@ let featureBlogsContainer = document.querySelector(
 let mainIndicator = document.querySelector(".main-indicator");
 let sliderIndicatorColor = document.querySelector(".indicator-middle-line");
 let translateXValue = featureBlogsContainer.children[0].style.transform;
+let heartDiv = document.querySelectorAll(".likes-div");
 let sliderPosition = 0;
 
 // contact section related
@@ -31,7 +31,6 @@ let contactSendBtn = document.querySelector(".ph-paper-plane-tilt");
 let contactName = document.getElementById("id_name");
 let email = document.getElementById("id_email");
 let message = document.getElementById("id_message");
-
 
 // navbar related
 
@@ -54,14 +53,13 @@ function lockScroll() {
 }
 
 hamburgerMenu.addEventListener("click", function () {
-    lockScroll()
+    lockScroll();
     if (navbar.classList.contains("burger-clicked")) {
         unshrinkHamburger();
         navbar.classList.remove("burger-clicked");
-        leftNavLinks.classList.remove('increase-font')
+        leftNavLinks.classList.remove("increase-font");
         leftNavLinks.classList.add("hidden");
         rightNavLinks.classList.add("hidden");
-
 
         leftNavLinks.style.display = "none";
         leftNavLinks.style.fontFamily = '"Poppins", sans-serif';
@@ -69,7 +67,7 @@ hamburgerMenu.addEventListener("click", function () {
     } else {
         shrinkHamburger();
         navbar.classList.add("burger-clicked");
-        leftNavLinks.classList.add('increase-font')
+        leftNavLinks.classList.add("increase-font");
         leftNavLinks.classList.remove("hidden");
         rightNavLinks.classList.remove("hidden");
 
@@ -85,7 +83,7 @@ window.addEventListener("resize", function () {
         navbar.classList.remove("burger-clicked");
         leftNavLinks.classList.remove("hidden");
         rightNavLinks.classList.remove("hidden");
-        leftNavLinks.classList.remove("increase-font")
+        leftNavLinks.classList.remove("increase-font");
         leftNavLinks.style.display = "flex";
         leftNavLinks.style.fontFamily = '"Poppins", sans-serif';
         rightNavLinks.style.display = "flex";
@@ -255,6 +253,34 @@ leftSlider.addEventListener("click", function () {
         translateXValue = "";
     }
 });
+
+// Heart button animation
+
+for(let i = 0; i < heartDiv.length; i++) {
+    heartDiv[i].addEventListener('click', function () {
+        heartReaction(heartDiv[i])
+    })
+}
+
+function heartReaction (e) {
+    let heart = e.children[0];
+    let reactionNumber = e.children[1];
+
+    if (!heart.classList.contains("heart-active")) {
+        reactionNumber.innerText = String(Number(reactionNumber.innerText) + 1);
+        heart.classList.add("heart-active");
+        heart.style.transform = "scale(0.5)";
+        setTimeout(() => {
+            heart.style.transform = "scale(1.75)";
+            setTimeout(() => {
+                heart.style.transform = "scale(1)";
+            }, "150");
+        }, "150");
+    } else {
+        heart.classList.remove("heart-active");
+        reactionNumber.innerText -= 1;
+    }
+}
 
 // contact section related
 
