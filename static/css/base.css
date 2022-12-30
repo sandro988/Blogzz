@@ -334,14 +334,30 @@ main {
     padding: clamp(0.4rem, 1vw, 0.5rem) clamp(1.3rem, 1vw, 1.9rem);
     font-size: clamp(1rem, 1.25vw, 3rem);
     font-weight: bold;
-    transition: 0.2s background-color ease-in-out, 0.25s color ease-in-out;
+    transition: 0.2s background-color ease-in-out, 
+    0.25s color ease-in-out;
     margin: 0 auto;
+}
+
+.blue-btn svg,
+.green-btn svg,
+.all-topics-btn svg {
+    width: clamp(.9rem, 1.2vw, 3rem);
+    height: clamp(.9rem, 1.2vw, 3rem)
+}
+
+.blue-btn path, .green-btn path {
+    transition: 0.2s stroke ease-in-out
 }
 
 .blue-btn:hover {
     background-color: black;
     color: white;
     cursor: pointer;
+}
+
+.blue-btn:hover path {
+    stroke: white;
 }
 
 .green-btn {
@@ -352,6 +368,10 @@ main {
     background-color: black;
     color: white;
     cursor: pointer;
+}
+
+.green-btn:hover path {
+    stroke: white;
 }
 
 .about-bottom {
@@ -440,6 +460,15 @@ main {
     width: max-content;
     margin: 0 auto;
     gap: 10px;
+}
+
+.all-topics-btn path {
+    stroke: white;
+    transition: stroke .25s ease-in-out
+}
+
+.all-topics-btn:hover path {
+    stroke: black;
 }
 
 /* styling featured section */
@@ -637,11 +666,12 @@ main {
     right: 0;
 }
 
-.slider-buttons i {
-    font-size: clamp(2.5rem, 3vw, 5rem);
+.slider-buttons svg {
+    width: clamp(2.5rem, 3vw, 5rem);
+    height: clamp(2.5rem, 3vw, 5rem);
 }
 
-.slider-buttons i:hover {
+.slider-buttons svg:hover {
     cursor: pointer;
 }
 
@@ -685,22 +715,24 @@ main {
     font-size: clamp(0.7rem, 1vw, 1rem);
 }
 
-.contact-section-headers button i,
-.contact-form button i {
-    font-size: clamp(1rem, 1.5vw, 2rem);
-    background-color: #afd7b6;
+.contact-section-headers button svg,
+.contact-form button svg {
+    width: clamp(2rem, 2.25vw, 3rem);
+    height: clamp(2rem, 2.25vw, 3rem);
+    background-color: white;
     border-radius: 50%;
     padding: 10px;
-    transition: 0.25s color ease-in-out, 0.3s background-color ease-in-out;
+    transition: 0.25s stroke ease-in-out, 0.3s background-color ease-in-out;
     color: black;
     border: 1px solid black;
 }
 
-.contact-section-headers button i {
+
+.contact-section-headers button svg {
     background-color: #fbc5c4;
 }
 
-.contact-submit i {
+.contact-submit svg {
     padding: 10px !important;
 }
 
@@ -724,8 +756,8 @@ main {
     cursor: pointer;
 }
 
-.contact-section-headers button:hover i {
-    color: black;
+.contact-section-headers button:hover svg path {
+    stroke: black;
     cursor: pointer;
 }
 
@@ -1196,22 +1228,30 @@ textarea::-webkit-scrollbar {
         gap: clamp(100px, 5vh, 300px);
     }
 
-    .contact-section-socials i {
-        font-size: clamp(1rem, 2vw, 3rem);
+    .contact-section-socials svg {
+        /* font-size: clamp(1rem, 2vw, 3rem); */
+        width: clamp(1.2rem, 2.5vw, 3.5rem);
+        height: clamp(1.2rem, 2.5vw, 3.5rem);
         border-radius: 15px;
         border: 1px solid black;
         padding: 7.5px;
-        transition: 0.2s background-color ease-in-out, 0.2s color ease-in-out;
+        transition: 0.2s background-color ease-in-out,
+        0.2s color ease-in-out;
+    }
+
+    .contact-section-socials svg path {
+        transition: 0.2s fill ease-in-out
     }
 
     .contact-section-socials {
         gap: 20px;
     }
 
-    .contact-section-socials i:hover {
+    .contact-section-socials svg:hover,
+    .contact-section-socials svg:hover path{
         background-color: black;
-        color: #f1f1f1;
         cursor: pointer;
+        fill: white;
     }
 
     .contact-section-headers h2,

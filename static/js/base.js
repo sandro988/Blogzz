@@ -26,8 +26,10 @@ let sliderPosition = 0;
 // contact section related
 let websiteEmail = document.querySelector(".website-email");
 let copyBtn = document.querySelector(".ph-copy");
+let checkBtn = document.querySelector(".ph-check");
+let contactCheckBtn = document.querySelector(".ph-check-contact");
 let contactSubmitBtn = document.querySelector(".contact-submit");
-let contactSendBtn = document.querySelector(".ph-paper-plane-tilt");
+let contactSendBtn = document.querySelector(".ph-plane");
 let contactName = document.getElementById("id_name");
 let email = document.getElementById("id_email");
 let message = document.getElementById("id_message");
@@ -256,13 +258,13 @@ leftSlider.addEventListener("click", function () {
 
 // Heart button animation
 
-for(let i = 0; i < heartDiv.length; i++) {
-    heartDiv[i].addEventListener('click', function () {
-        heartReaction(heartDiv[i])
-    })
+for (let i = 0; i < heartDiv.length; i++) {
+    heartDiv[i].addEventListener("click", function () {
+        heartReaction(heartDiv[i]);
+    });
 }
 
-function heartReaction (e) {
+function heartReaction(e) {
     let heart = e.children[0];
     let reactionNumber = e.children[1];
 
@@ -289,57 +291,53 @@ function copyToClipboard(param) {
 }
 
 websiteEmail.addEventListener("click", function () {
+    function copyToClipboard(param) {
+        return navigator.clipboard.writeText(param.innerText);
+    }
     copyToClipboard(websiteEmail);
-    copyBtn.style.color = "#fbc5c4";
 
+    copyBtn.style.backgroundColor = "#afd7b6";
+    copyBtn.children[0].style.stroke = "#afd7b6";
+    copyBtn.children[1].style.stroke = "#afd7b6";
     setTimeout(() => {
-        copyBtn.style.color = "black";
-        copyBtn.style.backgroundColor = "#afd7b6";
-        websiteEmail.children[0].className = "ph-check";
+        copyBtn.classList.add("hidden");
+        checkBtn.classList.remove("hidden");
+        checkBtn.style.backgroundColor = "#afd7b6";
+        setTimeout(() => {
+            checkBtn.classList.add("hidden");
+            copyBtn.classList.remove("hidden");
+            setTimeout(() => {
+                copyBtn.style.backgroundColor = "#fbc5c4";
+                copyBtn.children[0].style.stroke = "black";
+                copyBtn.children[1].style.stroke = "black";
+            }, "150");
+        }, "750");
     }, "250");
-
-    setTimeout(() => {
-        copyBtn.style.color = "#afd7b6";
-        setTimeout(() => {
-            websiteEmail.children[0].className = "ph-check";
-        }, "250");
-        copyBtn.style.color = "black";
-    }, "500");
-
-    setTimeout(() => {
-        copyBtn.style.color = "#fbc5c4";
-        copyBtn.style.backgroundColor = "#fbc5c4";
-        setTimeout(() => {
-            websiteEmail.children[0].className = "ph-copy";
-            copyBtn.style.color = "black";
-        }, "250");
-    }, "1000");
 });
 
 contactSubmitBtn.addEventListener("click", function () {
     let contactName = document.getElementById("id_name");
     let email = document.getElementById("id_email");
     let message = document.getElementById("id_message");
-    console.log("yes");
 
     if (contactName.value && email.value && message.value) {
         contactSendBtn.style.color = "white";
+        contactSendBtn.children[0].style.stroke = "white";
+        contactSendBtn.children[1].style.stroke = "white";
 
         setTimeout(() => {
-            contactSendBtn.style.backgroundColor = "#afd7b6";
-            contactSendBtn.style.color = "black";
-            contactSubmitBtn.children[0].className = "ph-check";
-        }, "250");
-
-        setTimeout(() => {
-            contactSendBtn.style.backgroundColor = "#afd7b6";
-            contactSendBtn.style.color = "#afd7b6";
+            contactSendBtn.classList.add("hidden");
+            contactCheckBtn.classList.remove("hidden");
+            contactCheckBtn.style.backgroundColor = "#afd7b6";
             setTimeout(() => {
-                contactSubmitBtn.children[0].className = "ph-paper-plane-tilt";
-                contactSendBtn.style.backgroundColor = "white";
-                contactSendBtn.style.color = "black";
-            }, "250");
-        }, "2000");
+                contactCheckBtn.classList.add("hidden");
+                contactSendBtn.classList.remove("hidden");
+                setTimeout(() => {
+                    contactSendBtn.style.backgroundColor = "white";
+                    contactSendBtn.children[0].style.stroke = "black";
+                    contactSendBtn.children[1].style.stroke = "black";
+                }, "250");
+            }, "1000");
+        }, "250");
     }
-    console.log(contactSubmitBtn.className);
 });
