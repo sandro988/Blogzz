@@ -99,6 +99,8 @@ window.addEventListener("resize", function () {
             rightNavLinks.style.display = "none";
         }
     }
+
+    returnToStartingPoint()
 });
 
 for (let i = 0; i < 3; i++) {
@@ -179,6 +181,19 @@ function getXfromTrasnlateXvalue(param) {
     }
 }
 
+
+function returnToStartingPoint() {
+    // returns featured blogs section to its starting position when user resizes webpage
+
+    translateXValue = "";
+    for (let i = 0; i < featureBlogsContainer.children.length; i++) {
+        featureBlogsContainer.children[i].style.transform = translateXValue;
+    }
+    sliderPosition = 0;
+    mainIndicator.innerText = `0${sliderPosition + 1}`;
+    createGradient(sliderPosition);
+}
+
 rightSlider.addEventListener("click", function () {
     sliderPosition += 1;
     mainIndicator.innerText = `0${sliderPosition + 1}`;
@@ -213,13 +228,7 @@ rightSlider.addEventListener("click", function () {
             featureBlogsContainer.children[i].style.transform = translateXValue;
         }
     } else {
-        translateXValue = "";
-        for (let i = 0; i < featureBlogsContainer.children.length; i++) {
-            featureBlogsContainer.children[i].style.transform = translateXValue;
-        }
-        sliderPosition = 0;
-        mainIndicator.innerText = `0${sliderPosition + 1}`;
-        createGradient(sliderPosition);
+        returnToStartingPoint()
     }
 });
 
