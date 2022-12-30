@@ -1003,8 +1003,16 @@ textarea::-webkit-scrollbar {
         gap: clamp(1.5rem, 4vw, 4rem) !important;
     }
 
-    .left-links {
+    /* .left-links {
         order: 1;
+    } */
+
+    .middle-links {
+        order: 1;
+    }
+
+    .left-links {
+        order: 2;
     }
 
     .right-links {
@@ -1012,15 +1020,15 @@ textarea::-webkit-scrollbar {
         justify-content: flex-end;
         gap: clamp(1.2rem, 4vw, 2.5rem) !important;
         order: 3;
-        width: 50%;
+        width: max-content;
     }
 
     .middle-links {
         justify-content: center;
-        order: 2;
-        position: absolute;
+        /* order: 2; */
+        /* position: absolute;
         left: 50%;
-        transform: translate(-50%);
+        transform: translate(-50%); */
         width: max-content;
     }
 
@@ -1188,9 +1196,6 @@ textarea::-webkit-scrollbar {
         flex-basis: clamp(325px, 22.5%, 500px);
     }
 
-    .featured-blogs-container-inner {
-        
-    }
 
     .indicator-middle-line {
         height: clamp(3px, 1vw, 5px);
