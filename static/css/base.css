@@ -1507,7 +1507,7 @@ footer a:hover svg path {
 
     .footer-container-inner {
         flex-direction: row;
-        height: 40vh        
+        height: 40vh;
     }
 
     .about-project-container {
@@ -1521,7 +1521,7 @@ footer a:hover svg path {
         display: block;
         width: fit-content;
         bottom: 0;
-        font-size: clamp(.6rem, .8vw, 1.5rem)
+        font-size: clamp(0.6rem, 0.8vw, 1.5rem);
     }
 
     .about-project-container,
@@ -1538,7 +1538,6 @@ footer a:hover svg path {
         width: 50%;
         height: 100%;
     }
-
 
     .footer-links-container {
         position: relative;

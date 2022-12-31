@@ -141,6 +141,16 @@ function createBlogTopics() {
         { topic: "Physics", color: "#fce440" },
         { topic: "Networking", color: "#0000b5" },
         { topic: "Education", color: "#b1aae6" },
+        { topic: "Architecture", color: "#d0291d" },
+        { topic: "Copyrighting", color: "#7860af" },
+        { topic: "Literature", color: "#eeae67" },
+        { topic: "Sports", color: "#12257f" },
+        { topic: "Fitness", color: "#5ff4f3" },
+        { topic: "Productivity", color: "#103f35" },
+        { topic: "Creativity", color: "#fcc519" },
+        { topic: "Leadership", color: "#d29dbe" },
+        { topic: "Traveling", color: "#d0291d" },
+        { topic: "Tech Industry", color: "#14af83" },
     ];
 
     for (let i = 0; i < topicsAndColors.length; i++) {
