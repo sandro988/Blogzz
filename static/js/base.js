@@ -24,9 +24,6 @@ let heartDiv = document.querySelectorAll(".likes-div");
 let sliderPosition = 0;
 
 // contact section related
-let websiteEmail = document.querySelector(".website-email");
-let copyBtn = document.querySelector(".ph-copy");
-let checkBtn = document.querySelector(".ph-check");
 let contactCheckBtn = document.querySelector(".ph-check-contact");
 let contactSubmitBtn = document.querySelector(".contact-submit");
 let contactSendBtn = document.querySelector(".ph-plane");
@@ -304,35 +301,6 @@ function heartReaction(e) {
 }
 
 // contact section related
-
-function copyToClipboard(param) {
-    return navigator.clipboard.writeText(param.innerText);
-}
-
-websiteEmail.addEventListener("click", function () {
-    function copyToClipboard(param) {
-        return navigator.clipboard.writeText(param.innerText);
-    }
-    copyToClipboard(websiteEmail);
-
-    copyBtn.style.backgroundColor = "#afd7b6";
-    copyBtn.children[0].style.stroke = "#afd7b6";
-    copyBtn.children[1].style.stroke = "#afd7b6";
-    setTimeout(() => {
-        copyBtn.classList.add("hidden");
-        checkBtn.classList.remove("hidden");
-        checkBtn.style.backgroundColor = "#afd7b6";
-        setTimeout(() => {
-            checkBtn.classList.add("hidden");
-            copyBtn.classList.remove("hidden");
-            setTimeout(() => {
-                copyBtn.style.backgroundColor = "#fbc5c4";
-                copyBtn.children[0].style.stroke = "black";
-                copyBtn.children[1].style.stroke = "black";
-            }, "150");
-        }, "750");
-    }, "250");
-});
 
 contactSubmitBtn.addEventListener("click", function () {
     let contactName = document.getElementById("id_name");

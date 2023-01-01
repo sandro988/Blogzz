@@ -700,24 +700,15 @@ main {
 }
 
 .contact-section-headers h2,
-.contact-section-headers p,
-.contact-section-headers button {
+.contact-section-headers p {
     width: 80%;
     margin: clamp(20px, 1vw, 50px) auto;
 }
 
-.contact-section-headers button {
-    color: black;
-    width: max-content;
-    font-weight: bold;
-    gap: 30px;
+.contact-section-headers p {
+    margin-bottom: clamp(40px, 1.5vw, 75px)
 }
 
-.contact-section-headers button {
-    font-size: clamp(0.7rem, 1vw, 1rem);
-}
-
-.contact-section-headers button svg,
 .contact-form button svg {
     width: clamp(2rem, 2.25vw, 3rem);
     height: clamp(2rem, 2.25vw, 3rem);
@@ -727,10 +718,6 @@ main {
     transition: 0.25s stroke ease-in-out, 0.3s background-color ease-in-out;
     color: black;
     border: 1px solid black;
-}
-
-.contact-section-headers button svg {
-    background-color: #fbc5c4;
 }
 
 .contact-submit svg {
@@ -1168,6 +1155,10 @@ footer a:hover svg path {
     .contact-form {
         width: 80%;
         margin: 50px auto;
+    }
+
+    .contact-section-headers p {
+        width: 50%;
     }
 
     /* footer styling */
