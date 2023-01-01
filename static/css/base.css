@@ -223,7 +223,8 @@ main {
 .about-header h2,
 .popular-topics-section h2,
 .featured-blogs-section h2,
-.contact-section-headers h2 {
+.contact-section-headers h2,
+.user-thoughts-section h2 {
     text-align: center;
     font-family: "Limelight", cursive;
     font-size: clamp(2rem, 3vw, 8rem);
@@ -296,13 +297,15 @@ main {
 .about-top-header p,
 .about-bottom-header p,
 .contact-section-headers p,
-.contact-section-headers button {
+.contact-section-headers button,
+.user-thoughts-bottom h3 {
     margin-bottom: 20px;
     font-size: clamp(1.3rem, 1.75vw, 5rem);
     text-align: center;
 }
 
-.contact-form h3 {
+.contact-form h3,
+.user-thoughts-bottom h3 {
     font-family: "Limelight", cursive;
     margin-bottom: clamp(1.5rem, 2vw, 3.5vw);
 }
@@ -796,7 +799,6 @@ textarea::-webkit-scrollbar {
 .input-box textarea {
     height: clamp(150px, 20vh, 250px);
     resize: none;
-    /* overflow: hidden; */
 }
 
 .input-box span {
@@ -950,6 +952,78 @@ footer a:hover svg path {
     transform: rotate(-45deg);
 }
 
+/* styling userthoughts section */
+
+.reason {
+    border: 1px solid black;
+    border-radius: 50px;
+    padding: clamp(10px, 1vw, 15px) clamp(15px, 1vw, 25px);
+    width: 100%;
+    font-size: clamp(0.9rem, 4vw, 1.5rem);
+    font-family: "Poppins", sans-serif;
+    transition: 0.2s color ease-in-out, 0.2s background-color ease-in-out;
+}
+
+.reason:hover {
+    background-color: black;
+    color: white;
+}
+
+.reasons-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    margin: clamp(50px, 10vw, 75px) 0;
+}
+
+.user-thoughts {
+    display: grid;
+    row-gap: 50px;
+}
+
+.user-thought {
+    border: 1px solid black;
+    border-radius: 15px;
+    padding: clamp(10px, 5vw, 30px);
+}
+
+.user-thought-body {
+    border-radius: 15px;
+    padding: clamp(5px, 4vw, 25px);
+}
+
+.user-thought-body1 {
+    background-color: #a5c1f0;
+}
+.user-thought-body2 {
+    background-color: #afd7b6;
+}
+.user-thought-body3 {
+    background-color: #fbc5c4;
+}
+.user-thought-body4 {
+    background-color: #d1cbff;
+}
+
+.user-thought-header img {
+    width: clamp(30px, 10vw, 50px);
+}
+
+.user-thought-header {
+    justify-content: flex-start;
+    gap: clamp(10px, 1vw, 15px);
+    margin-bottom: clamp(20px, 7.5vw, 40px);
+}
+
+.user-thought-header small {
+    color: #838383;
+}
+
+.user-thoughts-bottom h3 {
+    font-size: clamp(1.5rem, 1.75vw, 5rem);
+    margin-bottom: clamp(20px, 7.5vw, 40px);
+}
+
 @media only screen and (min-width: 320px) and (max-width: 375px) {
     .featured-blogs-container-inner {
         border-radius: 0px;
@@ -982,10 +1056,6 @@ footer a:hover svg path {
     .increase-font a {
         font-size: 20px;
     }
-
-    /* .increase-font {
-        gap: 15px;
-    } */
 }
 
 @media only screen and (min-width: 767px) and (max-width: 1100px) {
@@ -1129,6 +1199,13 @@ footer a:hover svg path {
 
     .back-to-top {
         bottom: 0;
+    }
+
+    /* user thoughts styling */
+
+    .user-thoughts {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
     }
 }
 
@@ -1295,7 +1372,6 @@ footer a:hover svg path {
     .about-bottom-footer div {
         display: flex;
     }
-
     .about-bottom-footer-bottom img:first-child {
         display: block;
     }
@@ -1312,15 +1388,12 @@ footer a:hover svg path {
     .about-bottom-footer img {
         width: clamp(100px, 45%, 500px);
     }
-
     .about-bottom-footer-bottom {
         width: 50%;
     }
-
     .about-bottom-footer-bottom img:first-child {
         width: 100%;
     }
-
     .about-top-footer img {
         width: clamp(100px, 45%, 600px);
     }
@@ -1336,7 +1409,6 @@ footer a:hover svg path {
     .about-bottom-footer img:nth-child(2) {
         display: none;
     }
-
     .about-bottom-footer-bottom img:nth-child(2) {
         display: block;
     }
@@ -1351,15 +1423,12 @@ footer a:hover svg path {
         height: clamp(3px, 1vw, 5px);
         border-radius: 5px;
     }
-
     .blog-author-name {
         font-size: clamp(0.7rem, 0.9vw, 1.4rem);
     }
-
     .read-time {
         font-size: clamp(0.7rem, 0.9vw, 1.4rem);
     }
-
     .likes-count {
         font-size: clamp(0.8rem, 1vw, 1.5rem);
     }
@@ -1435,7 +1504,6 @@ footer a:hover svg path {
     .contact-section-headers button {
         margin: 30px 0 !important;
     }
-
     .contact-section-container {
         padding: clamp(50px, 5vw, 150px);
     }
@@ -1501,10 +1569,6 @@ footer a:hover svg path {
 
     /* footer styling */
 
-    /* footer {
-        height: 40vh;
-    } */
-
     .footer-container-inner {
         flex-direction: row;
         height: 40vh;
@@ -1550,5 +1614,65 @@ footer a:hover svg path {
 
     .about-project-main p {
         width: 80%;
+    }
+
+    /* user thoughts section styling */
+
+    .user-thoughts-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: clamp(100px, 1vw, 300px);
+        height: max-content;
+        margin: clamp(75px, 20vh, 300px) 0;
+    }
+
+    .user-thoughts-bottom {
+        width: 65%;
+        height: 100%;
+    }
+
+    .user-thoughts {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .user-thoughts-bottom h3 {
+        display: none;
+    }
+    .user-thoughts-top {
+        width: 35%;
+    }
+
+    .user-thoughts-top h2 {
+        text-align: center;
+        margin-bottom: clamp(50px, 10vh, 75px);
+    }
+
+    .reasons-container {
+        margin: 0;
+        align-items: center;
+    }
+
+    .reason p {
+        font-size: clamp(0.8rem, 0.8vw, 2.5rem);
+    }
+    .reason {
+        width: clamp(300px, 25vw, 700px);
+    }
+
+    .user-thought-body {
+        font-size: clamp(0.8rem, 0.8vw, 3rem);
+        height: max-content;
+    }
+
+    .user-thought-header img {
+        width: clamp(30px, 4vw, 75px);
+    }
+    .user-thought-header p {
+        font-size: clamp(0.75rem, 0.75vw, 2.5rem);
+    }
+    .user-thought-header small {
+        font-size: clamp(0.65rem, 0.65vw, 2rem);
     }
 }
