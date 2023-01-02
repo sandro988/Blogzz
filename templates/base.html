@@ -23,7 +23,9 @@
     <script src="https://unpkg.com/htmx.org@1.8.4"></script>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% block css %}
+        <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% endblock css%}
 </head>
 <body>
     
@@ -34,12 +36,14 @@
     {% block content %} {% endblock content%}
     
     <!-- JavaScript -->
-    <script src="{% static 'js/base.js' %}">
-        // HTMX
-        document.body.addEventListener("htmx:configRequest", (e) => {
-            e.detail.headers["X-CSRFToken"] = "{{ csrf_token }}";
-        });
-    </script>
+    {% block js %}
+        <script src="{% static 'js/base.js' %}">
+            // HTMX
+            document.body.addEventListener("htmx:configRequest", (e) => {
+                e.detail.headers["X-CSRFToken"] = "{{ csrf_token }}";
+            });
+        </script>
+    {% endblock js %}
 
 </body>
 </html>
