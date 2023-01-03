@@ -101,18 +101,27 @@ const grid = new Grid(document.querySelector(".grid"));
 // Function for showing alert messages, adding a close button in them and 
 // handling the click action on that close button
 function alertMessageCloseBtn() {
-    let alertMessage = document.querySelector(".errorlist");
+    let alertMessage = document.querySelectorAll(".errorlist");
     let formFooter = document.querySelector(".form-footer");
     if (alertMessage) {
-        let closeBtn = document.createElement("p");
-        closeBtn.textContent = "Close";
-        closeBtn.classList.add("form-close-btn");
-        alertMessage.appendChild(closeBtn);
-        formFooter.classList.add("form-footer-relative")
-        closeBtn.addEventListener("click", function () {
-            alertMessage.style.display = "none";
-            formFooter.classList.remove("form-footer-relative")
-        });
+        for (let i = 0; i < alertMessage.length; i++) {
+            // creating button
+            let closeBtn = document.createElement("p");
+
+            // adding text and classnames
+            closeBtn.textContent = "Close";
+            closeBtn.classList.add("form-close-btn");
+            formFooter.classList.add("form-footer-relative")
+
+            // appending it to the alert container
+            alertMessage[i].appendChild(closeBtn);
+
+            // handling click event on close button
+            closeBtn.addEventListener("click", function () {
+                alertMessage[i].style.display = "none";
+                formFooter.classList.remove("form-footer-relative")
+            });
+        }
     }
 }
 

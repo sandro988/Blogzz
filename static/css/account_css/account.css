@@ -48,6 +48,13 @@ a {
     width: 100vw;
     position: relative;
     background-color: #f1f1f1;
+    overflow: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.left-side-div::-webkit-scrollbar {
+    display: none;
 }
 
 .grid {
@@ -155,6 +162,7 @@ input:active {
     top: 45%;
     transform: translate(-50%, -50%);
     width: 90%;
+    /* height: 100%; */
     text-align: center;
     font-family: "Poppins", cursive;
 }
@@ -242,6 +250,7 @@ input:active {
     border: 1px solid black;
 }
 
+
 .form-footer small {
     color: #434343;
 }
@@ -255,10 +264,10 @@ input:active {
     display: block;
     text-align: right;
     text-decoration: underline;
-    font-size: clamp(.8rem, 1vw, 1rem);
+    font-size: clamp(0.8rem, 1vw, 1rem);
     margin-bottom: 25px;
     color: #434343;
-    transition: .25s color ease-in-out;
+    transition: 0.25s color ease-in-out;
 }
 
 .forgot-password:hover {
@@ -273,21 +282,20 @@ ul {
     border: 1px solid #de8673;
 }
 
-
 li {
     list-style: none;
-    font-size: clamp(.7rem, 1vw, .9rem)
+    font-size: clamp(0.7rem, 1vw, 0.9rem);
 }
 
-
 .form-close-btn {
-    font-size: clamp(.7rem, 1vw, .9rem);
-    text-align: right;
+    font-size: clamp(0.7rem, 1vw, 0.9rem);
+    display: flex;
+    justify-content: flex-end;
     font-weight: bold;
     cursor: pointer;
     margin: 20px 0 0 0;
+    width: max-content;
 }
-
 
 @media only screen and (max-width: 325px) {
     .left-side-div-inner {
@@ -299,8 +307,10 @@ li {
         margin-bottom: clamp(25px, 7.5vw, 50px);
     }
 
-
-    .form-btn, .median-line, .form-footer, .forgot-password{
+    .form-btn,
+    .median-line,
+    .form-footer,
+    .forgot-password {
         font-size: 10px;
     }
 
@@ -323,7 +333,7 @@ li {
 
     .form-main input {
         font-size: 10px;
-    } 
+    }
 
     .form-main {
         gap: 15px;
@@ -380,7 +390,6 @@ li {
     .left-side-div {
         width: 30%;
         height: 100vh;
-        
     }
 
     .form-main form {
@@ -388,19 +397,22 @@ li {
         margin: 0 auto;
     }
 
-
     .form-main input {
         width: 100%;
-        margin-bottom: clamp(30px, 3vh, 50px)
+        margin-bottom: clamp(30px, 3vh, 50px);
     }
 
-    .form-btn, .form-main input, .social-auth {font-size: clamp(.8rem, 1.1vw, 2.5rem)}
+    .form-btn,
+    .form-main input,
+    .social-auth {
+        font-size: clamp(0.8rem, 1.1vw, 2.5rem);
+    }
 
     .social-auth {
         padding: clamp(10px, 1.25vh, 20px) clamp(20px, 3vh, 35px);
     }
     .social-auth img {
-        width: clamp(15px, 2.5vh, 50px)
+        width: clamp(15px, 2.5vh, 50px);
     }
 
     .form-header h1 {
@@ -417,20 +429,22 @@ li {
         width: 100%;
     }
 
-    .form-footer small, .median-line, .forgot-password {
-        font-size: clamp(.7rem, .8vw, 2rem)
+    .form-footer small,
+    .median-line,
+    .forgot-password {
+        font-size: clamp(0.7rem, 0.8vw, 2rem);
     }
 
     .form-btn {
-        margin-top: clamp(25px, 2vh, 75px)
+        margin-top: clamp(25px, 2vh, 75px);
     }
 
     .form-main {
-        gap: clamp(40px, 5vh, 75px)
+        gap: clamp(40px, 5vh, 75px);
     }
 
-    .grid-header h2  {
-        font-size: clamp(2rem, 3.5vw, 8rem)
+    .grid-header h2 {
+        font-size: clamp(2rem, 3.5vw, 8rem);
     }
 
     ul {
@@ -440,16 +454,14 @@ li {
         border-radius: 15px;
         border: 1px solid #de8673;
     }
-    
-    
+
     li {
         list-style: none;
-        font-size: clamp(.7rem, 1vw, 1.1rem)
+        font-size: clamp(0.7rem, 1vw, 1.1rem);
     }
-    
-    
+
     .form-close-btn {
-        font-size: clamp(.7rem, 1vw, 1.1rem);
+        font-size: clamp(0.7rem, 1vw, 1.1rem);
         text-align: right;
         font-weight: bold;
         cursor: pointer;
