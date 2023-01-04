@@ -420,13 +420,11 @@ li {
     .left-side-div-inner {
         width: 70%;
         height: 85vh;
-        top: 50%;
         margin: 0;
     }
 
     .left-side-div {
         width: 30%;
-        height: 100vh;
     }
 
     .form-main form {

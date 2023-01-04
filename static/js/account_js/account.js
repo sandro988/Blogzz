@@ -7,16 +7,22 @@ import {
 } from "../account_js/utils.js";
 
 let winsize = calcWinsize();
+let mobileAuthContainerHeight = document.querySelector(".left-side-div")
 
-window.addEventListener("resize", () => (winsize = calcWinsize()));
+
+window.addEventListener("resize", function () {
+    winsize = calcWinsize();
+    mobileAuthContainerHeight.style.height = `${winsize.height}px`;
+    
+});
 
 // The height of a div with class name "left-side-div" on bigger devices is set to 100vh,
 // but on the phone devices when user clicks on the input the height of the entire container
 // is calculated by the area that is left above the keyboard, this causes user to not see what they are writing
 // so with the code below i set the height of that element to the height of the device, this way the problem 
 // mentioned above is solved.
-let mobileAuthContainerHeight = document.querySelector(".left-side-div")
 mobileAuthContainerHeight.style.height = `${winsize.height}px`
+
 
 let mousepos = { x: winsize.width / 2, y: winsize.height / 2 };
 window.addEventListener("mousemove", (ev) => (mousepos = getMousePos(ev)));
