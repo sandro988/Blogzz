@@ -6,6 +6,34 @@
 
 body {
     background-color: #f1f1f1;
+    font-family: 'Poppins', sans-serif
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'limelight', cursive;
+    font-weight: normal;
+    margin-bottom: 20px;
+}
+
+.helper-paragraph {
+    font-size: clamp(1rem, 1vw, 2.5rem);
+    margin-top: 20px;
+}
+
+.left-side-div-inner-secondary {
+    width: 80%;
+    margin: clamp(75px, 10vh, 200px) auto;
+    text-align: center;
+    height: max-content;
+}
+
+.green-link {
+    color: #09bc8a;
+    font-weight: bold;
+}
+
+.blue-header {
+    color: #2b6be4;
 }
 
 a {
@@ -176,14 +204,14 @@ input:active {
     width: 100%;
 }
 
-.form-header h1 {
+.form-header h1, h1 {
     font-size: clamp(2rem, 7.5vw, 3rem);
     font-weight: normal;
     font-family: "limelight", sans-serif;
     margin-bottom: clamp(50px, 7.5vw, 75px);
 }
 
-.form-btn {
+.form-btn, .green-form-btn {
     background-color: black;
     color: #f1f1f1;
     outline: none;
@@ -194,7 +222,16 @@ input:active {
     transition: 0.25s background-color ease-in-out, 0.25s color ease-in-out;
 }
 
-.form-btn:hover {
+.green-form-btn {
+    display: block;
+    width: max-content;
+    margin: 20px auto;
+    background-color: #09bc8a;
+    color: white;
+    font-weight: bold;
+}
+
+.form-btn:hover, .green-form-btn:hover {
     background-color: #f1f1f1;
     color: black;
     cursor: pointer;
@@ -415,7 +452,7 @@ li {
         width: clamp(15px, 2.5vh, 50px);
     }
 
-    .form-header h1 {
+    .form-header h1, h1 {
         font-size: clamp(2rem, 2.5vw, 7rem);
         margin-bottom: clamp(50px, 7vh, 100px);
     }

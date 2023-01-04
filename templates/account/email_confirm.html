@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load account %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/account_css/account.css' %}">
+{% endblock css %}
+{% block title %}{% trans "Confirm E-mail Address" %}{% endblock title %}
+
+
+{% block content %}
+
+    <div class="content">
+        <div class="left-side-div" style="top: 0;"> 
+            <div class="left-side-div-inner-secondary">
+                <h1>{% trans "Confirm E-mail Address" %}</h1>
+                {% if confirmation %}
+                    {% user_display confirmation.email_address.user as user_display %}
+
+                    <p class="helper-paragraph">{% blocktrans with confirmation.email_address.email as email %}Please confirm that <a class="green-link" href="mailto:{{ email }}">{{ email }}</a> is an e-mail address for user {{ user_display }}.{% endblocktrans %}</p>
+
+                    <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+                        {% csrf_token %}
+                        <button type="submit" class="form-btn">{% trans 'Confirm' %}</button>
+                    </form>
+
+                {% else %}
+
+                    {% url 'account_email' as email_url %}
+
+                    <p class="helper-paragraph">{% blocktrans %}This e-mail confirmation link expired or is invalid. Please <a class="green-link" href="{{ email_url }}">issue a new e-mail confirmation request</a>.{% endblocktrans %}</p>
+
+                {% endif %}
+            </div>
+            
+        </div>
+
+        <div class="right-side-div hidden">
+            <div class="grid-header">
+                <h2 class="blue-header">Become our new member</h2>
+            </div>
+            {% include 'account/grid.html' %}
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block js %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>   
+    <script src="{% static 'js/account_js/account.js' %}" type="module"></script>
+{% endblock js %}
