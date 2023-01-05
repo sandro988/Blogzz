@@ -36,6 +36,65 @@ h1, h2, h3, h4, h5, h6 {
     color: #2b6be4;
 }
 
+.blockLabels{
+    border: none;
+}
+
+.buttonHolder {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    margin-bottom: 25px;
+    gap: 25px;
+    width: 50%;
+}
+
+.radio-label {
+    display: flex !important;
+    justify-content: flex-start !important;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: clamp(.7rem, 2vw, 1.2rem);
+    margin: 20px 0;
+}
+
+.radio-btn {
+    margin: 0 !important;
+    width: max-content !important;
+}
+
+.radio-verified, .radio-unverified, .radio-primary {
+    padding: 5px 10px;
+    background-color: #2b6be4;
+    color: white;
+    border-radius: 50px;
+}
+
+.radio-primary {
+    background-color: #09bc8a;
+}
+
+.radio-unverified {
+    background-color:rgb(216, 73, 73)
+}
+
+.form-red-btn {
+    background-color: rgb(216, 73, 73) !important;
+}
+
+.form-red-btn:hover {
+    background-color: #f1f1f1 !important;
+
+}
+
+.form-email-main {
+    border: 1px solid black;
+    border-radius: 15px;
+    padding: 10px 20px;
+    margin: 25px 0;
+}
+
 a {
     text-decoration: none;
     color: black;
