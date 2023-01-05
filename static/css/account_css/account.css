@@ -49,7 +49,7 @@ h1, h2, h3, h4, h5, h6 {
     width: 50%;
 }
 
-.radio-label {
+.radio-label, .social-label {
     display: flex !important;
     justify-content: flex-start !important;
     align-items: center;
@@ -59,7 +59,38 @@ h1, h2, h3, h4, h5, h6 {
     margin: 20px 0;
 }
 
-.radio-btn {
+.socialaccount_providers {
+    background-color: #f1f1f1;
+    border: 1px solid black
+}
+
+.socialaccount_providers li {
+    padding: 5px 10px;
+    background-color: #2b6be4;
+    width: max-content;
+    border-radius: 50px;
+    margin: 20px 0;
+    border: 1px solid black;
+    transition: background-color .25s ease-in-out
+}
+
+.socialaccount_providers li a {
+    color: white;
+    transition: color .25s ease-in-out;
+}
+
+.socialaccount_providers li:hover {
+    padding: 5px 10px;
+    background-color: #f1f1f1;
+    color: black;
+    cursor: pointer;
+}
+
+.socialaccount_providers li:hover a {
+    color: black;
+}
+
+.radio-btn, .social-label input {
     margin: 0 !important;
     width: max-content !important;
 }
@@ -93,6 +124,12 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: 15px;
     padding: 10px 20px;
     margin: 25px 0;
+}
+
+.social-go-back-link {
+    display: block;
+    margin-top: 25px;
+    text-decoration: underline;
 }
 
 a {

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/account_css/account.css' %}">
+{% endblock css %}
+
+{% block title %}{% trans "Login Cancelled" %}{% endblock title%}
+
+{% block content %}
+    <div class="content">
+        <div class="left-side-div">
+            <div class="left-side-div-inner-secondary">
+                <h1>{% trans "Login Cancelled" %}</h1>
+                {% url 'account_login' as login_url %}
+                <p class="helper-paragraph">{% blocktrans %}You decided to cancel logging in to our site using one of your existing accounts. If this was a mistake, please proceed to <a class="green-link" href="{{login_url}}">sign in</a>.{% endblocktrans %}</p>
+            </div>
+        </div>
+
+        <div class="right-side-div hidden">
+            <div class="grid-header">
+                <h2 style="color: #56d270">Some errors have occured along the way.</h2>
+            </div>
+            {% include 'account/grid.html' %}
+        </div>
+    </div>
+{% endblock content%}
+
+{% block js %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>   
+    <script src="{% static 'js/account_js/account.js' %}" type="module"></script>
+{% endblock js %}

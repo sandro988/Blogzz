@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load account %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/account_css/account.css' %}">
+{% endblock css %}
+
+{% block title %}{% trans "Sign In" %}{% endblock %}
+
+{% block content %}
+
+    <div class="content">
+        <div class="left-side-div">
+            <div class="left-side-div-inner-secondary">
+
+                {% if process == "connect" %}
+                    <h1>{% blocktrans with provider.name as provider %}Connect {{ provider }}{% endblocktrans %}</h1>
+
+                    <p class="helper-paragraph">{% blocktrans with provider.name as provider %}You are about to connect a new third party account from {{ provider }}.{% endblocktrans %}</p>
+                    {% else %}
+                    <h1>{% blocktrans with provider.name as provider %}Sign In Via {{ provider }}{% endblocktrans %}</h1>
+
+                    <p class="helper-paragraph">{% blocktrans with provider.name as provider %}You are about to sign in using a third party account from {{ provider }}.{% endblocktrans %}</p>
+                {% endif %}
+
+                <form method="post" class="form-main">
+                    {% csrf_token %}
+                    <button type="submit" class="form-btn">{% trans "Continue" %}</button>
+                </form>
+
+                <a href="{% url 'account_login' %}" class="social-go-back-link">Go back</a>
+
+            </div>
+        </div>
+
+        <div class="right-side-div hidden">
+            <div class="grid-header">
+                <h2 class="blue-header">Share your knowledge with others</h2>
+            </div>
+            {% include 'account/grid.html' %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>   
+    <script src="{% static 'js/account_js/account.js' %}" type="module"></script>
+{% endblock js %}

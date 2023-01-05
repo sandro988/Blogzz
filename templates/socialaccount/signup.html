@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load account %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/account_css/account.css' %}">
+{% endblock css %}
+
+{% block title %}{% trans "Signup" %}{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <div class="left-side-div">
+            <div class="left-side-div-inner-secondary">
+                <h1>{% trans "Sign Up" %}</h1>
+            
+                <p class="helper-paragraph">{% blocktrans with provider_name=account.get_provider.name site_name=site.name %}You are about to use your {{provider_name}} account to login to
+                {{site_name}}. As a final step, please complete the following form:{% endblocktrans %}</p>
+            
+                <form class="signup form-main" id="signup_form" method="post" action="{% url 'socialaccount_signup' %}">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    {% if redirect_field_value %}
+                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                    {% endif %}
+                    <button type="submit" class="form-btn">{% trans "Sign Up" %} &raquo;</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="right-side-div hidden">
+            <div class="grid-header">
+                <h2 style="color: #56d270">Join our community and connect with others</h2>
+            </div>
+            {% include 'account/grid.html' %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>   
+    <script src="{% static 'js/account_js/account.js' %}" type="module"></script>
+{% endblock js %}
