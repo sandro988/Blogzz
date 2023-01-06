@@ -5,20 +5,32 @@ from django.urls import reverse
 from .models import Blog, Category
 
 
-class BlogHomeAndDetailPageTests(TestCase):
-    @classmethod
-    def setUpTestData(cls):
+class BlogTests(TestCase):
+    def setUp(self):
         User = get_user_model()
-        cls.user = User.objects.create_user(
-            username="test_user",
+        self.client = Client()
+        self.user = User.objects.create_user(
             email="test_user@email.com",
+            username="test_user",
             password="test_user_password",
         )
-        cls.category = Category.objects.create(category_name="Python")
-        cls.blog = Blog.objects.create(
-            author=cls.user,
+        self.client.login(email="test_user@email.com", password="test_user_password")
+
+        self.category1 = Category.objects.create(category_name="Python")
+        # For CreateBlogView
+        self.category2 = Category.objects.create(
+            category_name="Category for Create view"
+        )
+        # For UpdateBlogView and DeleteBlogView
+        self.category3 = Category.objects.create(
+            category_name="Category for Create and Update views"
+        )
+
+        # This blog will be used in tests for Detail, Update, Delete views.
+        self.blog = Blog.objects.create(
+            author=self.user,
             blog_title="Intermediate Python",
-            blog_category=cls.category,
+            blog_category=self.category1,
             blog_body="Some text about python",
         )
 
@@ -43,27 +55,6 @@ class BlogHomeAndDetailPageTests(TestCase):
         self.assertContains(response, "Intermediate Python")
         self.assertTemplateUsed(response, "blogs/blogs_detail.html")
 
-
-class BlogCreateUpdateDeleteTests(TestCase):
-    def setUp(self):
-        # For CreateBlogView
-        self.category1 = Category.objects.create(category_name="Test Category number 1")
-        # For UpdateBlogView and DeleteBlogView
-        self.category2 = Category.objects.create(category_name="Test Category number 2")
-
-        User = get_user_model()
-        self.user = User.objects.create_user(
-            email="testuser@email.com", username="testuser", password="testpass"
-        )
-        self.client.login(email="testuser@email.com", password="testpass")
-
-        self.blog_for_update_and_delete_views = Blog.objects.create(
-            author=self.user,
-            blog_title="Test Blog",
-            blog_category=self.category1,
-            blog_body="This is a test blog.",
-        )
-
     def test_create_blog_view_for_get_request(self):
         response = self.client.get(reverse("create_blog"))
 
@@ -74,7 +65,7 @@ class BlogCreateUpdateDeleteTests(TestCase):
     def test_create_blog_view_for_post_request(self):
         form_data = {
             "blog_title": "Test Blog",
-            "blog_category": self.category1.pk,
+            "blog_category": self.category2.pk,
             "blog_body": "This is a test blog.",
         }
 
@@ -83,18 +74,16 @@ class BlogCreateUpdateDeleteTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Blog.objects.count(), 2)
 
-        new_blog = Blog.objects.last()
+        new_blog = Blog.objects.get(blog_title="Test Blog")
         self.assertEqual(new_blog.blog_title, "Test Blog")
-        self.assertEqual(new_blog.blog_category.category_name, "Test Category number 1")
+        self.assertEqual(
+            new_blog.blog_category.category_name, "Category for Create view"
+        )
         self.assertEqual(new_blog.blog_body, "This is a test blog.")
         self.assertEqual(new_blog.author.username, self.user.username)
 
     def test_update_blog_view_for_get_request(self):
-        response = self.client.get(
-            reverse(
-                "update_blog", kwargs={"pk": self.blog_for_update_and_delete_views.pk}
-            )
-        )
+        response = self.client.get(reverse("update_blog", kwargs={"pk": self.blog.pk}))
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Update blog")
@@ -103,14 +92,12 @@ class BlogCreateUpdateDeleteTests(TestCase):
     def test_update_blog_view_for_post_request(self):
         update_form_data = {
             "blog_title": "Updated Test Blog",
-            "blog_category": self.category2.pk,
+            "blog_category": self.category3.pk,
             "blog_body": "This is an updated test blog.",
         }
 
         response = self.client.post(
-            reverse(
-                "update_blog", kwargs={"pk": self.blog_for_update_and_delete_views.pk}
-            ),
+            reverse("update_blog", kwargs={"pk": self.blog.pk}),
             data=update_form_data,
         )
 
@@ -120,32 +107,23 @@ class BlogCreateUpdateDeleteTests(TestCase):
         updated_blog = Blog.objects.last()
         self.assertEqual(updated_blog.blog_title, "Updated Test Blog")
         self.assertEqual(
-            updated_blog.blog_category.category_name, "Test Category number 2"
+            updated_blog.blog_category.category_name,
+            "Category for Create and Update views",
         )
         self.assertEqual(updated_blog.blog_body, "This is an updated test blog.")
         self.assertEqual(updated_blog.author.username, self.user.username)
 
     def test_delete_blog_view_for_get_request(self):
-        response = self.client.get(
-            reverse(
-                "delete_blog", kwargs={"pk": self.blog_for_update_and_delete_views.pk}
-            )
-        )
+        response = self.client.get(reverse("delete_blog", kwargs={"pk": self.blog.pk}))
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Delete blog")
         self.assertTemplateUsed(response, "blogs/delete_blog.html")
 
     def test_delete_blog_view_for_post_request(self):
-        response = self.client.post(
-            reverse(
-                "delete_blog", kwargs={"pk": self.blog_for_update_and_delete_views.pk}
-            )
-        )
+        response = self.client.post(reverse("delete_blog", kwargs={"pk": self.blog.pk}))
         no_response = self.client.get(
-            reverse(
-                "delete_blog", kwargs={"pk": self.blog_for_update_and_delete_views.pk}
-            )
+            reverse("delete_blog", kwargs={"pk": self.blog.pk})
         )
 
         self.assertEqual(response.status_code, 302)
