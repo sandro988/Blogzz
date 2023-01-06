@@ -1,0 +1,14 @@
+{% extends 'blogs/home_authenticated.html' %}
+
+{% block title %}Create blog{% endblock title %}   
+
+{% block content %}
+    <h1>Create blog</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+        <input type="submit" value="create">
+    </form>
+{% endblock content %}

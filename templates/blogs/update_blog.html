@@ -1,0 +1,14 @@
+{% extends 'blogs/home_authenticated.html' %}
+
+{% block title %}Update {{ blog.blog_title }}{% endblock title %}   
+
+{% block content %}
+    <h1>Update blog</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+        <button type="submit">Update</button>
+    </form>
+{% endblock content %}

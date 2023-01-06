@@ -1,13 +1,11 @@
 {% extends 'base.html' %}
 
 {% block title %}
-
     {% if user.is_authenticated %}
-        Blogzz | Home
+        Blogzz | home
     {% else %}
         Blogzz
     {% endif %}
-
 {% endblock title %}
 
 {% block content %}
@@ -17,4 +15,3 @@
         {% include 'home_not_authenticated.html' %}
     {% endif %}
 {% endblock content %}
-

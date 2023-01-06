@@ -1,4 +1,11 @@
-from django.views.generic import ListView, DetailView, FormView
+from django.views.generic import (
+    ListView,
+    DetailView,
+    FormView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+)
 from .models import Blog
 from .forms import ContactForm
 from django.urls import reverse_lazy
@@ -35,6 +42,40 @@ class BlogsDetailView(DetailView):
     model = Blog
     context_object_name = "blog"
     template_name = "blogs/blogs_detail.html"
+
+
+class CreateBlogView(CreateView):
+    """
+    View for creating new blog post
+    """
+
+    model = Blog
+    template_name = "blogs/create_blog.html"
+    fields = ["blog_title", "blog_category", "blog_body"]
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+
+class UpdateBlogView(UpdateView):
+    """
+    View for updating individual blog post
+    """
+
+    model = Blog
+    template_name = "blogs/update_blog.html"
+    fields = ["blog_title", "blog_category", "blog_body"]
+
+
+class DeleteBlogView(DeleteView):
+    """
+    View for deleteing individual blog post
+    """
+
+    model = Blog
+    template_name = "blogs/delete_blog.html"
+    success_url = reverse_lazy("home")
 
 
 class ContactFormView(FormView):

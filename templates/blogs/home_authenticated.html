@@ -1,12 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
 
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/blog_css/blog.css' %}">
+{% endblock css%} 
 
 {% block content %}
 
     {% include 'navbar.html' %}
 
     <h1>Blogs</h1>
+    <a href="{% url 'create_blog' %}" style="color: red;">Create</a>
 
     {% for blog in blog_list %}
+        <a href="{% url 'update_blog' blog.id %}" style="color: red;">Update</a>
+        <a href="{% url 'delete_blog' blog.id %}" style="color: red;">Delete</a>
         <h2><a href="{{ blog.get_absolute_url }}">{{ blog.blog_title }}</a></h2>
         <small>@{{ blog.author }} | {{ blog.blog_created|timesince }}</small>
         <p>{{ blog.blog_body }}</p>
