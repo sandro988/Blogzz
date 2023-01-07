@@ -47,6 +47,10 @@ class BlogTests(TestCase):
         self.assertTemplateUsed(response, "home.html")
 
     def test_blogs_detail_view(self):
+        """
+        Test case where a logged in user tries to access individual blog posts.
+        """
+
         response = self.client.get(self.blog.get_absolute_url())
         no_response = self.client.get("/blogs/99999/")
 
@@ -54,6 +58,25 @@ class BlogTests(TestCase):
         self.assertEqual(no_response.status_code, 404)
         self.assertContains(response, "Intermediate Python")
         self.assertTemplateUsed(response, "blogs/blogs_detail.html")
+    
+    def test_blogs_detail_view_for_logged_out_user(self):
+        """
+        Test case where a logged out user tries to access individual blog posts.
+        """
+
+        self.client.logout()
+        response = self.client.get(self.blog.get_absolute_url())
+        no_response = self.client.get("/blogs/99999/")
+
+        # User tries to access the page without being authenticated
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(no_response.status_code, 404)
+        self.assertRedirects(response, f"%s?next={self.blog.get_absolute_url()}" % (reverse("account_login")))
+        
+        # User gets redirected to login page
+        response = self.client.get(f"%s?next={self.blog.get_absolute_url()}" % (reverse("account_login")))
+        self.assertContains(response, "Welcome back")
+        self.assertTemplateUsed(response, "account/login.html")
 
     def test_create_blog_view_for_get_request(self):
         response = self.client.get(reverse("create_blog"))
@@ -81,6 +104,62 @@ class BlogTests(TestCase):
         )
         self.assertEqual(new_blog.blog_body, "This is a test blog.")
         self.assertEqual(new_blog.author.username, self.user.username)
+
+    def test_create_blog_view_with_incomplete_form_data(self):
+        form_data = {
+            "blog_title": "",
+            "blog_category": self.category2.pk,
+            "blog_body": "This is a test blog.",
+        }
+
+        response = self.client.post(reverse("create_blog"), data=form_data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFormError(response, form='form', field='blog_title', errors=['This field is required.'], msg_prefix="Error: ")
+        self.assertContains(response, 'Create blog')
+        self.assertContains(response, 'This field is required')
+        self.assertTemplateUsed(response, 'blogs/create_blog.html')
+        # Checking that no new blog has been created
+        self.assertEqual(Blog.objects.count(), 1)
+
+    def test_create_blog_view_for_logged_out_user(self):
+        """Test case where a logged out user tries to go to a create blog page and create a new blog post"""
+
+        self.client.logout()
+        def request_method_GET():
+            response = self.client.get(reverse("create_blog"))
+            
+            # User tries to access the create page without being authenticated
+            self.assertEqual(response.status_code, 302)
+            self.assertRedirects(response, f"%s?next={reverse('create_blog')}" % (reverse("account_login")))
+
+            # User gets redirect to login page
+            response = self.client.get(f"%s?next={reverse('create_blog')}" % (reverse("account_login")))
+            self.assertContains(response, "Welcome back")
+            self.assertTemplateUsed(response, "account/login.html")
+        
+        def request_method_POST():
+            form_data = {
+                "blog_title": "Test Blog",
+                "blog_category": self.category2.pk,
+                "blog_body": "This is a test blog.",
+            }
+
+            response = self.client.post(reverse("create_blog"), data=form_data)
+            
+            # User tries to access the create page without being authenticated
+            self.assertEqual(response.status_code, 302)
+            self.assertEqual(Blog.objects.count(), 1)
+            self.assertNotEqual(Blog.objects.last().blog_title, 'Test Blog')
+            self.assertRedirects(response, f"{reverse('account_login')}?next={reverse('create_blog')}")
+
+            # User gets redirect to login page
+            response = self.client.get(f"{reverse('account_login')}?next={reverse('create_blog')}")
+            self.assertContains(response, "Welcome back")
+            self.assertTemplateUsed(response, "account/login.html")
+        
+        request_method_GET()
+        request_method_POST()
 
     def test_update_blog_view_for_get_request(self):
         response = self.client.get(reverse("update_blog", kwargs={"pk": self.blog.pk}))
