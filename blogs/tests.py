@@ -131,10 +131,10 @@ class BlogTests(TestCase):
             
             # User tries to access the create page without being authenticated
             self.assertEqual(response.status_code, 302)
-            self.assertRedirects(response, f"%s?next={reverse('create_blog')}" % (reverse("account_login")))
+            self.assertRedirects(response, f"{reverse('account_login')}?next={reverse('create_blog')}")
 
             # User gets redirect to login page
-            response = self.client.get(f"%s?next={reverse('create_blog')}" % (reverse("account_login")))
+            response = self.client.get(f"{reverse('account_login')}?next={reverse('create_blog')}")
             self.assertContains(response, "Welcome back")
             self.assertTemplateUsed(response, "account/login.html")
         
@@ -191,6 +191,64 @@ class BlogTests(TestCase):
         )
         self.assertEqual(updated_blog.blog_body, "This is an updated test blog.")
         self.assertEqual(updated_blog.author.username, self.user.username)
+
+    def test_update_blog_view_for_logged_out_user(self):
+        """Test case where a logged out user tries to go to an update blog page and update an already existing blog post"""
+
+        self.client.logout()
+        update_page_url = reverse("update_blog", kwargs={"pk": self.blog.pk})
+
+        def request_method_GET():
+            response = self.client.get(update_page_url)
+            
+            # User tries to access the update page without being authenticated
+            self.assertEqual(response.status_code, 302)
+            self.assertRedirects(response, f"{reverse('account_login')}?next={update_page_url}")
+
+            # User gets redirect to login page
+            response = self.client.get(f"{reverse('account_login')}?next={update_page_url}")
+            self.assertContains(response, "Welcome back")
+            self.assertTemplateUsed(response, "account/login.html")
+        
+        def request_method_POST():
+            update_form_data = {
+                "blog_title": "Test Blog Update",
+                "blog_category": self.category3.pk,
+                "blog_body": "This is a test blog.",
+            }
+
+            response = self.client.post(update_page_url, data=update_form_data)
+            
+            # User tries to access the create page without being authenticated
+            self.assertEqual(response.status_code, 302)
+            self.assertNotEqual(Blog.objects.last().blog_title, 'Test Blog Update')
+            self.assertRedirects(response, f"{reverse('account_login')}?next={update_page_url}")
+
+            # User gets redirect to login page
+            response = self.client.get(f"{reverse('account_login')}?next={update_page_url}")
+            self.assertContains(response, "Welcome back")
+            self.assertTemplateUsed(response, "account/login.html")
+        
+        request_method_GET()
+        request_method_POST()
+
+    def test_update_blog_view_with_incomplete_form_data(self):
+        update_form_data = {
+            "blog_title": "",
+            "blog_category": self.category3.pk,
+            "blog_body": "This is a test blog.",
+        }
+
+        update_page_url = reverse("update_blog", kwargs={"pk": self.blog.pk})
+        response = self.client.post(update_page_url, data=update_form_data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFormError(response, form='form', field='blog_title', errors=['This field is required.'], msg_prefix="Error: ")
+        self.assertContains(response, 'Update blog')
+        self.assertContains(response, 'This field is required')
+        self.assertTemplateUsed(response, 'blogs/update_blog.html')
+        # Checking that the blog has not changed
+        self.assertNotEqual(Blog.objects.last().blog_title, "")
 
     def test_delete_blog_view_for_get_request(self):
         response = self.client.get(reverse("delete_blog", kwargs={"pk": self.blog.pk}))
