@@ -43,7 +43,7 @@ class BlogsDetailView(LoginRequiredMixin, DetailView):
     model = Blog
     context_object_name = "blog"
     template_name = "blogs/blogs_detail.html"
-    login_url = 'account_login'
+    login_url = "account_login"
 
 
 class CreateBlogView(LoginRequiredMixin, CreateView):
@@ -54,7 +54,7 @@ class CreateBlogView(LoginRequiredMixin, CreateView):
     model = Blog
     template_name = "blogs/create_blog.html"
     fields = ["blog_title", "blog_category", "blog_body"]
-    login_url = 'account_login'
+    login_url = "account_login"
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -69,7 +69,7 @@ class UpdateBlogView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Blog
     template_name = "blogs/update_blog.html"
     fields = ["blog_title", "blog_category", "blog_body"]
-    login_url = 'account_login'
+    login_url = "account_login"
 
     def test_func(self):
         object = self.get_object()
@@ -84,7 +84,7 @@ class DeleteBlogView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Blog
     template_name = "blogs/delete_blog.html"
     success_url = reverse_lazy("home")
-    login_url = 'account_login'
+    login_url = "account_login"
 
     def test_func(self):
         object = self.get_object()
