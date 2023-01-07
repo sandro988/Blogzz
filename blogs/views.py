@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import (
     ListView,
     DetailView,
@@ -34,7 +35,7 @@ class HomePageView(ListView):
         return context
 
 
-class BlogsDetailView(DetailView):
+class BlogsDetailView(LoginRequiredMixin, DetailView):
     """
     View created for outputing details of idividual blog posts.
     """
@@ -42,9 +43,10 @@ class BlogsDetailView(DetailView):
     model = Blog
     context_object_name = "blog"
     template_name = "blogs/blogs_detail.html"
+    login_url = 'account_login'
 
 
-class CreateBlogView(CreateView):
+class CreateBlogView(LoginRequiredMixin, CreateView):
     """
     View for creating new blog post
     """
@@ -52,13 +54,14 @@ class CreateBlogView(CreateView):
     model = Blog
     template_name = "blogs/create_blog.html"
     fields = ["blog_title", "blog_category", "blog_body"]
+    login_url = 'account_login'
 
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
 
-class UpdateBlogView(UpdateView):
+class UpdateBlogView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     """
     View for updating individual blog post
     """
@@ -66,9 +69,14 @@ class UpdateBlogView(UpdateView):
     model = Blog
     template_name = "blogs/update_blog.html"
     fields = ["blog_title", "blog_category", "blog_body"]
+    login_url = 'account_login'
+
+    def test_func(self):
+        object = self.get_object()
+        return object.author == self.request.user
 
 
-class DeleteBlogView(DeleteView):
+class DeleteBlogView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     """
     View for deleteing individual blog post
     """
@@ -76,6 +84,11 @@ class DeleteBlogView(DeleteView):
     model = Blog
     template_name = "blogs/delete_blog.html"
     success_url = reverse_lazy("home")
+    login_url = 'account_login'
+
+    def test_func(self):
+        object = self.get_object()
+        return object.author == self.request.user
 
 
 class ContactFormView(FormView):
