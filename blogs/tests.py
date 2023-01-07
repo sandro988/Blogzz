@@ -147,7 +147,7 @@ class BlogTests(TestCase):
                 response, f"{reverse('account_login')}?next={reverse('create_blog')}"
             )
 
-            # User gets redirect to login page
+            # User gets redirected to login page
             response = self.client.get(
                 f"{reverse('account_login')}?next={reverse('create_blog')}"
             )
@@ -205,9 +205,9 @@ class BlogTests(TestCase):
             reverse("update_blog", kwargs={"pk": self.blog.pk}),
             data=update_form_data,
         )
-        pk_invalid = self.client.get("update_blog/123456/")
-        pk_does_not_exist = self.client.get(
-            "/update_blog/00000000-0000-0000-0000-000000000000/"
+        pk_invalid = self.client.post("update_blog/123456/", data=update_form_data)
+        pk_does_not_exist = self.client.post(
+            "/update_blog/00000000-0000-0000-0000-000000000000/", data=update_form_data
         )
 
         self.assertEqual(response.status_code, 302)
@@ -255,14 +255,14 @@ class BlogTests(TestCase):
 
             response = self.client.post(update_page_url, data=update_form_data)
 
-            # User tries to access the create page without being authenticated
+            # User tries to access the update page without being authenticated
             self.assertEqual(response.status_code, 302)
             self.assertNotEqual(Blog.objects.last().blog_title, "Test Blog Update")
             self.assertRedirects(
                 response, f"{reverse('account_login')}?next={update_page_url}"
             )
 
-            # User gets redirect to login page
+            # User gets redirected to login page
             response = self.client.get(
                 f"{reverse('account_login')}?next={update_page_url}"
             )
@@ -345,8 +345,13 @@ class BlogTests(TestCase):
 
     def test_delete_blog_view_for_get_request(self):
         response = self.client.get(reverse("delete_blog", kwargs={"pk": self.blog.pk}))
-
+        pk_invalid = self.client.get("update_blog/123456/")
+        pk_does_not_exist = self.client.get(
+            "/update_blog/00000000-0000-0000-0000-000000000000/"
+        )
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(pk_invalid.status_code, 404)
+        self.assertEqual(pk_does_not_exist.status_code, 404)
         self.assertContains(response, "Delete blog")
         self.assertTemplateUsed(response, "blogs/delete_blog.html")
 
@@ -355,10 +360,92 @@ class BlogTests(TestCase):
         no_response = self.client.get(
             reverse("delete_blog", kwargs={"pk": self.blog.pk})
         )
+        pk_invalid = self.client.post("update_blog/123456/")
+        pk_does_not_exist = self.client.post(
+            "/update_blog/00000000-0000-0000-0000-000000000000/"
+        )
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(no_response.status_code, 404)
+        self.assertEqual(pk_invalid.status_code, 404)
+        self.assertEqual(pk_does_not_exist.status_code, 404)
         self.assertEqual(Blog.objects.count(), 0)
+
+    def test_delete_blog_view_for_logged_out_user(self):
+        self.client.logout()
+        delete_page_url = reverse("delete_blog", kwargs={"pk": self.blog.pk})
+
+        def request_method_GET():
+            response = self.client.get(delete_page_url)
+
+            # User tries to access the delete page without being authenticated
+            self.assertEqual(response.status_code, 302)
+            self.assertRedirects(
+                response, f"{reverse('account_login')}?next={delete_page_url}"
+            )
+
+            # User gets redirect to login page
+            response = self.client.get(
+                f"{reverse('account_login')}?next={delete_page_url}"
+            )
+            self.assertContains(response, "Welcome back")
+            self.assertTemplateUsed(response, "account/login.html")
+
+        def request_method_POST():
+            response = self.client.post(delete_page_url)
+
+            # User tries to access the delete page without being authenticated
+            self.assertEqual(response.status_code, 302)
+            self.assertEqual(Blog.objects.last().blog_title, "Intermediate Python")
+            self.assertRedirects(
+                response, f"{reverse('account_login')}?next={delete_page_url}"
+            )
+
+            # User gets redirected to login page
+            response = self.client.get(
+                f"{reverse('account_login')}?next={delete_page_url}"
+            )
+            self.assertContains(response, "Welcome back")
+            self.assertTemplateUsed(response, "account/login.html")
+
+        request_method_GET()
+        request_method_POST()
+
+    def test_delete_blog_view_when_user_is_not_author(self):
+        """
+        Test where a non-author user is redirected to the "permission denied" page
+        when they try to delete a blog post.
+        """
+
+        User = get_user_model()
+        new_user = User.objects.create_user(
+            email="new_test_user@email.com",
+            username="new_test_user",
+            password="new_test_user_password",
+        )
+        self.client.logout()
+        self.client.login(
+            email="new_test_user@email.com", password="new_test_user_password"
+        )
+
+        def request_method_GET():
+            response = self.client.get(
+                reverse("delete_blog", kwargs={"pk": self.blog.pk})
+            )
+
+            self.assertEqual(response.status_code, 403)
+
+        def request_method_POST():
+            response = self.client.post(
+                reverse("delete_blog", kwargs={"pk": self.blog.pk}),
+            )
+
+            self.assertEqual(response.status_code, 403)
+            self.assertEqual(Blog.objects.count(), 1)
+            self.assertEqual(Blog.objects.last().blog_title, "Intermediate Python")
+
+        request_method_GET()
+        request_method_POST()
 
 
 class ContactPageTest(TestCase):
