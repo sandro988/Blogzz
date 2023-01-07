@@ -345,9 +345,9 @@ class BlogTests(TestCase):
 
     def test_delete_blog_view_for_get_request(self):
         response = self.client.get(reverse("delete_blog", kwargs={"pk": self.blog.pk}))
-        pk_invalid = self.client.get("update_blog/123456/")
+        pk_invalid = self.client.get("delete_blog/123456/")
         pk_does_not_exist = self.client.get(
-            "/update_blog/00000000-0000-0000-0000-000000000000/"
+            "/delete_blog/00000000-0000-0000-0000-000000000000/"
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(pk_invalid.status_code, 404)
@@ -360,9 +360,9 @@ class BlogTests(TestCase):
         no_response = self.client.get(
             reverse("delete_blog", kwargs={"pk": self.blog.pk})
         )
-        pk_invalid = self.client.post("update_blog/123456/")
+        pk_invalid = self.client.post("delete_blog/123456/")
         pk_does_not_exist = self.client.post(
-            "/update_blog/00000000-0000-0000-0000-000000000000/"
+            "/delete_blog/00000000-0000-0000-0000-000000000000/"
         )
 
         self.assertEqual(response.status_code, 302)
