@@ -7,8 +7,14 @@
 
     <form method="POST">
         {% csrf_token %}
-
+        
         {{ form.as_p }}
-        <button type="submit">Update</button>
+        {% if blog.blog_status == 'published' %}
+            <input type="submit" value="Update" name="Update">
+            <input type="submit" value="Move to drafts" name="Move to drafts">
+        {% else %}
+            <input type="submit" value="Publish" name="Publish">
+            <input type="submit" value="Leave as draft" name="Leave as draft">
+        {% endif%}
     </form>
 {% endblock content %}

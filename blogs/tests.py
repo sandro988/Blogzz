@@ -5,35 +5,37 @@ from django.urls import reverse
 from .models import Blog, Category
 
 
-class BlogTests(TestCase):
-    def setUp(self):
+class BlogTestsData:
+    @classmethod
+    def setUpTestData(cls):
         User = get_user_model()
-        self.client = Client()
-        self.user = User.objects.create_user(
+        cls.client = Client()
+        cls.user = User.objects.create_user(
             email="test_user@email.com",
             username="test_user",
             password="test_user_password",
         )
-        self.client.login(email="test_user@email.com", password="test_user_password")
 
-        self.category1 = Category.objects.create(category_name="Python")
+        cls.category1 = Category.objects.create(category_name="Python")
         # For CreateBlogView
-        self.category2 = Category.objects.create(
+        cls.category2 = Category.objects.create(
             category_name="Category for Create view"
         )
         # For UpdateBlogView and DeleteBlogView
-        self.category3 = Category.objects.create(
+        cls.category3 = Category.objects.create(
             category_name="Category for Create and Update views"
         )
 
         # This blog will be used in tests for Detail, Update, Delete views.
-        self.blog = Blog.objects.create(
-            author=self.user,
+        cls.blog = Blog.objects.create(
+            author=cls.user,
             blog_title="Intermediate Python",
-            blog_category=self.category1,
+            blog_category=cls.category1,
             blog_body="Some text about python",
         )
 
+
+class HomePageViewTests(BlogTestsData, TestCase):
     def test_blog_listing(self):
         self.assertEqual(self.blog.author, self.user)
         self.assertEqual(self.blog.blog_title, "Intermediate Python")
@@ -46,11 +48,15 @@ class BlogTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "home.html")
 
+
+class DetailPageViewTests(BlogTestsData, TestCase):
+    def setUp(self):
+        self.client.login(email="test_user@email.com", password="test_user_password")
+
     def test_blogs_detail_view(self):
         """
         Test case where a logged in user tries to access individual blog posts.
         """
-
         response = self.client.get(self.blog.get_absolute_url())
         no_response = self.client.get("/blogs/99999/")
 
@@ -83,6 +89,11 @@ class BlogTests(TestCase):
         self.assertContains(response, "Welcome back")
         self.assertTemplateUsed(response, "account/login.html")
 
+
+class CreateBlogPageViewTests(BlogTestsData, TestCase):
+    def setUp(self):
+        self.client.login(email="test_user@email.com", password="test_user_password")
+
     def test_create_blog_view_for_get_request(self):
         response = self.client.get(reverse("create_blog"))
 
@@ -108,6 +119,50 @@ class BlogTests(TestCase):
             new_blog.blog_category.category_name, "Category for Create view"
         )
         self.assertEqual(new_blog.blog_body, "This is a test blog.")
+        self.assertEqual(new_blog.author.username, self.user.username)
+
+    def test_create_blog_view_for_post_request_with_create_button(self):
+        form_data = {
+            "blog_title": "Test Blog",
+            "blog_category": self.category2.pk,
+            "blog_body": "This is a test blog.",
+            "Create": "Create",
+        }
+
+        response = self.client.post(reverse("create_blog"), data=form_data)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Blog.objects.count(), 2)
+
+        new_blog = Blog.objects.get(blog_title="Test Blog")
+        self.assertEqual(new_blog.blog_title, "Test Blog")
+        self.assertEqual(
+            new_blog.blog_category.category_name, "Category for Create view"
+        )
+        self.assertEqual(new_blog.blog_body, "This is a test blog.")
+        self.assertEqual(new_blog.blog_status, "published")
+        self.assertEqual(new_blog.author.username, self.user.username)
+
+    def test_create_blog_view_for_post_request_with_move_to_drafts_button(self):
+        form_data = {
+            "blog_title": "Test Blog",
+            "blog_category": self.category2.pk,
+            "blog_body": "This is a test blog.",
+            "Move to drafts": "Move to drafts",
+        }
+
+        response = self.client.post(reverse("create_blog"), data=form_data)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Blog.objects.count(), 2)
+
+        new_blog = Blog.objects.get(blog_title="Test Blog")
+        self.assertEqual(new_blog.blog_title, "Test Blog")
+        self.assertEqual(
+            new_blog.blog_category.category_name, "Category for Create view"
+        )
+        self.assertEqual(new_blog.blog_body, "This is a test blog.")
+        self.assertEqual(new_blog.blog_status, "draft")
         self.assertEqual(new_blog.author.username, self.user.username)
 
     def test_create_blog_view_with_incomplete_form_data(self):
@@ -181,6 +236,11 @@ class BlogTests(TestCase):
         request_method_GET()
         request_method_POST()
 
+
+class UpdateBlogPageViewTests(BlogTestsData, TestCase):
+    def setUp(self):
+        self.client.login(email="test_user@email.com", password="test_user_password")
+
     def test_update_blog_view_for_get_request(self):
         response = self.client.get(reverse("update_blog", kwargs={"pk": self.blog.pk}))
         pk_invalid = self.client.get("update_blog/123456/")
@@ -222,6 +282,81 @@ class BlogTests(TestCase):
             "Category for Create and Update views",
         )
         self.assertEqual(updated_blog.blog_body, "This is an updated test blog.")
+        self.assertEqual(updated_blog.author.username, self.user.username)
+
+    def test_update_blog_view_for_post_request_with_move_to_drafts_button(self):
+
+        """
+        A test case when a user wants to update the blog and move it from published blog to drafts.
+        """
+
+        update_form_data = {
+            "blog_title": "Updated Test Blog",
+            "blog_category": self.category3.pk,
+            "blog_body": "This is an updated test blog.",
+            "Move to drafts": "Move to drafts",
+        }
+
+        response = self.client.post(
+            reverse("update_blog", kwargs={"pk": self.blog.pk}),
+            data=update_form_data,
+        )
+        pk_invalid = self.client.post("update_blog/123456/", data=update_form_data)
+        pk_does_not_exist = self.client.post(
+            "/update_blog/00000000-0000-0000-0000-000000000000/", data=update_form_data
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(pk_invalid.status_code, 404)
+        self.assertEqual(pk_does_not_exist.status_code, 404)
+        self.assertEqual(Blog.objects.count(), 1)
+
+        updated_blog = Blog.objects.last()
+        self.assertEqual(updated_blog.blog_title, "Updated Test Blog")
+        self.assertEqual(
+            updated_blog.blog_category.category_name,
+            "Category for Create and Update views",
+        )
+        self.assertEqual(updated_blog.blog_body, "This is an updated test blog.")
+        self.assertEqual(updated_blog.blog_status, "draft")
+        self.assertEqual(updated_blog.author.username, self.user.username)
+
+    def test_update_blog_view_for_post_request_with_publish_button(self):
+
+        """
+        A test case when a user wants to move update their blog with the status of 'draft' and also change its status to
+        'published', so that this blog appears on the home page.
+        """
+
+        update_form_data = {
+            "blog_title": "Updated Test Blog",
+            "blog_category": self.category3.pk,
+            "blog_body": "This is an updated test blog.",
+            "Publish": "Publish",
+        }
+
+        response = self.client.post(
+            reverse("update_blog", kwargs={"pk": self.blog.pk}),
+            data=update_form_data,
+        )
+        pk_invalid = self.client.post("update_blog/123456/", data=update_form_data)
+        pk_does_not_exist = self.client.post(
+            "/update_blog/00000000-0000-0000-0000-000000000000/", data=update_form_data
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(pk_invalid.status_code, 404)
+        self.assertEqual(pk_does_not_exist.status_code, 404)
+        self.assertEqual(Blog.objects.count(), 1)
+
+        updated_blog = Blog.objects.last()
+        self.assertEqual(updated_blog.blog_title, "Updated Test Blog")
+        self.assertEqual(
+            updated_blog.blog_category.category_name,
+            "Category for Create and Update views",
+        )
+        self.assertEqual(updated_blog.blog_body, "This is an updated test blog.")
+        self.assertEqual(updated_blog.blog_status, "published")
         self.assertEqual(updated_blog.author.username, self.user.username)
 
     def test_update_blog_view_for_logged_out_user(self):
@@ -343,6 +478,11 @@ class BlogTests(TestCase):
         request_method_GET()
         request_method_POST()
 
+
+class DeleteBlogPageViewTests(BlogTestsData, TestCase):
+    def setUp(self):
+        self.client.login(email="test_user@email.com", password="test_user_password")
+
     def test_delete_blog_view_for_get_request(self):
         response = self.client.get(reverse("delete_blog", kwargs={"pk": self.blog.pk}))
         pk_invalid = self.client.get("delete_blog/123456/")
@@ -448,18 +588,19 @@ class BlogTests(TestCase):
         request_method_POST()
 
 
-class ContactPageTest(TestCase):
+class ContactPageTests(TestCase):
     """
     Test class created for testing contact form
     and contact page view
     """
 
-    def setUp(self):
-        self.subject = "Testing email"
-        self.body = "This is going to be a test for my contact form that sends emails from users to me."
-        self.email_from = "test_user_1"
-        self.email_to = "test_user_2"
-        self.reply_to = self.email_from
+    @classmethod
+    def setUpTestData(cls):
+        cls.subject = "Testing email"
+        cls.body = "This is going to be a test for my contact form that sends emails from users to me."
+        cls.email_from = "test_user_1"
+        cls.email_to = "test_user_2"
+        cls.reply_to = cls.email_from
 
     def test_sending_email(self):
         mail.EmailMessage(

@@ -12,6 +12,15 @@ class Category(models.Model):
 
 
 class Blog(models.Model):
+    class PublishedObjects(models.Manager):
+        def get_queryset(self):
+            return super().get_queryset().filter(blog_status="published")
+
+    options = (
+        ("draft", "Draft"),
+        ("published", "Published"),
+    )
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     blog_title = models.CharField(max_length=200)
@@ -19,6 +28,13 @@ class Blog(models.Model):
     blog_body = models.TextField()
     blog_created = models.DateTimeField(auto_now_add=True)
     blog_updated = models.DateTimeField(auto_now=True)
+    blog_status = models.CharField(max_length=10, choices=options, default="published")
+
+    objects = models.Manager()
+    published_objects = PublishedObjects()
+
+    class Meta:
+        ordering = ("-blog_created",)
 
     def __str__(self) -> str:
         return self.blog_title

@@ -7,5 +7,6 @@
         <h2>{{ blog.blog_title }}</h2>
         <small>@{{ blog.author }} | {{ blog.blog_created|timesince }}</small>
         <p>{{ blog.blog_body }}</p>
+        <p style="color: blue;">{{ blog.blog_status }}</p>
     </div>
 {% endblock content %}

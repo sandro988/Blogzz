@@ -29,6 +29,10 @@ class HomePageView(ListView):
     context_object_name = "blog_list"
     template_name = "home.html"
 
+    def get_queryset(self):
+        published_objects = Blog.published_objects
+        return published_objects.get_queryset()
+
     def get_context_data(self, **kwargs):
         context = super(HomePageView, self).get_context_data(**kwargs)
         context["form"] = ContactForm()
@@ -57,6 +61,19 @@ class CreateBlogView(LoginRequiredMixin, CreateView):
     login_url = "account_login"
 
     def form_valid(self, form):
+        """
+        Check if the user has clicked on Create button, if they did than that means that they are intending
+        to publish their blog, but if they click move to drafts button, the blog will not be published, but
+        rather saved as a draft that won't be shown on a home page.
+
+        Additionaly for all the new blogs, either draft or published the author of it will be set to request.user.
+        """
+
+        if "Create" in self.request.POST:
+            form.instance.blog_status = "published"
+        else:
+            form.instance.blog_status = "draft"
+
         form.instance.author = self.request.user
         return super().form_valid(form)
 
@@ -70,6 +87,14 @@ class UpdateBlogView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = "blogs/update_blog.html"
     fields = ["blog_title", "blog_category", "blog_body"]
     login_url = "account_login"
+
+    def form_valid(self, form):
+        if "Move to drafts" in self.request.POST:
+            form.instance.blog_status = "draft"
+        elif "Publish" in self.request.POST:
+            form.instance.blog_status = "published"
+
+        return super().form_valid(form)
 
     def test_func(self):
         object = self.get_object()
