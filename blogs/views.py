@@ -89,7 +89,10 @@ class UpdateBlogView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     login_url = "account_login"
 
     def form_valid(self, form):
-        if "Move to drafts" in self.request.POST:
+        if (
+            "Move to drafts" in self.request.POST
+            or "Save as draft" in self.request.POST
+        ):
             form.instance.blog_status = "draft"
         elif "Publish" in self.request.POST:
             form.instance.blog_status = "published"
