@@ -29,6 +29,7 @@ class Blog(models.Model):
     blog_created = models.DateTimeField(auto_now_add=True)
     blog_updated = models.DateTimeField(auto_now=True)
     blog_status = models.CharField(max_length=10, choices=options, default="published")
+    blog_thumbnail = models.ImageField(upload_to="blog_thumbnails/", blank=True)
 
     objects = models.Manager()
     published_objects = PublishedObjects()

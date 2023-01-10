@@ -4,6 +4,9 @@
 
 {% block content %}
     <div>
+        {% if blog.blog_thumbnail %}
+            <img src="{{ blog.blog_thumbnail.url }}" alt="{{ blog.blog_title }}">
+        {% endif %}
         <h2>{{ blog.blog_title }}</h2>
         <small>@{{ blog.author }} | {{ blog.blog_created|timesince }}</small>
         <p>{{ blog.blog_body }}</p>
