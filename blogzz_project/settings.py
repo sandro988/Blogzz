@@ -49,9 +49,12 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.github",
     "allauth.socialaccount.providers.google",
     "django_htmx",
+    "imagekit",
     # Local
     "accounts.apps.AccountsConfig",
     "blogs.apps.BlogsConfig",
+    # django_cleanup
+    "django_cleanup.apps.CleanupConfig",
 ]
 
 # A model that will be used in this project instead of default User model

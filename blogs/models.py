@@ -2,6 +2,8 @@ import uuid
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToCover
 
 
 class Category(models.Model):
@@ -29,7 +31,7 @@ class Blog(models.Model):
     blog_created = models.DateTimeField(auto_now_add=True)
     blog_updated = models.DateTimeField(auto_now=True)
     blog_status = models.CharField(max_length=10, choices=options, default="published")
-    blog_thumbnail = models.ImageField(upload_to="blog_thumbnails/", blank=True)
+    blog_thumbnail = ProcessedImageField(upload_to="blog_thumbnails/", processors=[ResizeToCover(300, 200)], format="JPEG", options={'quality': 90}, blank=True)
 
     objects = models.Manager()
     published_objects = PublishedObjects()

@@ -57,7 +57,7 @@ class CreateBlogView(LoginRequiredMixin, CreateView):
 
     model = Blog
     template_name = "blogs/create_blog.html"
-    fields = ["blog_title", "blog_category", "blog_body"]
+    fields = ["blog_title", "blog_category", "blog_body", "blog_thumbnail"]
     login_url = "account_login"
 
     def form_valid(self, form):
@@ -85,7 +85,7 @@ class UpdateBlogView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     model = Blog
     template_name = "blogs/update_blog.html"
-    fields = ["blog_title", "blog_category", "blog_body"]
+    fields = ["blog_title", "blog_category", "blog_body", "blog_thumbnail"]
     login_url = "account_login"
 
     def form_valid(self, form):
