@@ -27,7 +27,7 @@ class Blog(models.Model):
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     blog_title = models.CharField(max_length=200)
     blog_category = models.ForeignKey("Category", on_delete=models.SET_NULL, null=True)
-    blog_body = models.TextField()
+    blog_body = models.TextField(blank=False, null=True)
     blog_created = models.DateTimeField(auto_now_add=True)
     blog_updated = models.DateTimeField(auto_now=True)
     blog_status = models.CharField(max_length=10, choices=options, default="published")
