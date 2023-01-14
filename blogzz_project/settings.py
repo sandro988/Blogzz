@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.google",
     "django_htmx",
     "imagekit",
+    "django_editorjs_fields",
     # Local
     "accounts.apps.AccountsConfig",
     "blogs.apps.BlogsConfig",

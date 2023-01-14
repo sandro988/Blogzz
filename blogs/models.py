@@ -4,6 +4,7 @@ from django.db import models
 from django.urls import reverse
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToCover
+from django_editorjs_fields import EditorJsTextField
 
 
 class Category(models.Model):
@@ -27,11 +28,21 @@ class Blog(models.Model):
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     blog_title = models.CharField(max_length=200)
     blog_category = models.ForeignKey("Category", on_delete=models.SET_NULL, null=True)
-    blog_body = models.TextField(blank=False, null=True)
+    blog_body = EditorJsTextField(
+        plugins=["@editorjs/image", "@editorjs/embed"],
+        null=True,
+        blank=False,
+    )
     blog_created = models.DateTimeField(auto_now_add=True)
     blog_updated = models.DateTimeField(auto_now=True)
     blog_status = models.CharField(max_length=10, choices=options, default="published")
-    blog_thumbnail = ProcessedImageField(upload_to="blog_thumbnails/", processors=[ResizeToCover(300, 200)], format="JPEG", options={'quality': 90}, blank=True)
+    blog_thumbnail = ProcessedImageField(
+        upload_to="blog_thumbnails/",
+        processors=[ResizeToCover(300, 200)],
+        format="JPEG",
+        options={"quality": 90},
+        blank=True,
+    )
 
     objects = models.Manager()
     published_objects = PublishedObjects()

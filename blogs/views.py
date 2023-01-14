@@ -8,7 +8,7 @@ from django.views.generic import (
     DeleteView,
 )
 from .models import Blog
-from .forms import ContactForm
+from .forms import ContactForm, BlogForm
 from django.urls import reverse_lazy
 
 
@@ -57,7 +57,8 @@ class CreateBlogView(LoginRequiredMixin, CreateView):
 
     model = Blog
     template_name = "blogs/create_blog.html"
-    fields = ["blog_title", "blog_category", "blog_body", "blog_thumbnail"]
+    # fields = ["blog_title", "blog_category", "blog_body", "blog_thumbnail"]
+    form_class = BlogForm
     login_url = "account_login"
 
     def form_valid(self, form):

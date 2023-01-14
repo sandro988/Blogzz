@@ -2,6 +2,8 @@ from django import forms
 from django.core.mail import EmailMessage, BadHeaderError
 from django.http import HttpResponse
 from django.conf import settings
+from .models import Blog
+from django_editorjs_fields import EditorJsWidget
 
 
 class ContactForm(forms.Form):
@@ -72,3 +74,15 @@ class ContactForm(forms.Form):
                 email.send()
             except BadHeaderError:
                 return HttpResponse("Invalid header found.")
+
+
+class BlogForm(forms.ModelForm):
+    class Meta:
+        model = Blog
+        exclude = ["blog_status", "author"]
+        widgets = {
+            "body_editorjs": EditorJsWidget(config={"minHeight": 100}),
+            "body_editorjs_text": EditorJsWidget(
+                plugins=["@editorjs/image", "@editorjs/header"]
+            ),
+        }
