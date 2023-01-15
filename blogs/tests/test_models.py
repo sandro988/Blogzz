@@ -29,7 +29,7 @@ class BlogModelTests(TestCase):
         self.blog = Blog.objects.create(
             author=self.user,
             blog_title="Test blog",
-            blog_category=self.category,
+            blog_category="self.category",
             blog_body="This is a test blog.",
         )
 

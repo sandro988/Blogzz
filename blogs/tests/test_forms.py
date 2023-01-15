@@ -16,15 +16,11 @@ class TestsData:
             password="test_user_password",
         )
 
-        cls.category1 = Category.objects.create(category_name="Python")
+        cls.category1 = "Python"
         # For CreateBlogView
-        cls.category2 = Category.objects.create(
-            category_name="Category for Create view"
-        )
+        cls.category2 = "Category for Create view"
         # For UpdateBlogView and DeleteBlogView
-        cls.category3 = Category.objects.create(
-            category_name="Category for Create and Update views"
-        )
+        cls.category3 = "Category for Create and Update views"
 
         cls.blog = Blog.objects.create(
             author=cls.user,
@@ -39,7 +35,7 @@ class CreateBlogViewFormTests(TestsData, TestCase):
         self.client.login(email="test_user@email.com", password="test_user_password")
         self.form_data = {
             "blog_title": "Test Blog",
-            "blog_category": self.category2.pk,
+            "blog_category": self.category1,
             "blog_body": "This is a test blog.",
             # Simulating that user clicked Create button instead of Move to drafts.
             "Create": "Create",
@@ -47,7 +43,7 @@ class CreateBlogViewFormTests(TestsData, TestCase):
 
         self.incomplete_form_data = {
             "blog_title": "",
-            "blog_category": self.category2.pk,
+            "blog_category": self.category1,
             "blog_body": "This is a test blog.",
             # Simulating that user clicked Create button instead of Move to drafts.
             "Create": "Create",
@@ -61,8 +57,9 @@ class CreateBlogViewFormTests(TestsData, TestCase):
 
         new_blog = Blog.objects.get(blog_title="Test Blog")
         self.assertEqual(new_blog.blog_title, "Test Blog")
+        self.assertEqual(Category.objects.count(), 1)
         self.assertEqual(
-            new_blog.blog_category.category_name, "Category for Create view"
+            new_blog.blog_category_foreignkey.category_name, self.category1
         )
         self.assertEqual(new_blog.blog_body, "This is a test blog.")
         self.assertEqual(new_blog.blog_status, "published")
@@ -124,7 +121,7 @@ class CreateBlogViewFormTests(TestsData, TestCase):
         new_blog = Blog.objects.get(blog_title="Test Blog")
         self.assertEqual(new_blog.blog_title, "Test Blog")
         self.assertEqual(
-            new_blog.blog_category.category_name, "Category for Create view"
+            new_blog.blog_category_foreignkey.category_name, self.category1
         )
         self.assertEqual(new_blog.blog_body, "This is a test blog.")
         self.assertEqual(new_blog.blog_status, "draft")
@@ -136,17 +133,17 @@ class UpdateBlogViewFormTests(TestsData, TestCase):
         self.client.login(email="test_user@email.com", password="test_user_password")
         self.update_form_data = {
             "blog_title": "Updated Test Blog",
-            "blog_category": self.category3.pk,
+            "blog_category": self.category3,
             "blog_body": "This is an updated test blog.",
         }
         self.update_form_data_of_nonauthor_user = {
             "blog_title": "I am not author of this post",
-            "blog_category": self.category3.pk,
+            "blog_category": self.category3,
             "blog_body": "This is a test blog that has been updated.",
         }
         self.incomplete_update_form_data = {
             "blog_title": "",
-            "blog_category": self.category3.pk,
+            "blog_category": self.category3,
             "blog_body": "This is a test blog.",
         }
 
@@ -176,9 +173,10 @@ class UpdateBlogViewFormTests(TestsData, TestCase):
 
         updated_blog = Blog.objects.last()
         self.assertEqual(updated_blog.blog_title, "Updated Test Blog")
+        # In the view we use title() method, so the catgory name will have first letters of each word as uppercase.
         self.assertEqual(
-            updated_blog.blog_category.category_name,
-            "Category for Create and Update views",
+            updated_blog.blog_category_foreignkey.category_name,
+            "Category For Create And Update Views",
         )
         self.assertEqual(updated_blog.blog_body, "This is an updated test blog.")
         self.assertEqual(updated_blog.blog_status, "published")
@@ -258,9 +256,11 @@ class UpdateBlogViewFormTests(TestsData, TestCase):
 
         updated_blog = Blog.objects.last()
         self.assertEqual(updated_blog.blog_title, "Updated Test Blog")
+
+        # In the view we use title() method, so the catgory name will have first letters of each word as uppercase.
         self.assertEqual(
-            updated_blog.blog_category.category_name,
-            "Category for Create and Update views",
+            updated_blog.blog_category_foreignkey.category_name,
+            "Category For Create And Update Views",
         )
         self.assertEqual(updated_blog.blog_body, "This is an updated test blog.")
         self.assertEqual(updated_blog.blog_status, "draft")
@@ -288,8 +288,8 @@ class UpdateBlogViewFormTests(TestsData, TestCase):
         updated_blog = Blog.objects.last()
         self.assertEqual(updated_blog.blog_title, "Updated Test Blog")
         self.assertEqual(
-            updated_blog.blog_category.category_name,
-            "Category for Create and Update views",
+            updated_blog.blog_category_foreignkey.category_name,
+            "Category For Create And Update Views",
         )
         self.assertEqual(updated_blog.blog_body, "This is an updated test blog.")
         # Check if the status has changed from 'draft' to 'published'
@@ -317,9 +317,10 @@ class UpdateBlogViewFormTests(TestsData, TestCase):
 
         updated_blog = Blog.objects.last()
         self.assertEqual(updated_blog.blog_title, "Updated Test Blog")
+        # In the view we use title() method, so the catgory name will have first letters of each word as uppercase.
         self.assertEqual(
-            updated_blog.blog_category.category_name,
-            "Category for Create and Update views",
+            updated_blog.blog_category_foreignkey.category_name,
+            "Category For Create And Update Views",
         )
         self.assertEqual(updated_blog.blog_body, "This is an updated test blog.")
         # Check that status has not changed

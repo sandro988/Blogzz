@@ -7,7 +7,7 @@ from django.views.generic import (
     UpdateView,
     DeleteView,
 )
-from .models import Blog
+from .models import Blog, Category
 from .forms import ContactForm, BlogForm
 from django.urls import reverse_lazy
 
@@ -52,30 +52,40 @@ class BlogsDetailView(LoginRequiredMixin, DetailView):
 
 class CreateBlogView(LoginRequiredMixin, CreateView):
     """
-    View for creating new blog post
+    A view for creating a new blog post.
     """
 
     model = Blog
     template_name = "blogs/create_blog.html"
-    # fields = ["blog_title", "blog_category", "blog_body", "blog_thumbnail"]
     form_class = BlogForm
     login_url = "account_login"
 
     def form_valid(self, form):
         """
-        Check if the user has clicked on Create button, if they did than that means that they are intending
-        to publish their blog, but if they click move to drafts button, the blog will not be published, but
-        rather saved as a draft that won't be shown on a home page.
+        Handles the input from the user and creates a new blog post.
+        It takes the inputted topic name, checks if it exists in the category model,
+        if it does not, it will add it to the category model. Then it sets the author
+        of the blog to the currently logged-in user and sets the status of the blog
+        to either "published" or "draft" depending on the user's choice.
 
-        Additionaly for all the new blogs, either draft or published the author of it will be set to request.user.
+        Args:
+            form (BlogForm): An instance of the BlogForm containing the user's input.
+
+        Returns:
+            A redirect to the newly created blog post.
         """
+
+        blog_category = form.cleaned_data["blog_category"].lower()
+        category = Category.objects.get_or_create(category_name=blog_category.title())
+
+        form.instance.blog_category_foreignkey = category[0]
+        form.instance.author = self.request.user
 
         if "Create" in self.request.POST:
             form.instance.blog_status = "published"
         else:
             form.instance.blog_status = "draft"
 
-        form.instance.author = self.request.user
         return super().form_valid(form)
 
 
@@ -86,10 +96,27 @@ class UpdateBlogView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     model = Blog
     template_name = "blogs/update_blog.html"
-    fields = ["blog_title", "blog_category", "blog_body", "blog_thumbnail"]
+    form_class = BlogForm
     login_url = "account_login"
 
     def form_valid(self, form):
+        """
+        Handles the input from the user and updates the existing blog post.
+        It takes the inputted topic name, checks if it exists in the category model,
+        if it does not, it will add it to the category model. Then it sets the status of the blog
+        to either "published" or "draft" depending on the user's choice.
+
+        Args:
+            form (BlogForm): An instance of the BlogForm containing the user's input.
+
+        Returns:
+            A redirect to the updated blog
+        """
+
+        blog_category = form.cleaned_data["blog_category"].lower()
+        category = Category.objects.get_or_create(category_name=blog_category.title())
+        form.instance.blog_category_foreignkey = category[0]
+
         if (
             "Move to drafts" in self.request.POST
             or "Save as draft" in self.request.POST
