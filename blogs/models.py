@@ -27,7 +27,10 @@ class Blog(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     blog_title = models.CharField(max_length=200)
-    blog_category = models.ForeignKey("Category", on_delete=models.SET_NULL, null=True)
+    blog_category_foreignkey = models.ForeignKey(
+        "Category", on_delete=models.SET_NULL, null=True, blank=True
+    )
+    blog_category = models.CharField(max_length=50, null=True)
     blog_body = EditorJsTextField(
         plugins=["@editorjs/image", "@editorjs/embed"],
         null=True,
