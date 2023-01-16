@@ -20,6 +20,7 @@
         {% endif %}
         <h2><a href="{{ blog.get_absolute_url }}">{{ blog.blog_title }}</a></h2>
         <small>@{{ blog.author }} | {{ blog.blog_created|timesince }}</small>
+        <img src="{{ blog.author.profile_picture.url }}" alt="{{ blog.author }} profile picture">
         <p>{{ blog.blog_body | editorjs }}</p>
         <p style="color: blue;">{{ blog.blog_status }}</p>
         <div>
