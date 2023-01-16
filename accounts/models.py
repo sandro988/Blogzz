@@ -9,11 +9,11 @@ class CustomUser(AbstractUser):
         format="JPEG",
         options={"quality": 100},
         blank=True,
-        default="profile_pictures/default/default_profile_picture.jpg"
+        default='profile_pictures/default_profile_picture.jpg'
     )
 
     def save(self, *args, **kwargs):
         "If user decides to delete their profile picture, it will automatically be set to default picture."
         if not self.profile_picture:
-            self.profile_picture = 'profile_pictures/default/default_profile_picture.jpg'
+            self.profile_picture = 'profile_pictures/default_profile_picture.jpg'
         super().save(*args, **kwargs)

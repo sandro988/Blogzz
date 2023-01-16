@@ -1,4 +1,5 @@
 import uuid
+import math
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
@@ -62,3 +63,9 @@ class Blog(models.Model):
 
     def get_absolute_url(self):
         return reverse("blog_detail", kwargs={"pk": self.id})
+    
+    def reading_time(self):
+        words = self.blog_body.split()
+        reading_time = math.ceil(len(words) / 234)
+
+        return reading_time
