@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views import View
 from django.views.generic import (
     ListView,
     DetailView,
@@ -10,6 +11,8 @@ from django.views.generic import (
 from .models import Blog, Category
 from .forms import ContactForm, BlogForm
 from django.urls import reverse_lazy
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect
 
 
 class HomePageView(ListView):
@@ -145,6 +148,38 @@ class DeleteBlogView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         object = self.get_object()
         return object.author == self.request.user
+
+
+class LikeBlogView(LoginRequiredMixin, View):
+    """View created for handling liking and unliking of a blog"""
+
+    def post(self, request, *args, **kwargs):
+        """
+        Handles the post request to like or unlike a blog.
+
+        Args:
+            request: The current request object
+            kwargs: Additional keyword arguments, including the id of the blog
+
+        Returns:
+            JsonResponse: A JSON response containing the updated number of likes for the blog
+        """
+
+        blog = get_object_or_404(Blog, id=kwargs["pk"])
+        user = request.user
+
+        if user in blog.blog_likes.all():
+            blog.blog_likes.remove(user)
+            blog.blog_likes_count -= 1
+        else:
+            blog.blog_likes.add(user)
+            blog.blog_likes_count += 1
+
+        blog.save()
+        return JsonResponse(blog.blog_likes_count, safe=False)
+
+    def get(self, request, *args, **kwargs):
+        return redirect("home")
 
 
 class ContactFormView(FormView):

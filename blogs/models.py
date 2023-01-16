@@ -46,6 +46,10 @@ class Blog(models.Model):
         options={"quality": 90},
         blank=True,
     )
+    blog_likes = models.ManyToManyField(
+        get_user_model(), related_name="like", default=None, blank=True
+    )
+    blog_likes_count = models.IntegerField(default="0")
 
     objects = models.Manager()
     published_objects = PublishedObjects()

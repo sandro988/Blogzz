@@ -160,10 +160,9 @@ class UpdateBlogViewFormTests(TestsData, TestCase):
             reverse("update_blog", kwargs={"pk": self.blog.pk}),
             data=self.update_form_data,
         )
-        pk_invalid = self.client.post("update_blog/123456/", data=self.update_form_data)
+        pk_invalid = self.client.post("update_blog", kwargs={"pk": "123456"})
         pk_does_not_exist = self.client.post(
-            "/update_blog/00000000-0000-0000-0000-000000000000/",
-            data=self.update_form_data,
+            "update_blog", kwargs={"pk": "00000000-0000-0000-0000-000000000000/"}
         )
 
         self.assertEqual(response.status_code, 302)
@@ -345,9 +344,9 @@ class DeleteBlogViewFormTests(TestsData, TestCase):
         no_response = self.client.get(
             reverse("delete_blog", kwargs={"pk": self.blog.pk})
         )
-        pk_invalid = self.client.post("delete_blog/123456/")
+        pk_invalid = self.client.post("delete_blog", kwargs={"pk": "123456"})
         pk_does_not_exist = self.client.post(
-            "/delete_blog/00000000-0000-0000-0000-000000000000/"
+            "delete_blog", kwargs={"pk": "00000000-0000-0000-0000-000000000000/"}
         )
 
         self.assertEqual(response.status_code, 302)
@@ -388,6 +387,57 @@ class DeleteBlogViewFormTests(TestsData, TestCase):
         self.assertEqual(response.status_code, 403)
         self.assertEqual(Blog.objects.count(), 1)
         self.assertEqual(Blog.objects.last().blog_title, "Intermediate Python")
+
+
+class LikeBlogViewFormTests(TestsData, TestCase):
+    def setUp(self):
+        self.client.login(email="test_user@email.com", password="test_user_password")
+
+    def test_like_functionality(self):
+        # User click the like button
+        response_for_like = self.client.post(
+            reverse("like_blog", kwargs={"pk": self.blog.id})
+        )
+        self.assertEqual(response_for_like.status_code, 200)
+        self.assertEqual(Blog.objects.get(id=self.blog.id).blog_likes_count, 1)
+
+        # User clicks the like button again, resulting in unlike functionality
+        response_for_unlike = self.client.post(
+            reverse("like_blog", kwargs={"pk": self.blog.id})
+        )
+        self.assertEqual(response_for_unlike.status_code, 200)
+        self.assertEqual(Blog.objects.get(id=self.blog.id).blog_likes_count, 0)
+
+        # User likes a blog that does not exist or the primary key is invalid
+        pk_invalid = self.client.post("like_blog", kwargs={"pk": "123456"})
+        pk_does_not_exist = self.client.post(
+            "like_blog", kwargs={"pk": "00000000-0000-0000-0000-000000000000/"}
+        )
+
+        self.assertEqual(pk_invalid.status_code, 404)
+        self.assertEqual(pk_does_not_exist.status_code, 404)
+
+        # User sends a GET request instead of a POST
+        response = self.client.get(reverse("like_blog", kwargs={"pk": self.blog.id}))
+
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse("home"))
+
+    def test_like_functionality_for_logged_out_user(self):
+
+        self.client.logout()
+        like_url = reverse("like_blog", kwargs={"pk": self.blog.id})
+        response = self.client.post(like_url)
+
+        # User tries to like a blog without being authenticated
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Blog.objects.last().blog_likes_count, 0)
+        self.assertRedirects(response, f"{reverse('account_login')}?next={like_url}")
+
+        # User gets redirected to login page
+        response = self.client.get(f"{reverse('account_login')}?next={like_url}")
+        self.assertContains(response, "Welcome back")
+        self.assertTemplateUsed(response, "account/login.html")
 
 
 class ContactFormTests(TestCase):
