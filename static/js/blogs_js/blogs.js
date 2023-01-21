@@ -49,14 +49,14 @@ window.addEventListener("resize", () => {
         window.innerWidth < 1600 &&
         (previousScreenSize < 1000 || previousScreenSize >= 1600)
     ) {
-        masonryGrid(4, blogs);
+        masonryGrid(5, blogs);
     } else if (
         window.innerWidth >= 1600 &&
         window.innerWidth <= 1920 &&
         (previousScreenSize < 1600 || previousScreenSize >= 1920)
     ) {
         masonryGrid(6, blogs);
-    } else if (window.innerWidth > 1920 && previousScreenSize < 1920) {
+    } else if (window.innerWidth > 1920 && previousScreenSize <= 1920) {
         masonryGrid(7, blogs);
     }
 
@@ -69,7 +69,7 @@ function initialMasonry() {
     } else if (window.innerWidth >= 600 && window.innerWidth < 1000) {
         masonryGrid(3, blogs);
     } else if (window.innerWidth >= 1000 && window.innerWidth < 1600) {
-        masonryGrid(4, blogs);
+        masonryGrid(5, blogs);
     } else if (window.innerWidth >= 1600 && window.innerWidth <= 1920) {
         masonryGrid(6, blogs);
     } else {
