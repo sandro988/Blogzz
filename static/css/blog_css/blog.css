@@ -14,6 +14,7 @@ body {
     gap: 10px;
     width: 100%;
     padding: 0 10px;
+    margin: 50px 0;
 }
 
 .thumbnail_blog {
@@ -143,13 +144,18 @@ body {
     width: clamp(0.7rem, 1vw, 2rem);
     height: clamp(0.7rem, 1vw, 1.5rem);
     transition: all 0.25s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .like-button {
     width: max-content;
+    height: max-content;
     border: none;
     outline: none;
     background-color: transparent;
+    transition: all 0.25s ease-in-out;
 }
 
 .likes-div:hover,
@@ -159,11 +165,16 @@ body {
 
 .like-button:hover {
     cursor: pointer;
+    scale: 1.25
+}
+
+.heart-active path {
+    fill: #e755af;
 }
 
 .blog:hover .blog-content-container,
 .thumbnail_blog:hover .blog-content-container {
-    background-color: black;
+    background-color: black !important;
     color: white;
 }
 
@@ -187,6 +198,3 @@ body {
     height: max-content;
 }
 
-.blog2 .blog-content-container {
-    background-color: #b1aae6;
-}

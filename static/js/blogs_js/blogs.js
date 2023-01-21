@@ -1,5 +1,7 @@
 const blogsContainer = document.querySelector(".blogs-container");
 let blogs = document.querySelectorAll(".masonry_item");
+let previousScreenSize = window.innerWidth;
+let likeButtons = document.querySelectorAll(".like-button");
 
 function masonryGrid(columns, blogs) {
     let columnWrappers = {};
@@ -33,7 +35,6 @@ function masonryGrid(columns, blogs) {
     }
 }
 
-let previousScreenSize = window.innerWidth;
 window.addEventListener("resize", () => {
     if (window.innerWidth < 600 && previousScreenSize >= 600) {
         masonryGrid(2, blogs);
@@ -77,3 +78,25 @@ function initialMasonry() {
 }
 
 initialMasonry()
+
+
+// Animation on click of a like button
+
+for (let i = 0; i < likeButtons.length; i++) {
+    console.log(likeButtons[i])
+    likeButtons[i].addEventListener("click", () => {
+        let heart = likeButtons[i];
+        if (!heart.classList.contains("heart-active")) {
+            heart.classList.add("heart-active");
+            heart.style.transform = "scale(0.5)";
+            setTimeout(() => {
+                heart.style.transform = "scale(1.5)";
+                setTimeout(() => {
+                    heart.style.transform = "scale(1)";
+                }, "150");
+            }, "150");
+        } else {
+            heart.classList.remove("heart-active");
+        }
+    })
+}
