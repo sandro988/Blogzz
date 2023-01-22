@@ -13,7 +13,7 @@ from .forms import ContactForm, BlogForm
 from django.urls import reverse_lazy
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
-from django.db.models import Q 
+from django.db.models import Q
 
 
 class HomePageView(ListView):
@@ -34,8 +34,18 @@ class HomePageView(ListView):
     template_name = "home.html"
 
     def get_queryset(self):
-        published_objects = Blog.published_objects
-        return published_objects.get_queryset()
+
+        searched_objects = self.request.GET.get("q")
+        if searched_objects:
+            return Blog.objects.filter(
+                Q(blog_title__icontains=searched_objects)
+                | Q(blog_body__icontains=searched_objects)
+                | Q(blog_category__icontains=searched_objects),
+                blog_status="published",
+            )
+        else:
+            published_objects = Blog.published_objects
+            return published_objects.get_queryset()
 
     def get_context_data(self, **kwargs):
         context = super(HomePageView, self).get_context_data(**kwargs)
@@ -182,16 +192,6 @@ class LikeBlogView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         return redirect("home")
 
-
-class SearchBlogView(LoginRequiredMixin, ListView):
-    model = Blog 
-    context_object_name = "searching_list"
-    template_name = "blogs/search_blogs.html"
-
-    def get_queryset(self):
-        query = self.request.GET.get("q")
-        return Blog.objects.filter(
-            Q(blog_title__icontains=query) | Q(blog_body__icontains=query) | Q(blog_category__icontains=query))
 
 class ContactFormView(FormView):
     """

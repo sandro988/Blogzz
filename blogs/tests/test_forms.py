@@ -30,6 +30,20 @@ class TestsData:
         )
 
 
+class SearchBlogFormTests(TestsData, TestCase):
+    def test_searching_functionality(self):
+        response = self.client.get(reverse("home"), {"q": "Python"})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(response.context["blog_list"], [self.blog])
+
+    def test_search_value_does_not_exist(self):
+        response = self.client.get(reverse("home"), {"q": "1234567890"})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotEqual(response.context["blog_list"], [self.blog])
+
+
 class CreateBlogViewFormTests(TestsData, TestCase):
     def setUp(self):
         self.client.login(email="test_user@email.com", password="test_user_password")

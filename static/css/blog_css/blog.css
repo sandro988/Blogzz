@@ -121,6 +121,7 @@ body {
 
 .blog-bottom {
     width: 100%;
+    gap: 50px;
 }
 
 .read-time {
@@ -190,7 +191,7 @@ body {
 }
 
 .column {
-    flex: 1;
+    /* flex: 1; */
     display: flex;
     flex-direction: column;
     align-items: center;
