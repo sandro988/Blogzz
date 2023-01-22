@@ -13,6 +13,7 @@ from .forms import ContactForm, BlogForm
 from django.urls import reverse_lazy
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
+from django.db.models import Q 
 
 
 class HomePageView(ListView):
@@ -181,6 +182,16 @@ class LikeBlogView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         return redirect("home")
 
+
+class SearchBlogView(LoginRequiredMixin, ListView):
+    model = Blog 
+    context_object_name = "searching_list"
+    template_name = "blogs/search_blogs.html"
+
+    def get_queryset(self):
+        query = self.request.GET.get("q")
+        return Blog.objects.filter(
+            Q(blog_title__icontains=query) | Q(blog_body__icontains=query) | Q(blog_category__icontains=query))
 
 class ContactFormView(FormView):
     """

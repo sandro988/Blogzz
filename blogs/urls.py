@@ -6,6 +6,7 @@ from .views import (
     UpdateBlogView,
     DeleteBlogView,
     LikeBlogView,
+    SearchBlogView,
     ContactFormView,
 )
 
@@ -16,6 +17,7 @@ urlpatterns = [
     path("blog/update_blog/<uuid:pk>/", UpdateBlogView.as_view(), name="update_blog"),
     path("blog/delete_blob/<uuid:pk>/", DeleteBlogView.as_view(), name="delete_blog"),
     path("blog/like_blog/<uuid:pk>/", LikeBlogView.as_view(), name="like_blog"),
+    path("blog/search/", SearchBlogView.as_view(), name="search_blogs"),
     # Contact form url
     path("contact/", ContactFormView.as_view(), name="contact"),
 ]

@@ -77,13 +77,12 @@ function initialMasonry() {
     }
 }
 
-initialMasonry()
-
+initialMasonry();
 
 // Animation on click of a like button
 
 for (let i = 0; i < likeButtons.length; i++) {
-    console.log(likeButtons[i])
+    console.log(likeButtons[i]);
     likeButtons[i].addEventListener("click", () => {
         let heart = likeButtons[i];
         if (!heart.classList.contains("heart-active")) {
@@ -98,5 +97,5 @@ for (let i = 0; i < likeButtons.length; i++) {
         } else {
             heart.classList.remove("heart-active");
         }
-    })
+    });
 }

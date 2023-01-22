@@ -11,6 +11,12 @@
                 <a href="{% url 'home' %}">Home</a>
             </h1>
         </div>
+        <div>
+            <form method="GET" action="{% url 'search_blogs' %}">
+                <input type="search" name="q" placeholder="Search">
+                <button type="submit">Search</button>
+            </form>
+        </div>
 
         <div>
             {% if user.is_authenticated %}
