@@ -16,10 +16,7 @@
         {% for blog in blog_list %}
             <a 
             href="{{ blog.get_absolute_url }}"
-            class="
-            {% if blog.blog_thumbnail %}thumbnail_blog thumbnail_blog{{ forloop.counter }} masonry_item
-            {% else %}blog blog{{ forloop.counter }} masonry_item
-            {% endif %}">
+            class="{% if blog.blog_thumbnail %}thumbnail_blog{% else %}blog{% endif %} masonry-item">
                 {% if blog.blog_thumbnail %}
                     <div class="blog-img-container">
                         <img src="{{ blog.blog_thumbnail.url }}" alt="Header picture of blog with the title of: {{ blog.title }}">

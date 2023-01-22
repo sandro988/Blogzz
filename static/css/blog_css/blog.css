@@ -10,14 +10,13 @@ body {
 }
 
 .blogs-container {
-    display: flex;
-    gap: 10px;
+    column-gap: 10px;
     width: 100%;
     padding: 0 10px;
     margin: 50px 0;
 }
 
-.thumbnail_blog {
+.thumbnail_blog, .blog {
     text-decoration: none;
     color: black;
     display: block;
@@ -27,20 +26,8 @@ body {
     position: relative;
     cursor: pointer;
     border-radius: 15px;
-    flex-grow: 1;
-    flex-shrink: 0;
-}
-
-.blog {
-    text-decoration: none;
-    color: black;
-    display: block;
-    width: 100%;
-    height: max-content;
-    transition: 0.5s transform ease-in-out 0.5ms;
-    position: relative;
-    cursor: pointer;
-    border-radius: 15px;
+    break-inside: avoid-column;
+    margin-bottom: 10px;
 }
 
 .blog .blog-content-container {
@@ -188,14 +175,5 @@ body {
 .thumbnail_blog:hover .likes-form {
     background-color: #f1f1f1;
     color: black;
-}
-
-.column {
-    /* flex: 1; */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    height: max-content;
 }
 
