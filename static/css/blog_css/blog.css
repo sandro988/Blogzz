@@ -181,7 +181,9 @@ body {
     font-family: "limelight", cursive;
     font-size: clamp(1.8rem, 2.5vw, 6rem);
     font-weight: normal;
-    position: absolute;
+    position: fixed;
+    width: 100%;
+    text-align: center;
     top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);

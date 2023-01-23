@@ -39,9 +39,8 @@ class HomePageView(ListView):
         if searched_objects:
             return Blog.objects.filter(
                 Q(blog_title__icontains=searched_objects)
-                | Q(blog_body__icontains=searched_objects)
                 | Q(blog_category__icontains=searched_objects),
-                blog_status="published",
+                blog_status="published"
             )
         else:
             published_objects = Blog.published_objects
