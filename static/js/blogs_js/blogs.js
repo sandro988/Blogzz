@@ -1,6 +1,9 @@
 const blogsContainer = document.querySelector(".blogs-container");
 let previousScreenSize = window.innerWidth;
 let likeButtons = document.querySelectorAll(".like-button");
+let searchField = document.querySelector(".search-field");
+let searchCancelBtn = document.querySelector(".reset-search");
+let searchClearBtn = document.querySelector(".clear-search");
 
 // Masonry layout on home page
 
@@ -51,7 +54,6 @@ initialMasonry();
 // Animation on click of a like button
 
 for (let i = 0; i < likeButtons.length; i++) {
-    console.log(likeButtons[i]);
     likeButtons[i].addEventListener("click", () => {
         let heart = likeButtons[i];
         if (!heart.classList.contains("heart-active")) {
@@ -68,3 +70,30 @@ for (let i = 0; i < likeButtons.length; i++) {
         }
     });
 }
+
+// 1) Making cancel button active whenever the search field is active
+// This works on mobile and tabled devices only
+// 2) Making clear button active whenever the search field is active
+// This works on every device
+
+searchField.addEventListener("focus", () => {
+    searchCancelBtn.classList.add("reset-search-active");
+});
+
+searchField.addEventListener("blur", () => {
+    searchCancelBtn.classList.remove("reset-search-active");
+    searchClearBtn.classList.remove("clear-search-active");
+    searchField.value = "";
+});
+
+searchField.addEventListener("input", (event) => {
+    if (event.target.value !== "") {
+        searchClearBtn.classList.add("clear-search-active");
+    } else {
+        searchClearBtn.classList.remove("clear-search-active");
+    }
+});
+
+searchClearBtn.addEventListener("click", () => {
+    searchField.value = ""
+})

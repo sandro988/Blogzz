@@ -13,7 +13,7 @@ body {
     column-gap: 10px;
     width: 100%;
     padding: 0 10px;
-    margin: clamp(75px, 12.5vh, 150px) 0 100px 0;
+    margin: clamp(75px, 11vh, 125px) 0 100px 0;
 }
 
 .thumbnail_blog,
@@ -194,8 +194,8 @@ footer {
     width: 100%;
     height: max-content;
     z-index: 10;
-    background-color: #f1f1f1;
-    padding: clamp(10px, 5vw, 20px) clamp(15px, 10vw, 25px);
+    background-color: white;
+    padding: clamp(5px, 5vw, 15px) clamp(20px, 10vw, 35px);
     box-shadow: 0px 1px 5px #838383;
 }
 
@@ -217,6 +217,10 @@ footer a svg,
     transition: scale 0.15s ease-in-out, stroke 0.15s ease-in-out;
 }
 
+footer img {
+    transition: scale 0.15s ease-in-out;
+}
+
 footer svg path,
 footer svg line,
 footer svg circle,
@@ -224,7 +228,8 @@ footer svg polyline {
     stroke: #838383;
 }
 
-footer svg:hover {
+footer svg:hover,
+footer img:hover {
     cursor: pointer;
     scale: 1.15;
 }
@@ -234,6 +239,10 @@ footer svg:hover line,
 footer svg:hover circle,
 footer svg:hover polyline {
     stroke: black;
+}
+
+.homepage-nav-right {
+    display: none;
 }
 
 .current-user-profile-picture {
@@ -268,9 +277,12 @@ nav {
     height: max-content;
 }
 
-.homepage-blogzz-logo img,
-.current-user-profile-picture {
+.homepage-blogzz-logo img {
     width: clamp(35px, 1.5vw, 75px);
+}
+
+.current-user-profile-picture {
+    width: clamp(25px, 7.5vw, 30px);
 }
 
 .homepage-nav-create-btn,
@@ -285,6 +297,14 @@ nav {
     display: block;
 }
 
+.homepage-nav-middle form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: clamp(10px, 1vw, 20px);
+    position: relative;
+}
+
 .homepage-nav-middle input {
     height: clamp(35px, 3.5vh, 50px);
     border-radius: 75px;
@@ -293,6 +313,86 @@ nav {
     border: none;
     background-color: #e9e9e9;
     font-size: clamp(1rem, 0.9vw, 25px);
+}
+
+.reset-search {
+    display: none;
+}
+
+.reset-search-active {
+    display: block;
+    background-color: white;
+    color: #767676;
+    border: none;
+    outline: none;
+    transition: color 0.25s ease-in-out;
+    font-size: clamp(0.6rem, 0.8rem, 1rem);
+    font-weight: bold;
+    animation: slide-in 0.3s forwards;
+}
+
+.reset-search:hover {
+    cursor: pointer;
+    color: black;
+}
+
+@keyframes slide-in {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
+.clear-search {
+    display: none;
+}
+
+.clear-search-active {
+    display: flex;
+    background-color: #e9e9e9;
+    border: none;
+    position: absolute;
+    z-index: 3;
+    right: 0;
+    border-radius: 50%;
+    animation: slide-in-x 0.3s forwards;
+}
+
+@keyframes slide-in-x {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(-300%);
+    }
+}
+
+.clear-search svg {
+    width: clamp(20px, 2vw, 30px);
+    height: max-content;
+}
+
+.clear-search svg circle,
+.clear-search svg line {
+    stroke: #838383;
+}
+
+.clear-search:hover svg circle,
+.clear-search:hover svg line {
+    stroke: #434343;
+}
+
+.clear-search:hover {
+    cursor: pointer;
 }
 
 @media only screen and (max-width: 321px) {
@@ -373,21 +473,36 @@ nav {
     }
 
     .homepage-nav-middle input {
-        height: clamp(50px, 5vh, 75px);
-        border-radius: 75px;
-        outline: none;
+        height: clamp(40px, 5vh, 75px);
         padding: 10px clamp(15px, 1.25vw, 25px);
-        border: none;
-        background-color: #e9e9e9;
-        font-size: clamp(1rem, 0.9vw, 25px);
+        z-index: 2;
     }
 
     .homepage-nav-middle input:focus {
         background-color: #e9e9e9;
     }
 
-    .current-user-profile-picture {
+    .reset-search {
+        display: none;
+    }
+
+    .clear-search {
+        right: clamp(10px, 1vw, 20px);
+        animation: slide-in-x 0.3s forwards;
+    }
+
+    @keyframes slide-in-x {
+        from {
+            transform: translateX(100%);
+        }
+        to {
+            transform: translateX(0);
+        }
+    }
+
+    .desktop-current-user-profile-picture .current-user-profile-picture {
         width: clamp(20px, 2vw, 75px);
+        display: flex;
     }
 
     .homepage-navbar-dropdown {
