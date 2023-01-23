@@ -1,5 +1,8 @@
 const blogsContainer = document.querySelector(".blogs-container");
+let previousScreenSize = window.innerWidth;
 let likeButtons = document.querySelectorAll(".like-button");
+
+// Masonry layout on home page
 
 window.addEventListener("resize", () => {
     if (window.innerWidth < 600 && previousScreenSize >= 600) {

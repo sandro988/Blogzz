@@ -1,32 +1,35 @@
+{% load static %}
+
 <nav>
-    <div 
-    style="
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center;
-    padding: 0 20px;"
-    >
-        <div>
-            <h1>
-                <a href="{% url 'home' %}">Home</a>
-            </h1>
+    <div class="homepage-nav-inner">
+        <div class="homepage-nav-left">
+            
+            <a href="{% url 'home' %}" class="homepage-blogzz-logo">
+                <img src="{% static 'images/blogzz-logo.svg' %}" alt="Logo of Blogzz">
+            </a>
+            
+            <a href="{% url 'create_blog' %}" class="homepage-nav-create-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" fill="#000000" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"></rect><line x1="40" y1="128" x2="216" y2="128" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></line><line x1="128" y1="40" x2="128" y2="216" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></line></svg>
+            </a>
         </div>
-        <div>
+        <div class="homepage-nav-middle">
             <form method="GET" action="{% url 'home' %}">
-                <input type="search" name="q" placeholder="Search">
-                <button type="submit">Search</button>
+                <input type="search" name="q" placeholder="Search" autocomplete="off">
             </form>
         </div>
 
-        <div>
-            {% if user.is_authenticated %}
-                <p>Hello {{ user.username }}</p>
-                <a href="{% url 'account_logout' %}">Log Out</a>
-            {% else %}
-                <a href="{% url 'account_login' %}">Log In</a>
-                <a href="{% url 'account_signup' %}">Sign Up</a>
-            {% endif %}
+        <div class="homepage-nav-right">
+            <a href="/">
+                <img 
+                class="current-user-profile-picture"
+                src="{{ request.user.profile_picture.url}}" 
+                alt="{{ request.user }}'s profile image">
+            </a>
+
+            <div class="homepage-navbar-dropdown">
+                <svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" fill="#000000" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"></rect><polyline points="208 96 128 176 48 96" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></polyline></svg>
+            </div>
+            {% comment %} <a href="{% url 'account_logout' %}">Sign out</a> {% endcomment %}
         </div>
     </div>
-    <hr>
 </nav>

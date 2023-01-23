@@ -1,74 +1,155 @@
-{% extends 'base.html' %}
-{% load static %}
-{% load editorjs %}
+{% extends 'base.html' %} 
+{% load static %} 
+{% load editorjs %} 
 
 {% block css %}
-    <link rel="stylesheet" href="{% static 'css/blog_css/blog.css' %}">
+<link rel="stylesheet" href="{% static 'css/blog_css/blog.css' %}" />
 {% endblock css%} 
 
 {% block content %}
-
+<header>
     {% include 'navbar.html' %}
+</header>
 
-    <a href="{% url 'create_blog' %}" style="color: red;">Create</a>
-
+<main>
     <div class="blogs-container">
         {% for blog in blog_list %}
-            <a 
+        <a
             href="{{ blog.get_absolute_url }}"
-            class="{% if blog.blog_thumbnail %}thumbnail_blog{% else %}blog{% endif %} masonry-item">
-                {% if blog.blog_thumbnail %}
-                    <div class="blog-img-container">
-                        <img src="{{ blog.blog_thumbnail.url }}" alt="Header picture of blog with the title of: {{ blog.title }}">
-                    </div>
-                {% endif %}
-                <div class="blog-content-container">
-                    <div>
-                        <div class="blog-top">
-                            {% if blog.blog_title|length >= 30 %}
-                                <h2 class="blog-header">{{ blog.blog_title|truncatechars:30 }}...</h2>
-                            {% else %}
-                                <h2 class="blog-header">{{ blog.blog_title}}</h2>
-                            {% endif %}
-                        </div>
-
-                        <div class="blog-middle">
-                            <img class="blog-author-image" src="{{ blog.author.profile_picture.url }}" alt="{{ blog.author }}'s profile picture">
-                            <div class="author-info">
-                                <small class="blog-author-name">@{{ blog.author }}</small>
-                                <small class="follower-count">0 followers</small>
-                            </div>
-                            <img src="" alt="">
-                        </div>
+            class="{% if blog.blog_thumbnail %}thumbnail_blog{% else %}blog{% endif %} masonry-item"
+        >
+            {% if blog.blog_thumbnail %}
+            <div class="blog-img-container">
+                <img
+                    src="{{ blog.blog_thumbnail.url }}"
+                    alt="Header picture of blog with the title of: {{ blog.title }}"
+                />
+            </div>
+            {% endif %}
+            <div class="blog-content-container">
+                <div>
+                    <div class="blog-top">
+                        {% if blog.blog_title|length >= 30 %}
+                        <h2 class="blog-header">
+                            {{ blog.blog_title|truncatechars:30 }}...
+                        </h2>
+                        {% else %}
+                        <h2 class="blog-header">{{ blog.blog_title}}</h2>
+                        {% endif %}
                     </div>
 
-                    <div class="blog-bottom">
-                        <p class="read-time">{{ blog.reading_time }} minute read</p>
-                        
-                        <div class="likes-div">
-                            <form method="POST" class="likes-form">
-                                {% csrf_token %}
-                                <button 
-                                    class="like-button {% if request.user in blog.blog_likes.all %}heart-active{% endif %}" 
-                                    hx-post="{% url 'like_blog' blog.id %}" 
-                                    hx-target="#like_count-{{ blog.pk }}">
-                                    <svg class="ph-heart" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M22 4C20.8357 4 19.6873 4.27109 18.6459 4.7918C17.6045 5.3125 16.6986 6.06853 16 7C15.0555 5.74071 13.7388 4.8105 12.2363 4.34115C10.7337 3.8718 9.12163 3.8871 7.62829 4.38488C6.13495 4.88266 4.83609 5.83768 3.91568 7.11467C2.99528 8.39166 2.5 9.92588 2.5 11.5C2.5 20.4875 14.9875 27.575 15.5125 27.875C15.6613 27.9586 15.8294 28.0017 16 28C16.1708 28.0029 16.3392 27.9597 16.4875 27.875C18.7871 26.5306 20.944 24.9559 22.925 23.175C27.2875 19.25 29.5 15.325 29.5 11.5C29.5 9.51088 28.7098 7.60322 27.3033 6.1967C25.8968 4.79018 23.9891 4 22 4V4Z" fill="black"/>
-                                    </svg>
-                                </button>
-                                
-                                <span id="like_count-{{ blog.pk }}" class="likes-count" >{{ blog.blog_likes_count }}</span>
-                            </form>
+                    <div class="blog-middle">
+                        <img
+                            class="blog-author-image"
+                            src="{{ blog.author.profile_picture.url }}"
+                            alt="{{ blog.author }}'s profile picture"
+                        />
+                        <div class="author-info">
+                            <small class="blog-author-name"
+                                >@{{ blog.author }}</small
+                            >
+                            <small class="follower-count">0 followers</small>
                         </div>
+                        <img src="" alt="" />
                     </div>
                 </div>
-            </a>
+
+                <div class="blog-bottom">
+                    <p class="read-time">{{ blog.reading_time }} minute read</p>
+
+                    <div class="likes-div">
+                        <form method="POST" class="likes-form">
+                            {% csrf_token %}
+                            <button
+                                class="like-button {% if request.user in blog.blog_likes.all %}heart-active{% endif %}"
+                                hx-post="{% url 'like_blog' blog.id %}"
+                                hx-target="#like_count-{{ blog.pk }}"
+                            >
+                                <svg
+                                    class="ph-heart"
+                                    viewBox="0 0 32 32"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        d="M22 4C20.8357 4 19.6873 4.27109 18.6459 4.7918C17.6045 5.3125 16.6986 6.06853 16 7C15.0555 5.74071 13.7388 4.8105 12.2363 4.34115C10.7337 3.8718 9.12163 3.8871 7.62829 4.38488C6.13495 4.88266 4.83609 5.83768 3.91568 7.11467C2.99528 8.39166 2.5 9.92588 2.5 11.5C2.5 20.4875 14.9875 27.575 15.5125 27.875C15.6613 27.9586 15.8294 28.0017 16 28C16.1708 28.0029 16.3392 27.9597 16.4875 27.875C18.7871 26.5306 20.944 24.9559 22.925 23.175C27.2875 19.25 29.5 15.325 29.5 11.5C29.5 9.51088 28.7098 7.60322 27.3033 6.1967C25.8968 4.79018 23.9891 4 22 4V4Z"
+                                        fill="black"
+                                    />
+                                </svg>
+                            </button>
+
+                            <span
+                                id="like_count-{{ blog.pk }}"
+                                class="likes-count"
+                                >{{ blog.blog_likes_count }}</span
+                            >
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </a>
         {% empty %}
-            <h2>No blogs yet</h2>
+        <h2 class="no-blogs-yet">No blogs yet</h2>
         {% endfor %}
     </div>
-{% endblock content %}
+</main>
+
+<footer>
+    <div class="floating-board">
+        <a href="{% url 'home' %}" class="floating-board-home">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="192"
+                height="192"
+                fill="#000000"
+                viewBox="0 0 256 256"
+            >
+                <rect width="256" height="256" fill="none"></rect>
+                <path
+                    d="M216,216V115.5a8.3,8.3,0,0,0-2.6-5.9l-80-72.7a8,8,0,0,0-10.8,0l-80,72.7a8.3,8.3,0,0,0-2.6,5.9V216"
+                    fill="none"
+                    stroke="#000000"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="16"
+                ></path>
+                <line
+                    x1="16"
+                    y1="216"
+                    x2="240"
+                    y2="216"
+                    fill="none"
+                    stroke="#000000"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="16"
+                ></line>
+                <path
+                    d="M152,216V160a8,8,0,0,0-8-8H112a8,8,0,0,0-8,8v56"
+                    fill="none"
+                    stroke="#000000"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="16"
+                ></path>
+            </svg>
+        </a>
+
+        <div class="floating-board-search">
+            <svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" fill="#000000" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"></rect><circle cx="116" cy="116" r="84" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></circle><line x1="175.4" y1="175.4" x2="224" y2="224" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></line></svg>
+        </div>
+
+        <a href="{% url 'create_blog' %}" class="floating-board-create">
+            <svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" fill="#000000" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"></rect><line x1="40" y1="128" x2="216" y2="128" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></line><line x1="128" y1="40" x2="128" y2="216" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></line></svg>
+        </a>
+
+        <a href="{% url 'account_logout' %}" class="floating-board-logout">
+            <svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" fill="#000000" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"></rect><polyline points="174 86 216 128 174 170" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></polyline><line x1="104" y1="128" x2="216" y2="128" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></line><path d="M104,216H48a8,8,0,0,1-8-8V48a8,8,0,0,1,8-8h56" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></path></svg>
+        </a>
+    </div>
+</footer>
+{% endblock content %} 
 
 {% block js %}
-    <script src="{% static 'js/blogs_js/blogs.js' %}"></script>
+<script src="{% static 'js/blogs_js/blogs.js' %}"></script>
 {% endblock js%}
