@@ -1,11 +1,12 @@
 const blogsContainer = document.querySelector(".blogs-container");
-let blogThumbnailImages = document.querySelectorAll(".blog-thumbnail-img")
+let masonry;
+let blogThumbnailImages = document.querySelectorAll(".blog-thumbnail-img");
 let masonryItems = document.querySelectorAll(".masonry-item");
-let likeButtons = document.querySelectorAll(".like-button");
 let searchField = document.querySelector(".search-field");
 let searchCancelBtn = document.querySelector(".reset-search");
 let searchClearBtn = document.querySelector(".clear-search");
-let masonry;
+let navbarDropdownBtn = document.querySelector(".homepage-navbar-dropdown");
+let navbarDropdown = document.querySelector(".navbar-dropdown-container");
 
 function initialMasonryColumnSizes() {
     const computedStyle = getComputedStyle(blogsContainer);
@@ -69,12 +70,24 @@ window.addEventListener("load", () => {
             gutter: 15,
             transitionDuration: ".5s",
             columnWidth: initialMasonryColumnSizes(),
-            stagger: 30
+            stagger: 30,
         });
-    })
+    });
 });
 
-document.addEventListener("htmx:afterRequest", () => {
+document.addEventListener("htmx:afterRequest", (e) => {
+    // handling like button clicks
+    if (e.target.closest(".like-button")){
+        let likeBtn = e.target.closest(".like-button")
+        likeBtn.classList.toggle("heart-active")
+        if (likeBtn.classList.contains("heart-active")) {
+            likeBtn.style.animation = "heartActiveAnimation .5s forwards"
+        } else {
+            likeBtn.style.animation = "none"
+        }
+        return
+    }
+
     masonryItems = document.querySelectorAll(".masonry-item");
     initialMasonryTileSizes();
     imagesLoaded(blogThumbnailImages, function () {
@@ -86,32 +99,11 @@ document.addEventListener("htmx:afterRequest", () => {
             gutter: 15,
             transitionDuration: ".5s",
             columnWidth: initialMasonryColumnSizes(),
-            stagger: 30
+            stagger: 30,
         });
-    })
-    
+    });
 });
 
-
-// Animation on click of a like button
-
-for (let i = 0; i < likeButtons.length; i++) {
-    likeButtons[i].addEventListener("click", () => {
-        let heart = likeButtons[i];
-        if (!heart.classList.contains("heart-active")) {
-            heart.classList.add("heart-active");
-            heart.style.transform = "scale(0.5)";
-            setTimeout(() => {
-                heart.style.transform = "scale(1.5)";
-                setTimeout(() => {
-                    heart.style.transform = "scale(1)";
-                }, "150");
-            }, "150");
-        } else {
-            heart.classList.remove("heart-active");
-        }
-    });
-}
 
 // 1) Making cancel button active whenever the search field is active
 // This works on mobile and tabled devices only
@@ -139,3 +131,19 @@ searchField.addEventListener("input", (event) => {
 searchClearBtn.addEventListener("click", () => {
     searchField.value = "";
 });
+
+// handling homepage navbar dropdown click event
+
+navbarDropdownBtn.addEventListener("click", () => {
+    navbarDropdown.classList.toggle("navbar-dropdown-container-active");
+});
+
+document.addEventListener("keydown", function (e) {
+    if (
+        e.key === "Escape" &&
+        navbarDropdown.classList.contains("navbar-dropdown-container-active")
+    ) {
+        navbarDropdown.classList.remove("navbar-dropdown-container-active");
+    }
+});
+

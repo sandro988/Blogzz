@@ -20,12 +20,12 @@
         <img
             class="blog-thumbnail-img"
             src="{{ blog.blog_thumbnail.url }}"
+            loading="lazy"
             alt="Header picture of blog with the title of: {{ blog.title }}"
         />
     </div>
     {% endif %}
     <div class="blog-content-container">
-        {{ page_obj.paginator.num_pages }}
         <div>
             <div class="blog-top">
                 {% if blog.blog_title|length >= 30 %}
@@ -41,6 +41,7 @@
                 <img
                     class="blog-author-image"
                     src="{{ blog.author.profile_picture.url }}"
+                    loading="lazy"
                     alt="{{ blog.author }}'s profile picture"
                 />
                 <div class="author-info">
@@ -62,6 +63,7 @@
                         class="like-button {% if request.user in blog.blog_likes.all %}heart-active{% endif %}"
                         hx-post="{% url 'like_blog' blog.id %}"
                         hx-target="#like_count-{{ blog.pk }}"
+                        hx-swap="innerHTML"
                     >
                         <svg
                             class="ph-heart"
