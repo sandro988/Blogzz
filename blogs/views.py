@@ -14,6 +14,7 @@ from django.urls import reverse_lazy
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.db.models import Q
+from django.conf import settings
 
 
 class HomePageView(ListView):
@@ -32,6 +33,18 @@ class HomePageView(ListView):
     model = Blog
     context_object_name = "blog_list"
     template_name = "home.html"
+    paginate_by = settings.PAGINATION_NUMBER
+
+    def get_template_names(self):
+        """
+        Determines the template to be used for rendering the view, if user scrolls down to a last
+        element of a page, new set of blogs from next page is added to the current page, essentially it is a
+        infinite scrolling feature, which is handled by htmx, so we check if it is the htmx request
+        and return the appropriate template, but if it is not then we just return the 'home.html' template.
+        """
+        if self.request.htmx:
+            return "blogs/masonry_blog_list_element.html"
+        return "home.html"
 
     def get_queryset(self):
 
@@ -40,7 +53,7 @@ class HomePageView(ListView):
             return Blog.objects.filter(
                 Q(blog_title__icontains=searched_objects)
                 | Q(blog_category__icontains=searched_objects),
-                blog_status="published"
+                blog_status="published",
             )
         else:
             published_objects = Blog.published_objects

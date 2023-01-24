@@ -1,0 +1,89 @@
+{% load static %} 
+
+{% for blog in blog_list %}
+{% if forloop.last and page_obj.number != page_obj.paginator.num_pages %}
+<a
+    hx-get="{% url 'home' %}?page={{ page_obj.number|add:1 }}"
+    hx-trigger="revealed"
+    hx-swap="beforeend"
+    hx-target="#infinite-scroll-container"
+    hx-success-class="swapped"
+    href="{{ blog.get_absolute_url }}"
+    class="{% if blog.blog_thumbnail %}thumbnail_blog{% else %}blog{% endif %} masonry-item">
+{% else %}
+<a
+    href="{{ blog.get_absolute_url }}"
+    class="{% if blog.blog_thumbnail %}thumbnail_blog{% else %}blog{% endif %} masonry-item">
+{% endif %}
+    {% if blog.blog_thumbnail %}
+    <div class="blog-img-container">
+        <img
+            class="blog-thumbnail-img"
+            src="{{ blog.blog_thumbnail.url }}"
+            alt="Header picture of blog with the title of: {{ blog.title }}"
+        />
+    </div>
+    {% endif %}
+    <div class="blog-content-container">
+        {{ page_obj.paginator.num_pages }}
+        <div>
+            <div class="blog-top">
+                {% if blog.blog_title|length >= 30 %}
+                <h2 class="blog-header">
+                    {{ blog.blog_title|truncatechars:30 }}...
+                </h2>
+                {% else %}
+                <h2 class="blog-header">{{ blog.blog_title}}</h2>
+                {% endif %}
+            </div>
+
+            <div class="blog-middle">
+                <img
+                    class="blog-author-image"
+                    src="{{ blog.author.profile_picture.url }}"
+                    alt="{{ blog.author }}'s profile picture"
+                />
+                <div class="author-info">
+                    <small class="blog-author-name">@{{ blog.author }}</small>
+                    <small class="follower-count">0 followers</small>
+                </div>
+                <img src="" alt="" />
+            </div>
+        </div>
+
+        <div class="blog-bottom">
+            <p class="read-time">{{ blog.reading_time }} minute read</p>
+
+            <div class="likes-div">
+                <form method="POST" class="likes-form">
+                    {% csrf_token %}
+                    <button
+                        aria-label="like-button"
+                        class="like-button {% if request.user in blog.blog_likes.all %}heart-active{% endif %}"
+                        hx-post="{% url 'like_blog' blog.id %}"
+                        hx-target="#like_count-{{ blog.pk }}"
+                    >
+                        <svg
+                            class="ph-heart"
+                            viewBox="0 0 32 32"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M22 4C20.8357 4 19.6873 4.27109 18.6459 4.7918C17.6045 5.3125 16.6986 6.06853 16 7C15.0555 5.74071 13.7388 4.8105 12.2363 4.34115C10.7337 3.8718 9.12163 3.8871 7.62829 4.38488C6.13495 4.88266 4.83609 5.83768 3.91568 7.11467C2.99528 8.39166 2.5 9.92588 2.5 11.5C2.5 20.4875 14.9875 27.575 15.5125 27.875C15.6613 27.9586 15.8294 28.0017 16 28C16.1708 28.0029 16.3392 27.9597 16.4875 27.875C18.7871 26.5306 20.944 24.9559 22.925 23.175C27.2875 19.25 29.5 15.325 29.5 11.5C29.5 9.51088 28.7098 7.60322 27.3033 6.1967C25.8968 4.79018 23.9891 4 22 4V4Z"
+                                fill="black"
+                            />
+                        </svg>
+                    </button>
+
+                    <span id="like_count-{{ blog.pk }}" class="likes-count"
+                        >{{ blog.blog_likes_count }}</span
+                    >
+                </form>
+            </div>
+        </div>
+    </div>
+</a>
+{% empty %}
+<h2 class="no-blogs-yet">No blogs yet</h2>
+{% endfor %}

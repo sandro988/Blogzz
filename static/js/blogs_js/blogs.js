@@ -1,75 +1,32 @@
 const blogsContainer = document.querySelector(".blogs-container");
+let blogThumbnailImages = document.querySelectorAll(".blog-thumbnail-img")
 let masonryItems = document.querySelectorAll(".masonry-item");
-let previousScreenSize = window.innerWidth;
 let likeButtons = document.querySelectorAll(".like-button");
 let searchField = document.querySelector(".search-field");
 let searchCancelBtn = document.querySelector(".reset-search");
 let searchClearBtn = document.querySelector(".clear-search");
+let masonry;
 
-// Masonry layout on home page
-// window.onload = () => {
-//     const grid = document.querySelector(".grid");
-//     const masonry = new Masonry(grid, {
-//         itemSelector: ".masonry-item",
-//         horizontalOrder: true,
-//         fitWidth: true,
-//         gutter: 15,
-//         transitionDuration: ".5s",
-//     });
-// };
-
-window.addEventListener("load", () => {
-    const masonry = new Masonry(blogsContainer, {
-        itemSelector: ".masonry-item",
-        horizontalOrder: true,
-        fitWidth: true,
-        gutter: 15,
-        transitionDuration: ".5s",
-    });
-})
-
-window.addEventListener("resize", () => {
+function initialMasonryColumnSizes() {
     const computedStyle = getComputedStyle(blogsContainer);
     const paddings =
         parseFloat(computedStyle.paddingLeft) +
         parseFloat(computedStyle.paddingRight);
 
-    if (window.innerWidth < 600 && previousScreenSize >= 600) {
-        masonryItems[i].style.width = `${
-            blogsContainer.offsetWidth / 2 - paddings
-        }px`;
-    } else if (
-        window.innerWidth >= 600 &&
-        window.innerWidth < 1000 &&
-        (previousScreenSize < 600 || previousScreenSize >= 1000)
-    ) {
-        masonryItems[i].style.width = `${
-            blogsContainer.offsetWidth / 3 - paddings
-        }px`;
-    } else if (
-        window.innerWidth >= 1000 &&
-        window.innerWidth < 1600 &&
-        (previousScreenSize < 1000 || previousScreenSize >= 1600)
-    ) {
-        masonryItems[i].style.width = `${
-            blogsContainer.offsetWidth / 5 - paddings
-        }px`;
-    } else if (
-        window.innerWidth >= 1600 &&
-        window.innerWidth <= 1920 &&
-        (previousScreenSize < 1600 || previousScreenSize >= 1920)
-    ) {
-        masonryItems[i].style.width = `${
-            blogsContainer.offsetWidth / 6 - paddings
-        }px`;
-    } else {
-        masonryItems[i].style.width = `${
-            blogsContainer.offsetWidth / 7 - paddings
-        }px`
+    for (let i = 0; i < masonryItems.length; i++) {
+        if (window.innerWidth < 600) {
+            return blogsContainer.offsetWidth / 2 - paddings;
+        } else if (window.innerWidth >= 600 && window.innerWidth < 1000) {
+            return blogsContainer.offsetWidth / 3 - paddings;
+        } else if (window.innerWidth >= 1000 && window.innerWidth < 1600) {
+            return blogsContainer.offsetWidth / 5 - paddings;
+        } else if (window.innerWidth >= 1600 && window.innerWidth <= 1920) {
+            return blogsContainer.offsetWidth / 6 - paddings;
+        } else if (window.innerWidth > 1920) {
+            return blogsContainer.offsetWidth / 7 - paddings;
+        }
     }
-
-    previousScreenSize = window.innerWidth;
-});
+}
 
 function initialMasonryTileSizes() {
     const computedStyle = getComputedStyle(blogsContainer);
@@ -97,12 +54,44 @@ function initialMasonryTileSizes() {
         } else if (window.innerWidth > 1920) {
             masonryItems[i].style.width = `${
                 blogsContainer.offsetWidth / 7 - paddings
-            }px`
+            }px`;
         }
     }
 }
 
-initialMasonryTileSizes();
+window.addEventListener("load", () => {
+    imagesLoaded(blogThumbnailImages, function () {
+        initialMasonryTileSizes();
+        masonry = new Masonry(blogsContainer, {
+            itemSelector: ".masonry-item",
+            horizontalOrder: true,
+            fitWidth: true,
+            gutter: 15,
+            transitionDuration: ".5s",
+            columnWidth: initialMasonryColumnSizes(),
+            stagger: 30
+        });
+    })
+});
+
+document.addEventListener("htmx:afterRequest", () => {
+    masonryItems = document.querySelectorAll(".masonry-item");
+    initialMasonryTileSizes();
+    imagesLoaded(blogThumbnailImages, function () {
+        initialMasonryTileSizes();
+        masonry = new Masonry(blogsContainer, {
+            itemSelector: ".masonry-item",
+            horizontalOrder: true,
+            fitWidth: true,
+            gutter: 15,
+            transitionDuration: ".5s",
+            columnWidth: initialMasonryColumnSizes(),
+            stagger: 30
+        });
+    })
+    
+});
+
 
 // Animation on click of a like button
 

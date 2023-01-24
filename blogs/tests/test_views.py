@@ -2,6 +2,7 @@ from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from blogs.models import Blog, Category
+from django.conf import settings
 
 
 class TestsData:
@@ -26,6 +27,19 @@ class TestsData:
 
 
 class HomePageViewTest(TestsData, TestCase):
+    def setUp(self):
+        self.client.login(email="test_user@email.com", password="test_user_password")
+        self.create_blogs()
+
+    def create_blogs(self):
+        for i in range(settings.PAGINATION_NUMBER * 2):
+            Blog.objects.create(
+                author=self.user,
+                blog_title=f"Blog number {i}",
+                blog_category=self.category1,
+                blog_body=f"Blog body for blog number {i}",
+            )
+
     def test_blog_listing(self):
         self.assertEqual(self.blog.author, self.user)
         self.assertEqual(self.blog.blog_title, "Intermediate Python")
@@ -37,6 +51,15 @@ class HomePageViewTest(TestsData, TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "home.html")
+
+    def test_home_page_pagination(self):
+        response = self.client.get(reverse("home"))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context["blog_list"]), settings.PAGINATION_NUMBER)
+
+        response = self.client.get(reverse("home"), {"page": 2})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context["blog_list"]), settings.PAGINATION_NUMBER)
 
 
 class BlogDetailViewTests(TestsData, TestCase):
