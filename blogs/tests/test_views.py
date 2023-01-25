@@ -50,7 +50,7 @@ class HomePageViewTest(TestsData, TestCase):
         response = self.client.get(reverse("home"))
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "home.html")
+        self.assertTemplateUsed(response, "blogs/list_blog.html")
 
     def test_home_page_pagination(self):
         response = self.client.get(reverse("home"))
@@ -235,13 +235,3 @@ class DeleteBlogViewTests(TestsData, TestCase):
 
         response = self.client.get(reverse("delete_blog", kwargs={"pk": self.blog.pk}))
         self.assertEqual(response.status_code, 403)
-
-
-class ContactPageViewTests(TestCase):
-    def test_contact_page_view(self):
-        response = self.client.get(reverse("contact"))
-
-        self.assertEqual(response.status_code, 200)
-        # one of the input fields in contact form
-        self.assertContains(response, "Your Email")
-        self.assertTemplateUsed(response, "blogs/contact_form.html")

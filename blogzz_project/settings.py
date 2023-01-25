@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     # Local
     "accounts.apps.AccountsConfig",
     "blogs.apps.BlogsConfig",
+    "core.apps.CoreConfig",
     # django_cleanup
     "django_cleanup.apps.CleanupConfig",
 ]
@@ -66,7 +67,7 @@ AUTH_USER_MODEL = "accounts.CustomUser"
 
 SITE_ID = 1
 LOGIN_REDIRECT_URL = "home"
-LOGOUT_REDIRECT_URL = "home"
+LOGOUT_REDIRECT_URL = "welcome-page"
 ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
 ACCOUNT_USERNAME_REQUIRED = False

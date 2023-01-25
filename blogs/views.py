@@ -3,13 +3,12 @@ from django.views import View
 from django.views.generic import (
     ListView,
     DetailView,
-    FormView,
     CreateView,
     UpdateView,
     DeleteView,
 )
 from .models import Blog, Category
-from .forms import ContactForm, BlogForm
+from .forms import BlogForm
 from django.urls import reverse_lazy
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
@@ -17,23 +16,16 @@ from django.db.models import Q
 from django.conf import settings
 
 
-class HomePageView(ListView):
+class HomePageView(LoginRequiredMixin, ListView):
     """
-    View created for a home page, this view outputs blogs to users that are
-    authenticated and the template that this view uses is: home_authenticated.html,
-    but if the users are not authenticated the view will use home_not_authenticated.html
-    as a template instead, which is kind of a welcome page template for users that are not yet
-    authenticated.
-
-    This view also takes in a ContactForm, that is outputed in a contact section at
-    home_not_authenticated.html, this form can be used by users to send email messages
-    to us.
+    View created for listing out blogs on home page
     """
 
     model = Blog
     context_object_name = "blog_list"
-    template_name = "home.html"
+    template_name = "blogs/list_blog.html"
     paginate_by = settings.PAGINATION_NUMBER
+    login_url = "account_login"
 
     def get_template_names(self):
         """
@@ -43,10 +35,17 @@ class HomePageView(ListView):
         and return the appropriate template, but if it is not then we just return the 'home.html' template.
         """
         if self.request.htmx:
-            return "blogs/masonry_blog_list_element.html"
-        return "home.html"
+            return "blogs/partials/masonry_blog_list_element.html"
+        return "blogs/list_blog.html"
 
     def get_queryset(self):
+        """
+        If user tries to search specific blogs, we get the search value and return blogs that contain
+        the search value eather in their title or category, also we output onle the blogs that have 
+        status of "published", so any blog that is moved to drafts won't be outputed.
+
+        Alternatively If user just goes to home page, we output only the blogs that have status of "published".
+        """
 
         searched_objects = self.request.GET.get("q")
         if searched_objects:
@@ -58,11 +57,6 @@ class HomePageView(ListView):
         else:
             published_objects = Blog.published_objects
             return published_objects.get_queryset()
-
-    def get_context_data(self, **kwargs):
-        context = super(HomePageView, self).get_context_data(**kwargs)
-        context["form"] = ContactForm()
-        return context
 
 
 class BlogsDetailView(LoginRequiredMixin, DetailView):
@@ -203,17 +197,3 @@ class LikeBlogView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         return redirect("home")
-
-
-class ContactFormView(FormView):
-    """
-    View created for handling ContacForm submissions from users.
-    """
-
-    template_name = "blogs/contact_form.html"
-    form_class = ContactForm
-    success_url = "/contact/"
-
-    def form_valid(self, form):
-        form.send_email()
-        return super().form_valid(form)

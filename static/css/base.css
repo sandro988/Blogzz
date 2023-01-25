@@ -798,10 +798,12 @@ textarea::-webkit-scrollbar {
     transition: 0.25s;
 }
 
+
 .input-box input:valid ~ span,
 .input-box input:focus ~ span,
 .input-box textarea:valid ~ span,
-.input-box textarea:focus ~ span {
+.input-box textarea:focus ~ span,
+.input-box input[type="email"] ~ .floating-label{
     color: black;
     transform: translateX(clamp(10px, 1.25vw, 20px))
         translateY(clamp(-7px, -1vw, -15px));

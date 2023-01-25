@@ -23,5 +23,6 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path("editorjs/", include("django_editorjs_fields.urls")),
     # Locally created apps
+    path("", include("core.urls")),
     path("", include("blogs.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

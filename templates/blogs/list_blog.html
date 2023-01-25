@@ -2,18 +2,22 @@
 {% load static %} 
 {% load editorjs %} 
 
+{% block title %}
+    Blogzz | home
+{% endblock title %}
+
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/blog_css/blog.css' %}" />
 {% endblock css%} 
 
 {% block content %}
 <header>
-    {% include 'navbar.html' %}
+    {% include 'blogs/partials/navbar.html' %}
 </header>
 
 <main>
     <div class="blogs-container grid" id="infinite-scroll-container">
-        {% include "blogs/masonry_blog_list_element.html" %}
+        {% include "blogs/partials/masonry_blog_list_element.html" %}
     </div>
 </main>
 

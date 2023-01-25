@@ -24,12 +24,14 @@ let heartDiv = document.querySelectorAll(".likes-div");
 let sliderPosition = 0;
 
 // contact section related
+let contactSendBtn = document.querySelector(".ph-plane");
 let contactCheckBtn = document.querySelector(".ph-check-contact");
 let contactSubmitBtn = document.querySelector(".contact-submit");
-let contactSendBtn = document.querySelector(".ph-plane");
 let contactName = document.getElementById("id_name");
 let email = document.getElementById("id_email");
 let message = document.getElementById("id_message");
+let emailInput = document.getElementById("id_email");
+let emailLabel = document.querySelector(".contact-email-class");
 
 // navbar related
 
@@ -97,7 +99,7 @@ window.addEventListener("resize", function () {
         }
     }
 
-    returnToStartingPoint()
+    returnToStartingPoint();
 });
 
 for (let i = 0; i < 3; i++) {
@@ -188,7 +190,6 @@ function getXfromTrasnlateXvalue(param) {
     }
 }
 
-
 function returnToStartingPoint() {
     // returns featured blogs section to its starting position when user resizes webpage
 
@@ -235,7 +236,7 @@ rightSlider.addEventListener("click", function () {
             featureBlogsContainer.children[i].style.transform = translateXValue;
         }
     } else {
-        returnToStartingPoint()
+        returnToStartingPoint();
     }
 });
 
@@ -302,29 +303,68 @@ function heartReaction(e) {
 
 // contact section related
 
-contactSubmitBtn.addEventListener("click", function () {
-    let contactName = document.getElementById("id_name");
-    let email = document.getElementById("id_email");
-    let message = document.getElementById("id_message");
+function defineEventListeners() {
+    // When user subbmtis contact form, the input fields are replaced with new
+    // elements, that have the same id and classes, but they are not the same objects
+    // that we initially referenced at the top of this file when creating the variables.
+    // because of that when user tries to submit the form for the second time the event listeners
+    // for floating labels and subbmit button do not work, to solve this i created this function
+    // that will be reexecuted after the htmx request has completed in the event listener that
+    // is triggered by htmx:afterRequest event, basically when the HTMX request is completed
 
-    if (contactName.value && email.value && message.value) {
-        contactSendBtn.style.color = "white";
-        contactSendBtn.children[0].style.stroke = "white";
-        contactSendBtn.children[1].style.stroke = "white";
+    emailInput.addEventListener("input", function () {
+        if (emailInput.value) {
+            emailLabel.classList.add("floating-label");
+        }
+    });
 
-        setTimeout(() => {
-            contactSendBtn.classList.add("hidden");
-            contactCheckBtn.classList.remove("hidden");
-            contactCheckBtn.style.backgroundColor = "#afd7b6";
+    emailInput.addEventListener("focus", function () {
+        emailLabel.classList.add("floating-label");
+    });
+
+    emailInput.addEventListener("blur", function () {
+        if (!emailInput.value) {
+            emailLabel.classList.remove("floating-label");
+        }
+    });
+
+    contactSubmitBtn.addEventListener("click", function () {
+        contactName = document.getElementById("id_name");
+        email = document.getElementById("id_email");
+        message = document.getElementById("id_message");
+
+        if (contactName.value && email.value && message.value) {
+            contactSendBtn.style.color = "white";
+            contactSendBtn.children[0].style.stroke = "white";
+            contactSendBtn.children[1].style.stroke = "white";
+
             setTimeout(() => {
-                contactCheckBtn.classList.add("hidden");
-                contactSendBtn.classList.remove("hidden");
+                contactSendBtn.classList.add("hidden");
+                contactCheckBtn.classList.remove("hidden");
+                contactCheckBtn.style.backgroundColor = "#afd7b6";
                 setTimeout(() => {
-                    contactSendBtn.style.backgroundColor = "white";
-                    contactSendBtn.children[0].style.stroke = "black";
-                    contactSendBtn.children[1].style.stroke = "black";
-                }, "250");
-            }, "1000");
-        }, "250");
-    }
-});
+                    contactCheckBtn.classList.add("hidden");
+                    contactSendBtn.classList.remove("hidden");
+                    setTimeout(() => {
+                        contactSendBtn.style.backgroundColor = "white";
+                        contactSendBtn.children[0].style.stroke = "black";
+                        contactSendBtn.children[1].style.stroke = "black";
+                    }, "250");
+                }, "1000");
+            }, "250");
+        }
+    });
+    
+    document.addEventListener("htmx:afterRequest", () => {
+        // this event listener will be triggered after an AJAX request has completed
+    
+        contactSendBtn = document.querySelector(".ph-plane");
+        contactCheckBtn = document.querySelector(".ph-check-contact");
+        contactSubmitBtn = document.querySelector(".contact-submit");
+        emailInput = document.getElementById("id_email");
+        emailLabel = document.querySelector(".contact-email-class");
+        defineEventListeners();
+    });
+}
+
+defineEventListeners();

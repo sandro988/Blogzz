@@ -1,4 +1,3 @@
-from django.core import mail
 from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 from django.urls import reverse
@@ -31,6 +30,9 @@ class TestsData:
 
 
 class SearchBlogFormTests(TestsData, TestCase):
+    def setUp(self):
+        self.client.login(email="test_user@email.com", password="test_user_password")
+
     def test_searching_functionality(self):
         response = self.client.get(reverse("home"), {"q": "Python"})
 
@@ -452,24 +454,3 @@ class LikeBlogViewFormTests(TestsData, TestCase):
         response = self.client.get(f"{reverse('account_login')}?next={like_url}")
         self.assertContains(response, "Welcome back")
         self.assertTemplateUsed(response, "account/login.html")
-
-
-class ContactFormTests(TestCase):
-    def setUp(self):
-        self.subject = "Testing email"
-        self.body = "This is going to be a test for my contact form that sends emails from users to me."
-        self.email_from = "test_user_1"
-        self.email_to = "test_user_2"
-        self.reply_to = self.email_from
-
-    def test_sending_email(self):
-        mail.EmailMessage(
-            self.subject,
-            self.body,
-            self.email_from,
-            [self.email_to],
-            reply_to=[self.email_to],
-        ).send()
-
-        self.assertEqual(len(mail.outbox), 1)
-        self.assertEqual(mail.outbox[0].subject, "Testing email")
