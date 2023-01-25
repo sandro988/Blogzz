@@ -6,11 +6,16 @@
 
 body {
     background-color: #f1f1f1;
-    font-family: 'Poppins', sans-serif
+    font-family: "Poppins", sans-serif;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    font-family: 'limelight', cursive;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "limelight", cursive;
     font-weight: normal;
     margin-bottom: 20px;
 }
@@ -36,7 +41,7 @@ h1, h2, h3, h4, h5, h6 {
     color: #2b6be4;
 }
 
-.blockLabels{
+.blockLabels {
     border: none;
 }
 
@@ -49,19 +54,20 @@ h1, h2, h3, h4, h5, h6 {
     width: 50%;
 }
 
-.radio-label, .social-label {
+.radio-label,
+.social-label {
     display: flex !important;
     justify-content: flex-start !important;
     align-items: center;
     flex-wrap: wrap;
     gap: 10px;
-    font-size: clamp(.7rem, 2vw, 1.2rem);
+    font-size: clamp(0.7rem, 2vw, 1.2rem);
     margin: 20px 0;
 }
 
 .socialaccount_providers {
     background-color: #f1f1f1;
-    border: 1px solid black
+    border: 1px solid black;
 }
 
 .socialaccount_providers li {
@@ -71,12 +77,12 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: 50px;
     margin: 20px 0;
     border: 1px solid black;
-    transition: background-color .25s ease-in-out
+    transition: background-color 0.25s ease-in-out;
 }
 
 .socialaccount_providers li a {
     color: white;
-    transition: color .25s ease-in-out;
+    transition: color 0.25s ease-in-out;
 }
 
 .socialaccount_providers li:hover {
@@ -90,12 +96,15 @@ h1, h2, h3, h4, h5, h6 {
     color: black;
 }
 
-.radio-btn, .social-label input {
+.radio-btn,
+.social-label input {
     margin: 0 !important;
     width: max-content !important;
 }
 
-.radio-verified, .radio-unverified, .radio-primary {
+.radio-verified,
+.radio-unverified,
+.radio-primary {
     padding: 5px 10px;
     background-color: #2b6be4;
     color: white;
@@ -107,7 +116,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .radio-unverified {
-    background-color:rgb(216, 73, 73)
+    background-color: rgb(216, 73, 73);
 }
 
 .form-red-btn {
@@ -116,7 +125,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .form-red-btn:hover {
     background-color: #f1f1f1 !important;
-
 }
 
 .form-email-main {
@@ -300,14 +308,16 @@ input:active {
     width: 100%;
 }
 
-.form-header h1, h1 {
+.form-header h1,
+h1 {
     font-size: clamp(2rem, 7.5vw, 3rem);
     font-weight: normal;
     font-family: "limelight", sans-serif;
     margin-bottom: clamp(50px, 7.5vw, 75px);
 }
 
-.form-btn, .green-form-btn {
+.form-btn,
+.green-form-btn {
     background-color: black;
     color: #f1f1f1;
     outline: none;
@@ -327,7 +337,8 @@ input:active {
     font-weight: bold;
 }
 
-.form-btn:hover, .green-form-btn:hover {
+.form-btn:hover,
+.green-form-btn:hover {
     background-color: #f1f1f1;
     color: black;
     cursor: pointer;
@@ -383,7 +394,6 @@ input:active {
     border: 1px solid black;
 }
 
-
 .form-footer small {
     color: #434343;
 }
@@ -428,6 +438,27 @@ li {
     cursor: pointer;
     margin: 20px 0 0 0;
     width: max-content;
+}
+
+.auth-close-btn svg {
+    width: clamp(1.5rem, 7.5vw, 3rem);
+    height: clamp(1.5rem, 7.5vw, 3rem);
+    margin: 15px 20px;
+    position: absolute;
+    right: 0;
+}
+
+.auth-close-btn svg line {
+    stroke: #767676;
+    transition: stroke 0.25s ease-in-out;
+}
+
+.auth-close-btn:hover svg line {
+    stroke: black;
+}
+
+.auth-close-btn:hover {
+    cursor: pointer;
 }
 
 @media only screen and (max-width: 325px) {
@@ -501,6 +532,10 @@ li {
     .form-btn {
         margin-top: 40px;
     }
+
+    .auth-close-btn svg {
+        margin: 50px;
+    }
 }
 
 @media only screen and (min-width: 1101px) {
@@ -546,7 +581,8 @@ li {
         width: clamp(15px, 2.5vh, 50px);
     }
 
-    .form-header h1, h1 {
+    .form-header h1,
+    h1 {
         font-size: clamp(2rem, 2.5vw, 7rem);
         margin-bottom: clamp(50px, 7vh, 100px);
     }
@@ -597,6 +633,13 @@ li {
         font-weight: bold;
         cursor: pointer;
         margin: 20px 0 0 0;
+    }
+
+    .auth-close-btn svg {
+        width: clamp(1.5rem, 2vw, 3.5rem);
+        height: clamp(1.5rem, 2vw, 3.5rem);
+        left: 0;
+        margin: clamp(20px, 1vw, 40px);
     }
 }
 
