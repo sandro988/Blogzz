@@ -1,4 +1,4 @@
-<form method="POST" hx-post="{% url 'contact' %}" hx-target="this">
+<form method="POST" class="contact-form-tag" hx-post="{% url 'contact' %}" hx-target="this" hx-swap="outerHTML">
     <div>
         <div>
             {% csrf_token %}
@@ -20,12 +20,22 @@
             <path d="M27 9L13 23L6 16" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
     </button>
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == "error"%}
+                <div class="messages">
+                    <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                </div>
+            {% elif message.tags == "success" %}
+                <div class="messages messages-successfull">
+                    <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                </div>
+            {% else %}
+                <div class="messages has-to-be-removed-immediately">
+                    <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
 </form>
 
-{% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-    </ul>
-{% endif %}

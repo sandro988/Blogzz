@@ -40,8 +40,12 @@ class ContactFormView(FormView):
 
     def form_valid(self, form):
         form.send_email()
+        messages.success(self.request, "Your message was successfully sent.")
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        messages.error(self.request, "There was an error with your submission. Please try again.")
+        messages.error(
+            self.request,
+            "There was an error with sending your message. Please try again.",
+        )
         return super().form_invalid(form)

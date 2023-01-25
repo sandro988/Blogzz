@@ -41,7 +41,7 @@ class HomePageView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         """
         If user tries to search specific blogs, we get the search value and return blogs that contain
-        the search value eather in their title or category, also we output onle the blogs that have 
+        the search value eather in their title or category, also we output onle the blogs that have
         status of "published", so any blog that is moved to drafts won't be outputed.
 
         Alternatively If user just goes to home page, we output only the blogs that have status of "published".

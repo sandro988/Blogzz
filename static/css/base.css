@@ -706,7 +706,7 @@ main {
 }
 
 .contact-section-headers p {
-    margin-bottom: clamp(40px, 1.5vw, 75px)
+    margin-bottom: clamp(40px, 1.5vw, 75px);
 }
 
 .contact-form button svg {
@@ -798,12 +798,11 @@ textarea::-webkit-scrollbar {
     transition: 0.25s;
 }
 
-
 .input-box input:valid ~ span,
 .input-box input:focus ~ span,
 .input-box textarea:valid ~ span,
 .input-box textarea:focus ~ span,
-.input-box input[type="email"] ~ .floating-label{
+.input-box input[type="email"] ~ .floating-label {
     color: black;
     transform: translateX(clamp(10px, 1.25vw, 20px))
         translateY(clamp(-7px, -1vw, -15px));
@@ -813,6 +812,45 @@ textarea::-webkit-scrollbar {
     border: 1px solid black;
     border-radius: 5px;
     letter-spacing: 0.2em;
+}
+
+.messages {
+    min-width: 100%;
+    width: 0;
+    background-color: #ffd6d6;
+    border-radius: 15px;
+    border: 1px solid #de8673;
+    padding: clamp(5px, 1vw, 10px) clamp(10px, 1vw, 15px);
+    margin: 25px 0 0 0;
+    text-align: left;
+}
+
+.messages-successfull {
+    background-color: #d4edda;
+    border: 1px solid #92bb9b;
+}
+
+.messages p {
+    list-style-type: none;
+    font-size: clamp(0.8rem, 1vw, 1rem);
+}
+
+@keyframes fadeMessagesInAndOut {
+    0% {
+        transform: translateX(100%);
+        scale: 0.8;
+    }
+    15% {
+        transform: translateX(0);
+        scale: 1;
+    }
+    75% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        display: none;
+    }
 }
 
 /* footer styling */
@@ -1427,7 +1465,6 @@ footer a:hover svg path {
     }
 
     /* contact section styling */
-
     .contact-section-socials-icons,
     .contact-section-container {
         display: flex;

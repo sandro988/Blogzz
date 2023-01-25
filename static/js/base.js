@@ -303,6 +303,26 @@ function heartReaction(e) {
 
 // contact section related
 
+function handleDjangoMessagesForContactForm() {
+    let djangoMessages = document.querySelectorAll(".messages");
+
+    for (let i = 0; i < djangoMessages.length; i++) {
+        if (
+            djangoMessages[i].classList.contains(
+                "has-to-be-removed-immediately"
+            )
+        ) {
+            djangoMessages[i].remove();
+        } else {
+            djangoMessages[i].style.animation =
+                "fadeMessagesInAndOut 5s forwards";
+            setTimeout(() => {
+                djangoMessages[i].remove();
+            }, "3000");
+        }
+    }
+}
+
 function defineEventListeners() {
     // When user subbmtis contact form, the input fields are replaced with new
     // elements, that have the same id and classes, but they are not the same objects
@@ -354,15 +374,16 @@ function defineEventListeners() {
             }, "250");
         }
     });
-    
+
     document.addEventListener("htmx:afterRequest", () => {
         // this event listener will be triggered after an AJAX request has completed
-    
         contactSendBtn = document.querySelector(".ph-plane");
         contactCheckBtn = document.querySelector(".ph-check-contact");
         contactSubmitBtn = document.querySelector(".contact-submit");
         emailInput = document.getElementById("id_email");
         emailLabel = document.querySelector(".contact-email-class");
+
+        handleDjangoMessagesForContactForm()
         defineEventListeners();
     });
 }
