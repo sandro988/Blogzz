@@ -39,8 +39,22 @@ class SearchBlogFormTests(TestsData, TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(response.context["blog_list"], [self.blog])
 
+        # Test featured category search, this categories are listed out in the search dropdown container
+        # and users can see them when they click on search bar
+        response = self.client.get(reverse("home"), {"category": "Python"})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(response.context["blog_list"], [self.blog])
+
     def test_search_value_does_not_exist(self):
         response = self.client.get(reverse("home"), {"q": "1234567890"})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotEqual(response.context["blog_list"], [self.blog])
+
+        # Test featured category search, this categories are listed out in the search dropdown container
+        # and users can see them when they click on search bar
+        response = self.client.get(reverse("home"), {"category": "1234567890"})
 
         self.assertEqual(response.status_code, 200)
         self.assertNotEqual(response.context["blog_list"], [self.blog])

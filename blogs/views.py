@@ -43,7 +43,7 @@ class HomePageView(LoginRequiredMixin, ListView):
         If user tries to search specific blogs, we get the search value and return blogs that contain
         the search value eather in their title or category.
 
-        If user tries to search something and clicks on one of the featured topics, we get the search 
+        If user tries to search something and clicks on one of the featured topics, we get the search
         value and lookup any blog with that category name.
 
         Alternatively If user just goes to home page, we output all of the blogs and paginate by specific number.
@@ -53,7 +53,7 @@ class HomePageView(LoginRequiredMixin, ListView):
 
         searched_objects = self.request.GET.get("q")
         searched_objects_by_featured_category = self.request.GET.get("category")
-        print(searched_objects_by_featured_category)
+
         if searched_objects:
             return Blog.objects.filter(
                 Q(blog_title__icontains=searched_objects)
@@ -73,6 +73,7 @@ class HomePageView(LoginRequiredMixin, ListView):
         context = super(HomePageView, self).get_context_data(**kwargs)
         context["categories"] = Category.objects.all()[:10]
         return context
+
 
 class BlogsDetailView(LoginRequiredMixin, DetailView):
     """
