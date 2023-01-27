@@ -41,23 +41,38 @@ class HomePageView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         """
         If user tries to search specific blogs, we get the search value and return blogs that contain
-        the search value eather in their title or category, also we output only the blogs that have
-        status of "published", so any blog that is moved to drafts won't be outputed.
+        the search value eather in their title or category.
 
-        Alternatively If user just goes to home page, we output only the blogs that have status of "published".
+        If user tries to search something and clicks on one of the featured topics, we get the search 
+        value and lookup any blog with that category name.
+
+        Alternatively If user just goes to home page, we output all of the blogs and paginate by specific number.
+
+        Also we output only the blogs that have status of "published", so any blog that is moved to drafts won't be outputed.
         """
 
         searched_objects = self.request.GET.get("q")
+        searched_objects_by_featured_category = self.request.GET.get("category")
+        print(searched_objects_by_featured_category)
         if searched_objects:
             return Blog.objects.filter(
                 Q(blog_title__icontains=searched_objects)
                 | Q(blog_category__icontains=searched_objects),
                 blog_status="published",
             )
+        elif searched_objects_by_featured_category:
+            return Blog.objects.filter(
+                Q(blog_category__icontains=searched_objects_by_featured_category),
+                blog_status="published",
+            )
         else:
             published_objects = Blog.published_objects
             return published_objects.get_queryset()
 
+    def get_context_data(self, **kwargs):
+        context = super(HomePageView, self).get_context_data(**kwargs)
+        context["categories"] = Category.objects.all()[:10]
+        return context
 
 class BlogsDetailView(LoginRequiredMixin, DetailView):
     """
