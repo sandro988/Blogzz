@@ -12,7 +12,7 @@ let homePageFooter = document.querySelector(".home-page-footer");
 let navbarDropdownBtn = document.querySelector(".homepage-navbar-dropdown");
 let navbarDropdown = document.querySelector(".navbar-dropdown-container");
 
-console.log(searchOverlay);
+// masonry related
 
 function initialMasonryColumnSizes() {
     const computedStyle = getComputedStyle(blogsContainer);
@@ -67,7 +67,9 @@ function initialMasonryTileSizes() {
 }
 
 window.addEventListener("load", () => {
-    imagesLoaded(blogThumbnailImages, function () {
+    let loadThumbnails = imagesLoaded(blogThumbnailImages);
+
+    function onAlways() {
         initialMasonryTileSizes();
         masonry = new Masonry(blogsContainer, {
             itemSelector: ".masonry-item",
@@ -78,7 +80,9 @@ window.addEventListener("load", () => {
             columnWidth: initialMasonryColumnSizes(),
             stagger: 30,
         });
-    });
+    }
+
+    loadThumbnails.on("done", onAlways);
 });
 
 document.addEventListener("htmx:afterRequest", (e) => {
@@ -95,8 +99,10 @@ document.addEventListener("htmx:afterRequest", (e) => {
     }
 
     masonryItems = document.querySelectorAll(".masonry-item");
-    initialMasonryTileSizes();
-    imagesLoaded(blogThumbnailImages, function () {
+    blogThumbnailImages = document.querySelectorAll(".blog-thumbnail-img");
+    let loadThumbnails = imagesLoaded(blogThumbnailImages);
+
+    function onAlways() {
         initialMasonryTileSizes();
         masonry = new Masonry(blogsContainer, {
             itemSelector: ".masonry-item",
@@ -107,13 +113,12 @@ document.addEventListener("htmx:afterRequest", (e) => {
             columnWidth: initialMasonryColumnSizes(),
             stagger: 30,
         });
-    });
+    }
+
+    loadThumbnails.on("done", onAlways);
 });
 
-// 1) Making cancel button active whenever the search field is active
-// This works on mobile and tabled devices only
-// 2) Making clear button active whenever the search field is active
-// This works on every device
+// search field related
 
 searchField.addEventListener("focus", () => {
     searchCancelBtn.classList.add("reset-search-active");
@@ -148,7 +153,7 @@ document.addEventListener("mousedown", (e) => {
     } else {
         searchDropdown.classList.remove("search-dropdown-container-active");
         searchOverlay.classList.remove("search-overlay-active");
-        navbarDropdown.classList.remove("navbar-dropdown-container-active")
+        navbarDropdown.classList.remove("navbar-dropdown-container-active");
     }
 });
 

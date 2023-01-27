@@ -336,7 +336,7 @@ nav {
     position: relative;
 }
 
-.homepage-nav-middle input {
+.search-field {
     height: clamp(35px, 3.5vh, 50px);
     border-radius: 75px;
     outline: none;
@@ -344,6 +344,12 @@ nav {
     border: none;
     background-color: #e9e9e9;
     font-size: clamp(1rem, 0.9vw, 25px);
+    z-index: 1;
+}
+
+.search-field:active,
+.search-field:focus {
+    outline: 1px solid #838383
 }
 
 .reset-search {
