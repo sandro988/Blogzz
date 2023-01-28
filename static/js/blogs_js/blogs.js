@@ -120,7 +120,18 @@ document.addEventListener("htmx:afterRequest", (e) => {
 
 // search field related
 
+function lockScroll() {
+    if (window.innerWidth <= 1100) {
+        document.body.classList.add("lock-scroll");
+    }
+}
+
+function unLockScroll() {
+    document.body.classList.remove("lock-scroll");
+}
+
 searchField.addEventListener("focus", () => {
+    lockScroll();
     searchCancelBtn.classList.add("reset-search-active");
     searchDropdown.classList.add("search-dropdown-container-active");
     searchOverlay.classList.add("search-overlay-active");
@@ -134,9 +145,7 @@ searchField.addEventListener("focus", () => {
 });
 
 searchField.addEventListener("blur", () => {
-    searchCancelBtn.classList.remove("reset-search-active");
     searchClearBtn.classList.remove("clear-search-active");
-    homePageFooter.style.display = "block";
     searchField.value = "";
 });
 
@@ -149,11 +158,17 @@ document.addEventListener("mousedown", (e) => {
         e.target.classList.contains("prevent-propagation-on-search") ||
         e.target.classList.contains("prevent-propagation-nav-dropdown")
     ) {
+        lockScroll();
+        searchCancelBtn.classList.add("reset-search-active");
+        homePageFooter.style.display = "none";
         e.stopPropagation();
     } else {
+        unLockScroll();
+        searchCancelBtn.classList.remove("reset-search-active");
         searchDropdown.classList.remove("search-dropdown-container-active");
         searchOverlay.classList.remove("search-overlay-active");
         navbarDropdown.classList.remove("navbar-dropdown-container-active");
+        homePageFooter.style.display = "block";
     }
 });
 

@@ -69,3 +69,7 @@ class Blog(models.Model):
         reading_time = math.ceil(len(words) / 234)
 
         return reading_time
+
+    @classmethod
+    def get_popular_blogs(cls):
+        return cls.published_objects.order_by("-blog_likes_count")[:8]

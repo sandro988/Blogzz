@@ -34,6 +34,39 @@
                         {% endfor %}
                     </div>
                 </div>
+
+                <div class="popular-blogs-container prevent-propagation-on-search">
+                    <small class="popular-blogs-small prevent-propagation-on-search">Popular blogs</small>
+                    <div class="popular-blogs-layout prevent-propagation-on-search">
+                        {% for popular_blog in popular_blogs %}
+                            <a href="{{ popular_blog.get_absolute_url }}" class="popular-blog popular-blog-{{ forloop.counter }} prevent-propagation-on-search">
+                                <div class="popular-blogs-top prevent-propagation-on-search">
+                                    <p class="popular-blog-name prevent-propagation-on-search">
+                                        {% if popular_blog.blog_title|length >= 30 %}
+                                            {{ popular_blog|truncatechars:30 }}...
+                                        {% else %}
+                                            {{ popular_blog }}
+                                        {% endif %}
+                                    </p>
+                                </div>
+                                
+                                <div class="popular-blogs-bottom prevent-propagation-on-search">
+                                    
+                                    <div class="popular-blogs-info popular-blogs-info-{{ forloop.counter }} prevent-propagation-on-search">
+                                        <p class="popular-blog-read-time prevent-propagation-on-search">{{ popular_blog.reading_time }} minute read</p>
+                                        <div class="popular-blog-likes-div prevent-propagation-on-search">
+                                            <svg class="ph-heart popular-blogs-ph-heart prevent-propagation-on-search" xmlns="http://www.w3.org/2000/svg" width="192" height="192" fill="#000000" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"></rect><path d="M128,216S28,160,28,92A52,52,0,0,1,128,72h0A52,52,0,0,1,228,92C228,160,128,216,128,216Z" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></path></svg>
+                                            <span class="popular-blog-likes-count prevent-propagation-on-search">{{ popular_blog.blog_likes_count }}</span>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </a>
+                        {% empty %}
+                            <h3 class="popular-blogs-empty-header prevent-propagation-on-search">No blogs have been created yet.</h3>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
         </div>
         <div class="homepage-nav-right">

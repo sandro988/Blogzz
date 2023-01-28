@@ -72,6 +72,7 @@ class HomePageView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super(HomePageView, self).get_context_data(**kwargs)
         context["categories"] = Category.objects.all()[:10]
+        context["popular_blogs"] = Blog.get_popular_blogs()
         return context
 
 
