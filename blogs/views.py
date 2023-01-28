@@ -55,15 +55,13 @@ class HomePageView(LoginRequiredMixin, ListView):
         searched_objects_by_featured_category = self.request.GET.get("category")
 
         if searched_objects:
-            return Blog.objects.filter(
+            return Blog.published_objects.filter(
                 Q(blog_title__icontains=searched_objects)
-                | Q(blog_category__icontains=searched_objects),
-                blog_status="published",
+                | Q(blog_category__icontains=searched_objects)
             )
         elif searched_objects_by_featured_category:
-            return Blog.objects.filter(
-                Q(blog_category__icontains=searched_objects_by_featured_category),
-                blog_status="published",
+            return Blog.published_objects.filter(
+                Q(blog_category__icontains=searched_objects_by_featured_category)
             )
         else:
             published_objects = Blog.published_objects
