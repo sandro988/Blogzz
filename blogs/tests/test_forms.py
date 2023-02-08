@@ -2,6 +2,7 @@ from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from blogs.models import Blog, Category
+import json
 
 
 class TestsData:
@@ -21,11 +22,16 @@ class TestsData:
         # For UpdateBlogView and DeleteBlogView
         cls.category3 = "Category for Create and Update views"
 
+        quill_field_data = {
+            "delta": {"ops": [{"insert": "some text about python\n"}]},
+            "html": "<p>some text about python</p>",
+        }
+
         cls.blog = Blog.objects.create(
             author=cls.user,
             blog_title="Intermediate Python",
             blog_category=cls.category1,
-            blog_body="Some text about python",
+            blog_body=json.dumps(quill_field_data),
         )
 
 
@@ -63,10 +69,16 @@ class SearchBlogFormTests(TestsData, TestCase):
 class CreateBlogViewFormTests(TestsData, TestCase):
     def setUp(self):
         self.client.login(email="test_user@email.com", password="test_user_password")
+
+        blog_body = {
+            "delta": {"ops": [{"insert": "This is a test blog.\n"}]},
+            "html": "<p>This is a test blog.</p>",
+        }
+
         self.form_data = {
             "blog_title": "Test Blog",
             "blog_category": self.category1,
-            "blog_body": "This is a test blog.",
+            "blog_body": json.dumps(blog_body),
             # Simulating that user clicked Create button instead of Move to drafts.
             "Create": "Create",
         }
@@ -74,7 +86,7 @@ class CreateBlogViewFormTests(TestsData, TestCase):
         self.incomplete_form_data = {
             "blog_title": "",
             "blog_category": self.category1,
-            "blog_body": "This is a test blog.",
+            "blog_body": json.dumps(blog_body),
             # Simulating that user clicked Create button instead of Move to drafts.
             "Create": "Create",
         }
@@ -91,7 +103,7 @@ class CreateBlogViewFormTests(TestsData, TestCase):
         self.assertEqual(
             new_blog.blog_category_foreignkey.category_name, self.category1
         )
-        self.assertEqual(new_blog.blog_body, "This is a test blog.")
+        self.assertEqual(new_blog.blog_body, self.form_data["blog_body"])
         self.assertEqual(new_blog.blog_status, "published")
         self.assertEqual(new_blog.author.username, self.user.username)
 
@@ -153,7 +165,7 @@ class CreateBlogViewFormTests(TestsData, TestCase):
         self.assertEqual(
             new_blog.blog_category_foreignkey.category_name, self.category1
         )
-        self.assertEqual(new_blog.blog_body, "This is a test blog.")
+        self.assertEqual(new_blog.blog_body, self.form_data["blog_body"])
         self.assertEqual(new_blog.blog_status, "draft")
         self.assertEqual(new_blog.author.username, self.user.username)
 
@@ -161,20 +173,26 @@ class CreateBlogViewFormTests(TestsData, TestCase):
 class UpdateBlogViewFormTests(TestsData, TestCase):
     def setUp(self):
         self.client.login(email="test_user@email.com", password="test_user_password")
+
+        blog_body = {
+            "delta": {"ops": [{"insert": "This is an updated test blog.\n"}]},
+            "html": "<p>This is an updated test blog.</p>",
+        }
+
         self.update_form_data = {
             "blog_title": "Updated Test Blog",
             "blog_category": self.category3,
-            "blog_body": "This is an updated test blog.",
+            "blog_body": json.dumps(blog_body),
         }
         self.update_form_data_of_nonauthor_user = {
             "blog_title": "I am not author of this post",
             "blog_category": self.category3,
-            "blog_body": "This is a test blog that has been updated.",
+            "blog_body": json.dumps(blog_body),
         }
         self.incomplete_update_form_data = {
             "blog_title": "",
             "blog_category": self.category3,
-            "blog_body": "This is a test blog.",
+            "blog_body": json.dumps(blog_body),
         }
 
         # Creating non author user
@@ -207,7 +225,7 @@ class UpdateBlogViewFormTests(TestsData, TestCase):
             updated_blog.blog_category_foreignkey.category_name,
             "Category For Create And Update Views",
         )
-        self.assertEqual(updated_blog.blog_body, "This is an updated test blog.")
+        self.assertEqual(updated_blog.blog_body, self.update_form_data["blog_body"])
         self.assertEqual(updated_blog.blog_status, "published")
         self.assertEqual(updated_blog.author.username, self.user.username)
 
@@ -291,7 +309,7 @@ class UpdateBlogViewFormTests(TestsData, TestCase):
             updated_blog.blog_category_foreignkey.category_name,
             "Category For Create And Update Views",
         )
-        self.assertEqual(updated_blog.blog_body, "This is an updated test blog.")
+        self.assertEqual(updated_blog.blog_body, self.update_form_data["blog_body"])
         self.assertEqual(updated_blog.blog_status, "draft")
         self.assertEqual(updated_blog.author.username, self.user.username)
 
@@ -320,7 +338,7 @@ class UpdateBlogViewFormTests(TestsData, TestCase):
             updated_blog.blog_category_foreignkey.category_name,
             "Category For Create And Update Views",
         )
-        self.assertEqual(updated_blog.blog_body, "This is an updated test blog.")
+        self.assertEqual(updated_blog.blog_body, self.update_form_data["blog_body"])
         # Check if the status has changed from 'draft' to 'published'
         self.assertNotEqual(updated_blog.blog_status, "draft")
         self.assertEqual(updated_blog.author.username, self.user.username)
@@ -351,7 +369,7 @@ class UpdateBlogViewFormTests(TestsData, TestCase):
             updated_blog.blog_category_foreignkey.category_name,
             "Category For Create And Update Views",
         )
-        self.assertEqual(updated_blog.blog_body, "This is an updated test blog.")
+        self.assertEqual(updated_blog.blog_body, self.update_form_data["blog_body"])
         # Check that status has not changed
         self.assertNotEqual(updated_blog.blog_status, "published")
         self.assertEqual(updated_blog.author.username, self.user.username)

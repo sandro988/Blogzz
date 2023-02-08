@@ -1,11 +1,12 @@
 import uuid
 import math
+import readtime
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToCover
-from django_editorjs_fields import EditorJsTextField
+from django_quill.fields import QuillField
 
 
 class Category(models.Model):
@@ -32,11 +33,7 @@ class Blog(models.Model):
         "Category", on_delete=models.SET_NULL, null=True, blank=True
     )
     blog_category = models.CharField(max_length=50, null=True)
-    blog_body = EditorJsTextField(
-        plugins=["@editorjs/image", "@editorjs/embed"],
-        null=True,
-        blank=False,
-    )
+    blog_body = QuillField()
     blog_created = models.DateTimeField(auto_now_add=True)
     blog_updated = models.DateTimeField(auto_now=True)
     blog_status = models.CharField(max_length=10, choices=options, default="published")
@@ -65,10 +62,9 @@ class Blog(models.Model):
         return reverse("blog_detail", kwargs={"pk": self.id})
 
     def reading_time(self):
-        words = self.blog_body.split()
-        reading_time = math.ceil(len(words) / 234)
+        """Calculates the time that user will need to read a blog"""
 
-        return reading_time
+        return readtime.of_html(self.blog_body.html)
 
     @classmethod
     def get_popular_blogs(cls):

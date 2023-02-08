@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 from blogs.models import Blog, Category
 from django.conf import settings
+import json
 
 
 class TestsData:
@@ -18,11 +19,16 @@ class TestsData:
 
         cls.category1 = Category.objects.create(category_name="Python")
 
+        quill_field_data = {
+            "delta": {"ops": [{"insert": "some text about python\n"}]},
+            "html": "<p>some text about python</p>",
+        }
+
         cls.blog = Blog.objects.create(
             author=cls.user,
             blog_title="Intermediate Python",
             blog_category=cls.category1,
-            blog_body="Some text about python",
+            blog_body=json.dumps(quill_field_data),
         )
 
 
@@ -37,14 +43,21 @@ class HomePageViewTest(TestsData, TestCase):
                 author=self.user,
                 blog_title=f"Blog number {i}",
                 blog_category=self.category1,
-                blog_body=f"Blog body for blog number {i}",
+                blog_body=json.dumps(
+                    {
+                        "delta": {
+                            "ops": [{"insert": f"Blog body for blog number {i}\n"}]
+                        },
+                        "html": f"<p>Blog body for blog number {i}</p>",
+                    }
+                ),
             )
 
     def test_blog_listing(self):
         self.assertEqual(self.blog.author, self.user)
         self.assertEqual(self.blog.blog_title, "Intermediate Python")
         self.assertEqual(self.blog.blog_category.category_name, "Python")
-        self.assertEqual(self.blog.blog_body, "Some text about python")
+        self.assertEqual(self.blog.blog_body.html, "<p>some text about python</p>")
 
     def test_home_page_view(self):
         response = self.client.get(reverse("home"))

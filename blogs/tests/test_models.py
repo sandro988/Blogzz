@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from blogs.models import Blog, Category
+import json
 
 
 class CategoryModelTests(TestCase):
@@ -25,12 +26,17 @@ class BlogModelTests(TestCase):
         # Creating category
         self.category = Category.objects.create(category_name="Writing tests")
 
+        data = {
+            "delta": {"ops": [{"insert": "This is a test blog.\n"}]},
+            "html": "<p>This is a test blog.</p>",
+        }
+
         # Creating blog
         self.blog = Blog.objects.create(
             author=self.user,
             blog_title="Test blog",
             blog_category="self.category",
-            blog_body="This is a test blog.",
+            blog_body=json.dumps(data),
         )
 
     def test_blog_model(self):

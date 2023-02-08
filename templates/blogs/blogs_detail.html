@@ -1,5 +1,4 @@
 {% extends 'blogs/list_blog.html' %}
-{% load editorjs %}
 
 {% block title %}Blogzz | {{ blog.blog_title }}{% endblock title %}
 
@@ -10,7 +9,7 @@
         {% endif %}
         <h2>{{ blog.blog_title }}</h2>
         <small>@{{ blog.author }} | {{ blog.blog_created|timesince }}</small>
-        <p>{{ blog.blog_body | editorjs }}</p>
+        <p>{{ blog.blog_body.html|safe }}</p>
         <p style="color: blue;">{{ blog.blog_status }}</p>
     </div>
 {% endblock content %}

@@ -21,7 +21,6 @@ from django.urls import path, include
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
-    path("editorjs/", include("django_editorjs_fields.urls")),
     # Locally created apps
     path("", include("core.urls")),
     path("", include("blogs.urls")),
