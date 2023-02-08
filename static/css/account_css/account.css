@@ -289,12 +289,9 @@ input:active {
 }
 
 .left-side-div-inner {
-    position: absolute;
-    left: 50%;
-    top: 45%;
-    transform: translate(-50%, -50%);
+    margin: 15% auto;
     width: 90%;
-    /* height: 100%; */
+    height: max-content;
     text-align: center;
     font-family: "Poppins", cursive;
 }
@@ -551,7 +548,7 @@ li {
     .left-side-div-inner {
         width: 70%;
         height: 85vh;
-        margin: 0;
+        margin: 20% auto;
     }
 
     .left-side-div {
