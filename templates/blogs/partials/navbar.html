@@ -73,7 +73,7 @@
             <a href="/" class="desktop-current-user-profile-picture">
                 <img 
                 class="current-user-profile-picture"
-                src="{{ request.user.profile_picture.url}}" 
+                src="{{ request.user.get_profile_picture }}" 
                 alt="{{ request.user }}'s profile image">
             </a>
 
@@ -84,7 +84,7 @@
             <div class="navbar-dropdown-container prevent-propagation-nav-dropdown">
                 <div class="navbar-dropdown-top prevent-propagation-nav-dropdown">
                     <a href="#" class="navbar-dropdown-profile-link1 prevent-propagation-nav-dropdown">
-                        <img src="{{ request.user.profile_picture.url }}" alt="{{ request.user }}'s profile picture" class="prevent-propagation-nav-dropdown">
+                        <img src="{{ request.user.get_profile_picture }}" alt="{{ request.user }}'s profile picture" class="prevent-propagation-nav-dropdown">
                         <div>
                             <p class="prevent-propagation-nav-dropdown">{{ request.user }}</p>
                             <p class="prevent-propagation-nav-dropdown">{{ request.user.email|truncatechars:25 }}...</p>

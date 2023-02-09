@@ -109,7 +109,9 @@ main {
 
 .blog-author-image {
     width: clamp(20px, 2vw, 75px);
+    height: clamp(20px, 2vw, 75px);
     border-radius: 50%;
+    border: 1px solid #c8c8c8
 }
 
 .blog-author-name {
@@ -166,6 +168,7 @@ main {
     outline: none;
     background-color: transparent;
     transition: all 0.25s ease-in-out;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .likes-div:hover,
@@ -243,6 +246,7 @@ footer {
 .floating-board a,
 .floating-board-search {
     display: flex;
+    -webkit-tap-highlight-color: transparent;
 }
 
 footer a svg,
@@ -310,15 +314,18 @@ nav {
 .homepage-nav-right a {
     display: flex;
     height: max-content;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .homepage-blogzz-logo img {
     width: clamp(35px, 1.5vw, 75px);
+    height: clamp(35px, 1.5vw, 75px);
     z-index: 2;
 }
 
 .current-user-profile-picture {
     width: clamp(25px, 7.5vw, 30px);
+    height: clamp(25px, 7.5vw, 30px);
 }
 
 .homepage-nav-create-btn,
@@ -371,6 +378,7 @@ nav {
     font-size: clamp(0.6rem, 0.8rem, 1rem);
     font-weight: bold;
     animation: slide-in 0.3s forwards;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .reset-search:hover {
@@ -408,6 +416,7 @@ input[type="search"]::-webkit-search-cancel-button {
     border-radius: 50%;
     animation: slide-in-x 0.3s forwards;
     height: max-content;
+    -webkit-tap-highlight-color: transparent;
 }
 
 @keyframes slide-in-x {
@@ -472,8 +481,10 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 .navbar-dropdown-profile-link1 img {
-    width: clamp(50px, 1.5vw, 75px);
+    width: clamp(40px, 1.5vw, 75px);
+    height: clamp(40px, 1.5vw, 75px);
     border-radius: 50%;
+    border: 1px solid #c8c8c8;
 }
 
 .navbar-dropdown-top {
@@ -946,7 +957,9 @@ input[type="search"]::-webkit-search-cancel-button {
 
     .desktop-current-user-profile-picture .current-user-profile-picture {
         width: clamp(20px, 2vw, 75px);
+        height: clamp(20px, 2vw, 75px);
         display: flex;
+        border: 1px solid #c8c8c8
     }
 
     .homepage-navbar-dropdown {

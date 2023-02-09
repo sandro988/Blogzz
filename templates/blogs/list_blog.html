@@ -75,7 +75,7 @@
         <a href="/" class="mobile-current-user-profile-picture" aria-label="Button for users profile page">
             <img 
             class="current-user-profile-picture"
-            src="{{ request.user.profile_picture.url}}" 
+            src="{{ request.user.get_profile_picture }}" 
             alt="{{ request.user }}'s profile image">
         </a>
 
