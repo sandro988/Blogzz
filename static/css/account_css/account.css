@@ -4,6 +4,15 @@
     padding: 0;
 }
 
+@font-face {
+    font-family: "Limelight";
+    src: url("/static/fonts/Limelight-Regular.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Poppins";
+    src: url("/static/fonts/Poppins-Regular.ttf") format("truetype");
+}
+
 body {
     background-color: #f1f1f1;
     font-family: "Poppins", sans-serif;

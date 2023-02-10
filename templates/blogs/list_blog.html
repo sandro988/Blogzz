@@ -16,8 +16,24 @@
 </header>
 
 <main>
-    <div class="blogs-container grid" id="infinite-scroll-container">
+    <div class="masonry-blog-loader">
+        <div class="loader-circle"></div>
+        <div class="loader-circle"></div>
+        <div class="loader-circle"></div>
+        <div class="loader-circle"></div>
+        <div class="loader-circle"></div>
+        <div class="loader-circle"></div>
+    </div>
+    <div class="blogs-container grid is-loading" id="infinite-scroll-container">
         {% include "blogs/partials/masonry_blog_list_element.html" %}
+        <div class="masonry-blog-loader-infinite-scroll">
+            <div class="loader-circle-inf"></div>
+            <div class="loader-circle-inf"></div>
+            <div class="loader-circle-inf"></div>
+            <div class="loader-circle-inf"></div>
+            <div class="loader-circle-inf"></div>
+            <div class="loader-circle-inf"></div>
+        </div>
     </div>
     <!-- This overlay will be activated when user clicks search field -->
     <div class="search-overlay"></div>
@@ -74,7 +90,7 @@
 
         <a href="/" class="mobile-current-user-profile-picture" aria-label="Button for users profile page">
             <img 
-            class="current-user-profile-picture"
+            class="current-user-profile-picture skeleton-placeholder"
             src="{{ request.user.get_profile_picture }}" 
             alt="{{ request.user }}'s profile image">
         </a>

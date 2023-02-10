@@ -26,6 +26,91 @@ main {
     margin: clamp(75px, 11vh, 125px) auto 100px auto;
 }
 
+.is-loading {
+    visibility: hidden;
+}
+
+.masonry-blog-loader{
+    width: max-content;
+    height: max-content;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.masonry-blog-loader-infinite-scroll {
+    width: max-content;
+    height: max-content;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+    bottom: 15%;
+    left: 50%;
+    position: fixed;
+    transform: translate(-50%);
+    z-index: 1;
+}
+
+.loader-circle, .loader-circle-inf{
+    background-color: black;
+    width: clamp(10px, 1.5vw, 15px);
+    height: clamp(10px, 1.5vw, 15px);
+    border-radius: 50px;
+}
+
+.loader-circle-inf {
+    width: clamp(10px, 1.25vw, 12.5px);
+    height: clamp(10px, 1.25vw, 12.5px);
+}
+
+.loader-circle:nth-child(1),
+.loader-circle:nth-child(3),
+.loader-circle:nth-child(5),
+.loader-circle-inf:nth-child(1),
+.loader-circle-inf:nth-child(3),
+.loader-circle-inf:nth-child(5) {
+    animation: bounceOdd 0.5s infinite;
+}
+
+.loader-circle:nth-child(2),
+.loader-circle:nth-child(4),
+.loader-circle:nth-child(6),
+.loader-circle-inf:nth-child(2),
+.loader-circle-inf:nth-child(4),
+.loader-circle-inf:nth-child(6) {
+    animation: bounceEven 0.5s infinite;
+}
+
+@keyframes bounceOdd {
+    0%,
+    100% {
+        transform: translateY(0);
+        scale: 1.2
+    }
+    50% {
+        transform: translateY(clamp(10px, 1.5vw, 20px));
+        scale: 1
+    }
+}
+
+@keyframes bounceEven {
+    0%,
+    100% {
+        transform: translateY(clamp(10px, 1.5vw, 20px));
+        scale: 1.2
+    }
+    50% {
+        transform: translateY(0px);
+        scale: 1
+    }
+}
+
 .thumbnail_blog,
 .blog {
     text-decoration: none;
@@ -51,14 +136,27 @@ main {
     }
 }
 
+.skeleton-placeholder {
+    animation: skeleton-placeholder 1s linear infinite alternate;
+    border-radius: 50%;
+}
+
+@keyframes skeleton-placeholder {
+    from {
+        background-color: #e9e9e9;
+    }
+    to {
+        background-color: #ababab;
+    }
+}
+
 .blog .blog-content-container {
     border-radius: 15px;
 }
 
 .blog-img-container {
     width: 100%;
-    height: 30vh;
-    max-height: 450px;
+    height: 200px;
     object-fit: cover;
     border-radius: 20px 20px 0 0;
     overflow: hidden;
@@ -111,7 +209,7 @@ main {
     width: clamp(20px, 2vw, 75px);
     height: clamp(20px, 2vw, 75px);
     border-radius: 50%;
-    border: 1px solid #c8c8c8
+    border: 1px solid #c8c8c8;
 }
 
 .blog-author-name {
@@ -315,6 +413,11 @@ nav {
     display: flex;
     height: max-content;
     -webkit-tap-highlight-color: transparent;
+}
+
+.homepage-blogzz-logo {
+    width: clamp(35px, 1.5vw, 75px);
+    height: clamp(35px, 1.5vw, 75px);
 }
 
 .homepage-blogzz-logo img {
@@ -753,7 +856,7 @@ input[type="search"]::-webkit-search-cancel-button {
     position: relative;
     overflow: hidden;
     animation: popularBlogFadeIn 0.5s forwards;
-    z-index: 10
+    z-index: 10;
 }
 
 .popular-blog:hover .popular-blogs-top {
@@ -857,6 +960,10 @@ input[type="search"]::-webkit-search-cancel-button {
         background-color: white;
     }
 
+    .blog-img-container {
+        height: 300px;
+    }
+
     .category-decorative-circle {
         width: clamp(20px, 1.3vw, 40px);
         height: clamp(20px, 1.3vw, 40px);
@@ -889,6 +996,10 @@ input[type="search"]::-webkit-search-cancel-button {
     nav a {
         text-decoration: none;
         color: black;
+    }
+
+    .blog-img-container {
+        height: 325px;
     }
 
     .homepage-nav-right,
@@ -959,7 +1070,7 @@ input[type="search"]::-webkit-search-cancel-button {
         width: clamp(20px, 2vw, 75px);
         height: clamp(20px, 2vw, 75px);
         display: flex;
-        border: 1px solid #c8c8c8
+        border: 1px solid #c8c8c8;
     }
 
     .homepage-navbar-dropdown {
@@ -1081,6 +1192,10 @@ input[type="search"]::-webkit-search-cancel-button {
     .blog,
     .thumbnail_blog {
         margin-bottom: 15px;
+    }
+
+    .blog-img-container {
+        height: 450px;
     }
 
     .topic-name,

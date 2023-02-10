@@ -5,7 +5,7 @@
         <div class="homepage-nav-left">
             
             <a href="{% url 'home' %}" class="homepage-blogzz-logo">
-                <img src="{% static 'images/blogzz-logo.svg' %}" alt="Logo of Blogzz">
+                <img src="{% static 'images/blogzz-logo.svg' %}" class="skeleton-placeholder" alt="Logo of Blogzz">
             </a>
             
             <a href="{% url 'create_blog' %}" class="homepage-nav-create-btn">
@@ -72,7 +72,7 @@
         <div class="homepage-nav-right">
             <a href="/" class="desktop-current-user-profile-picture">
                 <img 
-                class="current-user-profile-picture"
+                class="current-user-profile-picture skeleton-placeholder"
                 src="{{ request.user.get_profile_picture }}" 
                 alt="{{ request.user }}'s profile image">
             </a>

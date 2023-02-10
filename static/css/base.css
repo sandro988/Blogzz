@@ -4,6 +4,15 @@
     margin: 0;
 }
 
+@font-face {
+    font-family: "Limelight";
+    src: url("/static/fonts/Limelight-Regular.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Poppins";
+    src: url("/static/fonts/Poppins-Regular.ttf") format("truetype");
+}
+
 html {
     scroll-behavior: smooth;
 }
