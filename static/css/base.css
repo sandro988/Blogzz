@@ -6,11 +6,7 @@
 
 @font-face {
     font-family: "Limelight";
-    src: url("/static/fonts/Limelight-Regular.ttf") format("truetype");
-}
-@font-face {
-    font-family: "Poppins";
-    src: url("/static/fonts/Poppins-Regular.ttf") format("truetype");
+    src: url("/static/fonts/Limelight-Regular.woff") format("woff");
 }
 
 html {
@@ -584,6 +580,7 @@ main {
 
 .blog-author-image {
     width: clamp(20px, 2vw, 75px);
+    border-radius: 50%;
 }
 
 .featured-blog-bottom,
@@ -1043,6 +1040,7 @@ footer a:hover svg path {
 
 .user-thought-header img {
     width: clamp(30px, 10vw, 50px);
+    border-radius: 50%;
 }
 
 .user-thought-header {

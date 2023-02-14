@@ -27,9 +27,11 @@
                     <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
                 </div>
             {% elif message.tags == "success" %}
+                {% if message|stringformat:"s" == "Your message was successfully sent."  %}
                 <div class="messages messages-successfull">
                     <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
                 </div>
+                {% endif %}
             {% else %}
                 <div class="messages has-to-be-removed-immediately">
                     <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
