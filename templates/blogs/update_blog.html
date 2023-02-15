@@ -1,6 +1,9 @@
 {% extends 'blogs/list_blog.html' %}
 
 {% block title %}Update {{ blog.blog_title }}{% endblock title %}   
+{% block HTMX %}
+    <!-- This page does not require HTMX -->
+{% endblock HTMX %}
 
 {% block content %}
     <h1>Update blog</h1>

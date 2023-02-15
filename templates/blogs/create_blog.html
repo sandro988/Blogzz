@@ -1,15 +1,62 @@
 {% extends 'blogs/list_blog.html' %}
+{% load static %}
 
 {% block title %}Create blog{% endblock title %}   
 
-{% block content %}
-    <h1>Create blog</h1>
-    
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/blog_css/blog_main.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/blog_css/blog_create.css' %}" />
 
-        {{ form.as_p }}
-        <input type="submit" value="Create" name="Create">
-        <input type="submit" value="Move to drafts" name="Move to drafts">
-    </form>
+    <!-- For quill rich tex editor-->
+    {{ form.media }}
+{% endblock css%} 
+
+{% block PreloadFont %}
+    <link rel="preload" as="font" href="{% static 'fonts/Limelight-Regular.woff2' %}" crossorigin="anonymous">
+{% endblock PreloadFont %}
+
+{% block HTMX %}
+    <!-- This page does not require HTMX -->
+{% endblock HTMX %}
+
+{% block content %}
+
+    <header>
+        {% include 'blogs/partials/navbar.html' %}
+    </header>
+
+    <main class="prevent-propagation-on-search create-page-main">
+
+        <div class="create-form-container">
+            <div class="create-form-container-top">
+                <h1>Create new blog</h1>
+                <div class="create-page-decorative-circles">
+                    <div class="create-page-decorative-circle1"></div>
+                    <div class="create-page-decorative-circle2"></div>
+                    <div class="create-page-decorative-circle3"></div>
+                </div>
+            </div>
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                {{ form.as_p }}
+                <div class="create-page-submit-btn-div">
+                    <input type="submit" value="Create" name="Create" class="create-page-btn1">
+                    <input type="submit" value="Move to drafts" name="Move to drafts" class="create-page-btn2">
+                </div>
+            </form>
+            
+        </div>
+        <!-- This overlay will be activated when user clicks search field -->
+        <div class="search-overlay"></div>
+    </main>
+
+    <footer class="blogs-page-footer">
+        {% include "blogs/partials/floating_board.html" %}
+    </footer>
 {% endblock content %}
+
+{% block js %}
+    <script src="{% static 'js/blogs_js/blogs.js' %}" type="text/javascript"></script>
+{% endblock js%}

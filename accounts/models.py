@@ -1,7 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToCover
-from allauth.socialaccount.models import SocialAccount
 
 
 class CustomUser(AbstractUser):
@@ -11,13 +10,13 @@ class CustomUser(AbstractUser):
         format="JPEG",
         options={"quality": 100},
         blank=True,
-        default="profile_pictures/default_profile_picture.jpg",
+        default="profile_pictures/default_profile_picture.webp",
     )
 
     def save(self, *args, **kwargs):
         "If user decides to delete their profile picture, it will automatically be set to default picture."
         if not self.profile_picture:
-            self.profile_picture = "profile_pictures/default_profile_picture.jpg"
+            self.profile_picture = "profile_pictures/default_profile_picture.webp"
         super().save(*args, **kwargs)
 
     def get_profile_picture(self):
@@ -39,7 +38,7 @@ class CustomUser(AbstractUser):
 
         if (
             social_accounts
-            and self.profile_picture == "profile_pictures/default_profile_picture.jpg"
+            and self.profile_picture == "profile_pictures/default_profile_picture.webp"
         ):
             social_account = social_accounts[0]
 

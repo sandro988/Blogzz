@@ -123,6 +123,11 @@ class CreateBlogView(LoginRequiredMixin, CreateView):
 
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super(CreateBlogView, self).get_context_data(**kwargs)
+        context["categories"] = Category.objects.all()[:10]
+        context["popular_blogs"] = Blog.get_popular_blogs()
+        return context
 
 class UpdateBlogView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     """

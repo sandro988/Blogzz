@@ -12,7 +12,14 @@
     <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
 
     <!-- HTMX -->
-    <script src="https://unpkg.com/htmx.org@1.8.4"></script>
+    {% block HTMX %}
+        <script src="https://unpkg.com/htmx.org@1.8.4"></script>
+    {% endblock HTMX %}
+
+    <!-- Preloading Font -->
+    {% block PreloadFont %}
+        <link rel="preload" as="font" href="{% static 'fonts/Limelight-Regular.woff2' %}" crossorigin="anonymous">
+    {% endblock PreloadFont %}
 
     <!-- CSS -->
     {% block css %}

@@ -1,0 +1,59 @@
+<div class="floating-board">
+    <a href="{% url 'home' %}" class="floating-board-home" aria-label="Button for returning to home page">
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="192"
+            height="192"
+            fill="#000000"
+            viewBox="0 0 256 256"
+        >
+            <rect width="256" height="256" fill="none"></rect>
+            <path
+                d="M216,216V115.5a8.3,8.3,0,0,0-2.6-5.9l-80-72.7a8,8,0,0,0-10.8,0l-80,72.7a8.3,8.3,0,0,0-2.6,5.9V216"
+                fill="none"
+                stroke="#000000"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="16"
+            ></path>
+            <line
+                x1="16"
+                y1="216"
+                x2="240"
+                y2="216"
+                fill="none"
+                stroke="#000000"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="16"
+            ></line>
+            <path
+                d="M152,216V160a8,8,0,0,0-8-8H112a8,8,0,0,0-8,8v56"
+                fill="none"
+                stroke="#000000"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="16"
+            ></path>
+        </svg>
+    </a>
+
+    <div class="floating-board-search prevent-propagation">
+        <svg xmlns="http://www.w3.org/2000/svg" class="prevent-propagation" width="192" height="192" fill="#000000" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"></rect><circle cx="116" cy="116" r="84" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></circle><line x1="175.4" y1="175.4" x2="224" y2="224" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></line></svg>
+    </div>
+
+    <a href="{% url 'create_blog' %}" class="floating-board-create" aria-label="Button for create blog action">
+        <svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" fill="#000000" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"></rect><line x1="40" y1="128" x2="216" y2="128" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></line><line x1="128" y1="40" x2="128" y2="216" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></line></svg>
+    </a>
+
+    <a href="/" class="mobile-current-user-profile-picture" aria-label="Button for users profile page">
+        <img 
+        class="current-user-profile-picture skeleton-placeholder"
+        src="{{ request.user.get_profile_picture }}" 
+        alt="{{ request.user }}'s profile image">
+    </a>
+
+    <a href="{% url 'account_logout' %}" class="floating-board-logout" aria-label="Button for signing out of the website">
+        <svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" fill="#000000" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"></rect><polyline points="174 86 216 128 174 170" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></polyline><line x1="104" y1="128" x2="216" y2="128" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></line><path d="M104,216H48a8,8,0,0,1-8-8V48a8,8,0,0,1,8-8h56" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></path></svg>
+    </a>
+</div>

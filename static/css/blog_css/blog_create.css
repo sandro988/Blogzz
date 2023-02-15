@@ -1,0 +1,225 @@
+@font-face {
+    font-family: "Limelight";
+    src: url("/static/fonts/Limelight-Regular.woff2") format("woff2");
+}
+
+.create-page-main {
+    margin: 20% auto 20% auto;
+    width: 90%;
+    max-width: 1200px;
+    animation: fadeCreatePageIn .5s forwards
+}
+
+@keyframes fadeCreatePageIn{
+    from {
+        scale: .5;
+        opacity: .1
+    } 
+    to {
+        scale: 1;
+        opacity: 1
+    }
+}
+
+
+.create-page-main form p label:nth-child(1),
+.create-page-main form p label:nth-child(2),
+.create-page-main form p label:nth-child(3) {
+    display: none
+}
+
+.create-page-main form {
+    padding: clamp(15px, 2vw, 30px);
+}
+
+.create-page-main form input {
+    width: 100%;
+    padding: clamp(5px, 2vw, 15px) clamp(10px, 1.5vw, 15vw);
+    margin: 10px 0;
+    background-color: #f1f1f1;
+    font-size: clamp(12px, 1rem, 1.3rem);
+    border: 1px solid #c9c9c9;
+    outline: none;
+    border-radius: 15px;
+}
+
+#id_blog_thumbnail {
+    border: none !important;
+    padding: clamp(5px, 2vw, 15px) clamp(10px, 3vw, 20vw) clamp(5px, 2vw, 15px) 0;
+}
+
+::-webkit-file-upload-button {
+    border: 1px solid #c9c9c9;
+    border-radius: 30px;
+    padding: clamp(5px, 2vw, 10px) clamp(5px, 2.5vw, 15vw) !important;
+    transition: background-color .25s ease-in-out, color .25s ease-in-out, border .25s ease-in-out
+}
+
+::-webkit-file-upload-button:hover {
+    cursor: pointer;
+    color: black;
+    background-color: #a5c1f0;
+    border: 1px solid black;
+}
+
+.create-page-btn1,
+.create-page-btn2 {
+    width: max-content !important;
+    background-color: #afd7b6 !important;
+    color: black;
+    border: 1px solid black !important;
+    border-radius: 30px;
+    padding: clamp(5px, 2vw, 10px) clamp(10px, 3vw, 15vw) !important;
+    transition: background-color .25s ease-in-out, color .25s ease-in-out
+}
+
+.create-page-btn2 {
+    background-color: #f1f1f1 !important;
+    color: black;
+}
+
+.create-page-btn1:hover{
+    cursor: pointer;
+    background-color: black !important;
+    color: #f1f1f1;
+}
+
+.create-page-btn2:hover {
+    cursor: pointer;
+    background-color: #fbc5c4 !important;
+    color: black;
+}
+
+.ql-editor {
+    min-height: 300px;
+    border-radius: 15px;
+    font-size: clamp(12px, 1rem, 1.3rem);
+}
+
+.ql-toolbar {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.ql-toolbar span {
+    font-size: clamp(12px, 1rem, 1.3rem);
+}
+
+.create-form-container {
+    width: 100%;
+    border: 1px solid black;
+    border-radius: 30px;
+}
+
+.create-form-container-top {
+    border-bottom: 2px solid black;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    padding: 15px clamp(15px, 2vw, 30px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: black;
+    color: white;
+}
+
+.create-form-container h1 {
+    font-size: clamp(14px, 1rem, 22px);
+    font-family: "Limelight", cursive;
+}
+
+.create-page-decorative-circles {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+    width: max-content;
+}
+
+.create-page-decorative-circle1,
+.create-page-decorative-circle2,
+.create-page-decorative-circle3 {
+    width: clamp(20px, 4vw, 30px);
+    height: clamp(20px, 4vw, 30px);
+    border-radius: 50%;
+    border: 1px solid black;
+}
+
+.create-page-decorative-circle1 {
+    background-color: #afd7b6;
+}
+
+.create-page-decorative-circle2 {
+    background-color: #a5c1f0;
+}
+
+.create-page-decorative-circle3 {
+    background-color: #fbc5c4;
+}
+
+@media only screen and (min-width: 767px) and (max-width: 1100px) {
+    .create-page-main {
+        margin: 12.5% auto 2% auto;
+    }
+}
+
+@media only screen and (min-width: 1101px) {
+    .create-page-main {
+        margin: 7% auto 2% auto;
+        width: 70% !important;
+        max-width: 1700px;
+    }
+
+    .create-page-main form input {
+        font-size: clamp(14px, 1rem, 1.5rem);
+        padding: 15px 15px;
+    }
+
+    .ql-editor, .create-form-container h1 {
+        font-size: clamp(14px, 1rem, 1.5rem);
+    }
+
+}
+
+@media only screen and (min-width: 1921px) {
+
+    .create-page-main {
+        margin: 7.5% auto 2% auto;
+        width: 70% !important;
+        max-width: 2700px;
+    }
+
+    .ql-editor {
+        min-height: 600px;
+    }
+
+    .create-page-btn1,
+    .create-page-btn2 {
+        padding: 10px 20px !important;
+    }
+
+    ::-webkit-file-upload-button {
+        padding: 10px 20px !important;
+    }
+}
+
+@media only screen and (min-width: 2560px) {
+    .create-page-main {
+        margin: 7.5% auto 2% auto;
+        width: 80% !important;
+        max-width: 3000px;
+    }
+
+    .ql-editor {
+        min-height: 1000px;
+    }
+
+    .create-page-main form input {
+        font-size: clamp(18px, 1.6rem, 1.8rem);
+        padding: 15px 15px;
+    }
+
+    .ql-editor, .create-form-container h1 {
+        font-size: clamp(18px, 1.6rem, 1.8rem);
+    }
+}

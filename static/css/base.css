@@ -6,7 +6,7 @@
 
 @font-face {
     font-family: "Limelight";
-    src: url("/static/fonts/Limelight-Regular.woff") format("woff");
+    src: url("/static/fonts/Limelight-Regular.woff2") format("woff2");
 }
 
 html {
@@ -15,7 +15,7 @@ html {
 
 body {
     background-color: #f1f1f1;
-    font-family: "Poppins", sans-serif;
+    font-family: "Poppins", Helvetica;
 }
 
 .hidden {

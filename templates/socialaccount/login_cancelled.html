@@ -4,6 +4,9 @@
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/account_css/account.css' %}">
 {% endblock css %}
+{% block HTMX %}
+    <!-- This page does not require HTMX -->
+{% endblock HTMX %}
 
 {% block title %}{% trans "Login Cancelled" %}{% endblock title%}
 
@@ -28,6 +31,5 @@
 
 {% block js %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
-    <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>   
     <script src="{% static 'js/account_js/account.js' %}" type="module"></script>
 {% endblock js %}

@@ -6,11 +6,12 @@
 
 @font-face {
     font-family: "Limelight";
-    src: url("/static/fonts/Limelight-Regular.ttf") format("truetype");
+    src: url("/static/fonts/Limelight-Regular.woff2") format("woff2");
 }
+
 @font-face {
     font-family: "Poppins";
-    src: url("/static/fonts/Poppins-Regular.ttf") format("truetype");
+    src: url("/static/fonts/Poppins-Regular.woff2") format("woff2");
 }
 
 body {
@@ -24,7 +25,7 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: "limelight", cursive;
+    font-family: "Limelight", cursive;
     font-weight: normal;
     margin-bottom: 20px;
 }
@@ -280,7 +281,7 @@ input {
     outline: 0;
     font-size: clamp(0.8rem, 4vw, 1.25rem);
     padding: clamp(5px, 2.5vw, 10px);
-    font-family: "Poppins", cursive;
+    font-family: "Poppins", sans-serif;;
     border: 1px solid #f1f1f1;
     border-bottom: 1px solid #838383;
     margin-bottom: clamp(10px, 4vw, 20px);
@@ -302,7 +303,7 @@ input:active {
     width: 90%;
     height: max-content;
     text-align: center;
-    font-family: "Poppins", cursive;
+    font-family: "Poppins", sans-serif;
 }
 
 .form-main {
