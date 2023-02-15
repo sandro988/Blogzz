@@ -14,5 +14,6 @@ class BlogForm(forms.ModelForm):
         ]
         widgets = {
             'blog_title': forms.TextInput(attrs={'placeholder': 'Title'}),
-            'blog_category': forms.TextInput(attrs={'placeholder': "Category"})
+            'blog_category': forms.TextInput(attrs={'placeholder': "Category"}),
+            'blog_thumbnail': forms.FileInput()
         }

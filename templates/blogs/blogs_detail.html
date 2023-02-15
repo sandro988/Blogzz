@@ -4,6 +4,7 @@
 
 {% block content %}
     <div>
+        <a href="{% url 'update_blog' blog.id %}">Update</a>
         {% if blog.blog_thumbnail %}
             <img src="{{ blog.blog_thumbnail.url }}" alt="{{ blog.blog_title }}">
         {% endif %}

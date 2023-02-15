@@ -169,7 +169,7 @@ class UpdateBlogViewTests(TestsData, TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(pk_invalid.status_code, 404)
         self.assertEqual(pk_does_not_exist.status_code, 404)
-        self.assertContains(response, "Update blog")
+        self.assertContains(response, "Enjoy writing")
         self.assertTemplateUsed(response, "blogs/update_blog.html")
 
     def test_update_blog_view_for_logged_out_user(self):

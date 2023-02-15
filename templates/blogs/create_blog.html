@@ -5,7 +5,7 @@
 
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/blog_css/blog_main.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/blog_css/blog_create.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/blog_css/blog_create_update.css' %}" />
 
     <!-- For quill rich tex editor-->
     {{ form.media }}
@@ -25,25 +25,17 @@
         {% include 'blogs/partials/navbar.html' %}
     </header>
 
-    <main class="prevent-propagation-on-search create-page-main">
-
-        <div class="create-form-container">
-            <div class="create-form-container-top">
-                <h1>Create new blog</h1>
-                <div class="create-page-decorative-circles">
-                    <div class="create-page-decorative-circle1"></div>
-                    <div class="create-page-decorative-circle2"></div>
-                    <div class="create-page-decorative-circle3"></div>
-                </div>
-            </div>
+    <main class="prevent-propagation-on-search create-update-page-main">
+        <div class="create-update-form-container">
+            {% include 'blogs/partials/create_update_decorative_header_element.html' %}
 
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 
                 {{ form.as_p }}
-                <div class="create-page-submit-btn-div">
-                    <input type="submit" value="Create" name="Create" class="create-page-btn1">
-                    <input type="submit" value="Move to drafts" name="Move to drafts" class="create-page-btn2">
+                <div class="create-update-page-submit-btn-div">
+                    <input type="submit" value="Create" name="Create" class="create-update-page-btn1">
+                    <input type="submit" value="Move to drafts" name="Move to drafts" class="create-update-page-btn2">
                 </div>
             </form>
             

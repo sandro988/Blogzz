@@ -243,7 +243,7 @@ class UpdateBlogViewFormTests(TestsData, TestCase):
             errors=["This field is required."],
             msg_prefix="Error: ",
         )
-        self.assertContains(response, "Update blog")
+        self.assertContains(response, "Enjoy writing")
         self.assertContains(response, "This field is required")
         self.assertTemplateUsed(response, "blogs/update_blog.html")
         # Checking that the blog has not changed
