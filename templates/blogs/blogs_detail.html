@@ -3,8 +3,9 @@
 {% block title %}Blogzz | {{ blog.blog_title }}{% endblock title %}
 
 {% block content %}
-    <div>
+    <main>
         <a href="{% url 'update_blog' blog.id %}">Update</a>
+        <a href="{% url 'delete_blog' blog.id %}">Delete</a>
         {% if blog.blog_thumbnail %}
             <img src="{{ blog.blog_thumbnail.url }}" alt="{{ blog.blog_title }}">
         {% endif %}
@@ -12,5 +13,5 @@
         <small>@{{ blog.author }} | {{ blog.blog_created|timesince }}</small>
         <p>{{ blog.blog_body.html|safe }}</p>
         <p style="color: blue;">{{ blog.blog_status }}</p>
-    </div>
+    </main>
 {% endblock content %}

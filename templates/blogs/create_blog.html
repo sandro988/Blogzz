@@ -1,6 +1,5 @@
 {% extends 'blogs/list_blog.html' %}
 {% load static %}
-
 {% block title %}Create blog{% endblock title %}   
 
 {% block css %}
@@ -20,12 +19,11 @@
 {% endblock HTMX %}
 
 {% block content %}
-
     <header>
         {% include 'blogs/partials/navbar.html' %}
     </header>
 
-    <main class="prevent-propagation-on-search create-update-page-main">
+    <main class="create-update-page-main">
         <div class="create-update-form-container">
             {% include 'blogs/partials/create_update_decorative_header_element.html' %}
 
@@ -38,7 +36,6 @@
                     <input type="submit" value="Move to drafts" name="Move to drafts" class="create-update-page-btn2">
                 </div>
             </form>
-            
         </div>
         <!-- This overlay will be activated when user clicks search field -->
         <div class="search-overlay"></div>

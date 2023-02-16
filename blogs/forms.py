@@ -13,7 +13,7 @@ class BlogForm(forms.ModelForm):
             "blog_likes_count",
         ]
         widgets = {
-            'blog_title': forms.TextInput(attrs={'placeholder': 'Title'}),
-            'blog_category': forms.TextInput(attrs={'placeholder': "Category"}),
-            'blog_thumbnail': forms.FileInput()
+            "blog_title": forms.TextInput(attrs={"placeholder": "Title"}),
+            "blog_category": forms.TextInput(attrs={"placeholder": "Category"}),
+            "blog_thumbnail": forms.FileInput(),
         }

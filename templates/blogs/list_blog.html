@@ -14,8 +14,6 @@
     <!-- This page does not require preloading limelight font -->
 {% endblock PreloadFont %}
 
-
-
 {% block content %}
     <header>
         {% include 'blogs/partials/navbar.html' %}
@@ -51,8 +49,8 @@
 {% endblock content %} 
 
 {% block js %}
-<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>  
 <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>  
 <script src="{% static 'js/blogs_js/list_blog.js' %}" type="text/javascript">
     // HTMX
     document.body.addEventListener("htmx:configRequest", (e) => {

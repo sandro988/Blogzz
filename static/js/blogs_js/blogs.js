@@ -1,12 +1,3 @@
-// const blogsContainer = document.querySelector(".blogs-container");
-// const infiniteScrollUrl = "/home/?page=";
-// let masonryBlogsLoader = document.querySelector(".masonry-blog-loader");
-// let loadingIndicator = document.querySelector(
-//     ".masonry-blog-loader-infinite-scroll"
-// );
-// let masonry;
-// let blogThumbnailImages = document.querySelectorAll(".blog-thumbnail-img");
-// let masonryItems = document.querySelectorAll(".masonry-item");
 let searchField = document.querySelector(".search-field");
 let searchCancelBtn = document.querySelector(".reset-search");
 let searchClearBtn = document.querySelector(".clear-search");
