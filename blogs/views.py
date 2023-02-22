@@ -84,6 +84,12 @@ class BlogsDetailView(LoginRequiredMixin, DetailView):
     template_name = "blogs/blogs_detail.html"
     login_url = "account_login"
 
+    def get_context_data(self, **kwargs):
+        context = super(BlogsDetailView, self).get_context_data(**kwargs)
+        context["categories"] = Category.objects.all()[:10]
+        context["popular_blogs"] = Blog.get_popular_blogs()
+        return context
+
 
 class CreateBlogView(LoginRequiredMixin, CreateView):
     """
