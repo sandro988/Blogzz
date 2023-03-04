@@ -17,27 +17,66 @@
     </header>
 
     <main class="blog-detail-container">
-        <div class="blog-detail-header">
-            <h1>{{ blog.blog_title }}</h1>
-            <div>
-                <a href="/" class="blog-author-info">
-                    <img 
-                    class="blog-author-img skeleton-placeholder"
-                    src="{{ request.user.get_profile_picture }}" 
-                    alt="{{ request.user }}'s profile image">
-                    <p>@{{ blog.author }}</p>
-                </a>
+        <div class="blog-detail">
+            <div class="blog-detail-header">
+                <h1>{{ blog.blog_title }}</h1>
+                <div>
+                    <a href="/" class="blog-author-info">
+                        <img 
+                        class="blog-author-img skeleton-placeholder"
+                        src="{{ request.user.get_profile_picture }}" 
+                        alt="{{ request.user }}'s profile image">
+                        <p>@{{ blog.author }}</p>
+                    </a>
+                </div>
+                <small>Published {{ blog.blog_created|timesince }} ago</small>
             </div>
-            <small>Published {{ blog.blog_created|timesince }} ago</small>
+            
+            <div class="blog-detail-main">
+                <div class="blog-detail-body">
+                    {{ blog.blog_body.html | safe}}
+                </div>
+            </div>
+            
+            <!-- This overlay will be activated when user clicks search field -->
+            <div class="search-overlay"></div>
         </div>
 
-        <div class="blog-detail-main">
-            <div class="blog-detail-body">
-                {{ blog.blog_body.html | safe}}
+        <aside class="container-with-suggestions">
+            <div class="popular-blogs">
+                <h3 class="aside-popular-blogs-h3">Popular blogs on blogzz</h3>
+                {% for blog in popular_blogs %}
+                    {% if forloop.counter <= 3 %}
+                        <a class="aside-popular-blog" href="{{ blog.get_absolute_url }}">
+                            <div class="popular-blog-header">
+                                <img class="skeleton-placeholder" src="{{ blog.author.get_profile_picture }}" alt="{{ blog.author }}'s profile picture">
+                                <p>{{ blog.author }}</p>    
+                            </div>
+                            
+                            <div class="popular-blog-body">
+                                <p>{{ blog.blog_title }}</p>
+                            </div>
+                        </a>
+                    {% endif %}
+                {% empty %}
+                    <h3 class="popular-blogs-empty-header">No blogs to suggest yet.</h3>
+                {% endfor %}
             </div>
-        </div>
-        <!-- This overlay will be activated when user clicks search field -->
-        <div class="search-overlay"></div>
+            
+            <div class="aside-featured-topics-container">
+                <h3 class="aside-popular-blogs-h3">Featured topics on blogzz</h3>
+                <div class="aside-featured-topics">
+                    {% for category in categories %}
+                        <a href="{% url 'home' %}?category={{ category }}" class="featured-category"">
+                            <p class="topic-name"">{{ category }}</p>
+                            <div class="category-decorative-circle category-decorative-circle-{{ forloop.counter }}"></div>
+                        </a>
+                    {% empty %}
+                        <h3 class="featured-categories-empty-header">No categories to suggest yet.</h3>
+                    {% endfor %}
+                </div>
+            </div>
+        </aside>
     </main>
 
     <footer class="blogs-page-footer">

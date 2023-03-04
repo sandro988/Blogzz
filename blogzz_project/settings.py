@@ -201,27 +201,31 @@ PAGINATION_NUMBER = 30
 # Quill editor configuration
 
 QUILL_CONFIGS = {
-    'default':{
-        'theme': 'snow',
-        'modules': {
-            'syntax': True,
-            'toolbar': [
+    "default": {
+        "theme": "snow",
+        "modules": {
+            "syntax": True,
+            "toolbar": [
                 [
-                    {'font': []},
-                    {'header': [1, 2, 3, 4, 5, 6, False]},
+                    {"font": []},
+                    {"header": [1, 2, 3, 4, 5, 6, False]},
                 ],
                 [
-                    'bold', 'italic', 'underline', 'strike', 'blockquote',
-                    {'color': []},
-                    {'background': []},
+                    "bold",
+                    "italic",
+                    "underline",
+                    "strike",
+                    "blockquote",
+                    {"color": []},
+                    {"background": []},
                 ],
                 [
-                    {'align': []},
-                    { 'list': 'ordered'}, 
-                    { 'list': 'bullet' },
+                    {"align": []},
+                    {"list": "ordered"},
+                    {"list": "bullet"},
                 ],
-                ['code-block', 'link', 'image'],
-            ]
-        }
+                ["code-block", "link", "image"],
+            ],
+        },
     }
 }
