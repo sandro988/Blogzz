@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     # Local
     "accounts.apps.AccountsConfig",
     "blogs.apps.BlogsConfig",
+    "comments.apps.CommentsConfig",
     "core.apps.CoreConfig",
     # django_cleanup
     "django_cleanup.apps.CleanupConfig",
