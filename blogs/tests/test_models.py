@@ -42,7 +42,6 @@ class CategoryModelTests(TestCase):
 
 
 class BlogModelTests(SetUpDataForBlogAndCommentModels):
-    
     def test_blog_model(self):
         self.assertEqual(Blog.objects.count(), 1)
         self.assertEqual(Blog.objects.first().blog_title, "Test blog")

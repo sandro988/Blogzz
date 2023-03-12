@@ -1,0 +1,14 @@
+<form
+    class="comment-form"
+    method="POST"
+    hx-post="{% url 'create_comment' blog.id %}"
+    hx-target="#comment-section"
+    hx-swap="innerHTML"
+>
+    {% csrf_token %} {{ form.as_p }}
+    <button type="submit" name="comment-submit-btn" class="comment-submit-btn">
+        Comment
+    </button>
+</form>
+
+

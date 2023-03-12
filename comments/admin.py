@@ -9,6 +9,7 @@ class CommentInline(admin.TabularInline):
 
 class CommentAdmin(admin.ModelAdmin):
     list_display = [
+        "id",
         "blog",
         "comment_author",
         "short_comment_body",

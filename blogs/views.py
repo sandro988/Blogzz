@@ -9,6 +9,7 @@ from django.views.generic import (
 )
 from .models import Blog, Category
 from .forms import BlogForm
+from comments.forms import CommentForm
 from django.urls import reverse_lazy
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
@@ -84,10 +85,16 @@ class BlogsDetailView(LoginRequiredMixin, DetailView):
     template_name = "blogs/blogs_detail.html"
     login_url = "account_login"
 
+    def get_template_names(self):
+        if self.request.htmx:
+            return "comments/list_comments.html"
+        return "blogs/blogs_detail.html"
+
     def get_context_data(self, **kwargs):
         context = super(BlogsDetailView, self).get_context_data(**kwargs)
         context["categories"] = Category.objects.all()[:10]
         context["popular_blogs"] = Blog.get_popular_blogs()
+        context["form"] = CommentForm()
         return context
 
 

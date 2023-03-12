@@ -1,0 +1,8 @@
+<div class="reply" style="margin-left: 5px; border-left: 1px solid black; padding: 10px;">
+    
+    <p id="comment-{{ comment.id }}" class="comment-{{ comment.id }}">{{ comment.comment_body }} | <a href="#">Edit</a> &bull; <a href="#">Delete</a></p>
+    
+    {% for comment in comment.replies.all %}
+        {% include "comments/comment_recursive.html" with comment=comment%}
+    {% endfor %}
+</div>

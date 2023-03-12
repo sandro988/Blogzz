@@ -1,4 +1,6 @@
+import uuid
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 from django.db import models
 from blogs.models import Blog
 
@@ -6,6 +8,7 @@ from blogs.models import Blog
 
 
 class Comment(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name="comments")
     comment_author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     comment_body = models.TextField()
@@ -24,6 +27,9 @@ class Comment(models.Model):
 
     def __str__(self) -> str:
         return self.comment_body[:50]
+
+    def get_absolute_url(self):
+        return reverse("blog_detail", kwargs={"pk": self.blog.id})
 
     def get_replies(self):
         return Comment.objects.filter(comment_parent=self).order_by("comment_created")
