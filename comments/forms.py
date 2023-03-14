@@ -2,7 +2,17 @@ from django import forms
 from .models import Comment
 
 
-class CommentForm(forms.ModelForm):
+class CommentCreationForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        exclude = [
+            "blog",
+            "comment_author",
+            "comment_parent",
+        ]
+
+
+class CommentUpdateForm(CommentCreationForm):
     class Meta:
         model = Comment
         exclude = [

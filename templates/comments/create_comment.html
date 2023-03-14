@@ -5,7 +5,7 @@
     hx-target="#comment-section"
     hx-swap="innerHTML"
 >
-    {% csrf_token %} {{ form.as_p }}
+    {% csrf_token %} {{ create_page_form.as_p }}
     <button type="submit" name="comment-submit-btn" class="comment-submit-btn">
         Comment
     </button>

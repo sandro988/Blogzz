@@ -1,6 +1,31 @@
 <div class="reply" style="margin-left: 5px; border-left: 1px solid black; padding: 10px;">
-    
-    <p id="comment-{{ comment.id }}" class="comment-{{ comment.id }}">{{ comment.comment_body }} | <a href="#">Edit</a> &bull; <a href="#">Delete</a></p>
+    <div id="comment-div-{{ comment.id }}">
+
+        <!-- Edit and delete buttons that will be seen only be the comment authors.-->
+        {% if request.user == comment.comment_author %}
+            <button 
+            hx-get="{% url 'update_comment' blog.id comment.id %}"
+            hx-target="#comment-div-{{ comment.id }}"
+            hx-swap="innerHTML">
+            Edit
+            </button> &bull; 
+            <button href="#">Delete</button>
+        {% endif %}
+
+        <!-- Body of the comment -->
+        <p id="comment-{{ comment.id }}" class="comment-{{ comment.id }}">
+            {{ comment.comment_body }}
+        </p>
+        {{ comment.id }}
+
+        <!-- 
+            Including the form for updating the individual comment, this will 
+            be used if the users manually enters the url for updating the comment.
+        -->
+        {% if comment == comment_to_be_updated %}
+            {% include 'comments/update_comment.html' %}
+        {% endif %}
+    </div>
     
     {% for comment in comment.replies.all %}
         {% include "comments/comment_recursive.html" with comment=comment%}
