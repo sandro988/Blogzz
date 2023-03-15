@@ -1,0 +1,18 @@
+<div class="upvotes-div">
+    <form method="POST" class="upvotes-form" id="upvote-form-{{ comment.id }}">
+        {% csrf_token %}
+        <button
+            aria-label="upvote-button"
+            class="upvote-button {% if request.user in comment.comment_upvotes.all %}upvote-active{% endif %}"
+            hx-post="{% url 'upvote_comment' blog.id comment.id %}"
+            hx-target="#upvote-form-{{ comment.id }}"
+            hx-swap="innerHTML"
+        >
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M231.39,123.06A8,8,0,0,1,224,128H184v80a16,16,0,0,1-16,16H88a16,16,0,0,1-16-16V128H32a8,8,0,0,1-5.66-13.66l96-96a8,8,0,0,1,11.32,0l96,96A8,8,0,0,1,231.39,123.06Z"></path></svg>
+        </button>
+
+        <span id="upvote_count-{{ comment.id }}" class="upvotes-count"
+            >{{ comment.comment_upvotes_count }}</span
+        >
+    </form>
+</div>

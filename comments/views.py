@@ -1,8 +1,9 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
+from django.views import View
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse_lazy
 from blogs.models import Blog, Category
 from .models import Comment
@@ -118,3 +119,38 @@ class DeleteCommentView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         object = self.get_object()
         return object.comment_author == self.request.user
+
+
+class UpvoteCommentView(LoginRequiredMixin, View):
+    template_name = "comments/upvote_comment.html"
+
+    def post(self, request, *args, **kwargs):
+        blog_pk = kwargs["blog_pk"]
+        comment_pk = kwargs["comment_pk"]
+        user = request.user
+        comment = get_object_or_404(Comment, pk=comment_pk, blog_id=blog_pk)
+
+        if user in comment.comment_upvotes.all():
+            comment.comment_upvotes.remove(user)
+            comment.comment_upvotes_count -= 1
+        else:
+            comment.comment_upvotes.add(user)
+            comment.comment_upvotes_count += 1
+
+        comment.save()
+
+        context = self.get_context_data(**kwargs)
+        return render(request, self.template_name, context=context)
+
+    def get(self, request, *args, **kwargs):
+        return redirect("blog_detail", pk=kwargs["blog_pk"])
+
+    def get_context_data(self, **kwargs):
+        context = {}
+        comment_pk = kwargs["comment_pk"]
+        blog_pk = kwargs["blog_pk"]
+        comment = get_object_or_404(Comment, pk=comment_pk, blog_id=blog_pk)
+        context["comment"] = comment
+        context["blog"] = comment.blog
+        context["upvote_count"] = comment.comment_upvotes_count
+        return context

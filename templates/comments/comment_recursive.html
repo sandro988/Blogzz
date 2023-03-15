@@ -24,6 +24,7 @@
         <p id="comment-{{ comment.id }}" class="comment-{{ comment.id }}">
             {{ comment.comment_body }}
         </p>
+        {% include "comments/upvote_comment.html" %}
         {{ comment.id }}
 
         <!-- 

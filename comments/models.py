@@ -21,6 +21,10 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
         related_name="replies",
     )
+    comment_upvotes = models.ManyToManyField(
+        get_user_model(), related_name="upvote", default=None, blank=True
+    )
+    comment_upvotes_count = models.IntegerField(default="0")
 
     class Meta:
         ordering = ("-comment_created",)

@@ -208,10 +208,63 @@ class DeleteCommentViewFormTests(CommentTestsData, TestCase):
             "delete_comment",
             kwargs={"blog_pk": self.blog.pk, "comment_pk": self.comment.pk},
         )
-        
+
         response = self.client.post(comment_delete_page_url)
         self.assertEqual(response.status_code, 403)
         self.assertEqual(Comment.objects.count(), 1)
         self.assertEqual(
             Comment.objects.last().comment_body, "First comment on 'Test blog'"
         )
+
+
+class UpvoteCommentViewFormTests(CommentTestsData, TestCase):
+    def test_upvote_functionality(self):
+        self.client.login(email="test_user@email.com", password="test_user_password")
+
+        # User upvotes the comment
+        response_for_upvote = self.client.post(
+            reverse(
+                "upvote_comment",
+                kwargs={"blog_pk": self.blog.pk, "comment_pk": self.comment.pk},
+            )
+        )
+
+        self.assertEqual(response_for_upvote.status_code, 200)
+        self.assertEqual(Comment.objects.last().comment_upvotes_count, 1)
+
+        # User clicks the upvote button again which results in downvote
+        response_for_downvote = self.client.post(
+            reverse(
+                "upvote_comment",
+                kwargs={"blog_pk": self.blog.pk, "comment_pk": self.comment.pk},
+            )
+        )
+        self.assertEqual(response_for_downvote.status_code, 200)
+        self.assertEqual(Comment.objects.last().comment_upvotes_count, 0)
+
+        # User sends a GET request instead of a POST
+        response = self.client.get(
+            reverse(
+                "upvote_comment",
+                kwargs={"blog_pk": self.blog.pk, "comment_pk": self.comment.pk},
+            )
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(
+            response, reverse("blog_detail", kwargs={"pk": self.blog.pk})
+        )
+
+    def test_upvote_functionality_for_logged_out_user(self):
+        response = self.client.post(
+            reverse(
+                "upvote_comment",
+                kwargs={"blog_pk": self.blog.pk, "comment_pk": self.comment.pk},
+            )
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(
+            response,
+            f"{reverse('account_login')}?next={reverse('upvote_comment', kwargs={'blog_pk': self.blog.pk, 'comment_pk': self.comment.pk})}",
+        )
+        self.assertEqual(Comment.objects.last().comment_upvotes_count, 0)
