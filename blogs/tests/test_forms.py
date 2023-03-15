@@ -1,3 +1,4 @@
+import uuid
 from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 from django.urls import reverse
@@ -210,7 +211,7 @@ class UpdateBlogViewFormTests(TestsData, TestCase):
         )
         pk_invalid = self.client.post("update_blog", kwargs={"pk": "123456"})
         pk_does_not_exist = self.client.post(
-            "update_blog", kwargs={"pk": "00000000-0000-0000-0000-000000000000/"}
+            "update_blog", kwargs={"pk": str(uuid.uuid4())}
         )
 
         self.assertEqual(response.status_code, 302)
@@ -394,7 +395,7 @@ class DeleteBlogViewFormTests(TestsData, TestCase):
         )
         pk_invalid = self.client.post("delete_blog", kwargs={"pk": "123456"})
         pk_does_not_exist = self.client.post(
-            "delete_blog", kwargs={"pk": "00000000-0000-0000-0000-000000000000/"}
+            "delete_blog", kwargs={"pk": str(uuid.uuid4())}
         )
 
         self.assertEqual(response.status_code, 302)
@@ -459,7 +460,7 @@ class LikeBlogViewFormTests(TestsData, TestCase):
         # User likes a blog that does not exist or the primary key is invalid
         pk_invalid = self.client.post("like_blog", kwargs={"pk": "123456"})
         pk_does_not_exist = self.client.post(
-            "like_blog", kwargs={"pk": "00000000-0000-0000-0000-000000000000/"}
+            "like_blog", kwargs={"pk": str(uuid.uuid4())}
         )
 
         self.assertEqual(pk_invalid.status_code, 404)

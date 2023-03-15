@@ -1,15 +1,23 @@
 <div class="reply" style="margin-left: 5px; border-left: 1px solid black; padding: 10px;">
+    <div class="comment-delete-modal-div" id="comment-delete-modal-div"></div>
+    
     <div id="comment-div-{{ comment.id }}">
 
-        <!-- Edit and delete buttons that will be seen only be the comment authors.-->
+        <!-- Edit and delete buttons that will be seen only by the comment authors.-->
         {% if request.user == comment.comment_author %}
             <button 
-            hx-get="{% url 'update_comment' blog.id comment.id %}"
-            hx-target="#comment-div-{{ comment.id }}"
-            hx-swap="innerHTML">
-            Edit
-            </button> &bull; 
-            <button href="#">Delete</button>
+                hx-get="{% url 'update_comment' blog.id comment.id %}"
+                hx-target="#comment-div-{{ comment.id }}"
+                hx-swap="innerHTML">
+                Edit
+            </button> 
+            &bull; 
+            <button 
+                hx-get="{% url 'delete_comment' blog.id comment.id %}"
+                hx-target="#comment-delete-modal-div"
+                hx-swap="afterbegin">
+                Delete
+            </button>
         {% endif %}
 
         <!-- Body of the comment -->
@@ -19,11 +27,13 @@
         {{ comment.id }}
 
         <!-- 
-            Including the form for updating the individual comment, this will 
-            be used if the users manually enters the url for updating the comment.
+            Including the form for updating/deleting the individual comment, this will 
+            be used if the users manually enters the url for updating/deleting the comment.
         -->
         {% if comment == comment_to_be_updated %}
             {% include 'comments/update_comment.html' %}
+        {% elif comment == comment_to_be_deleted %} 
+            {% include 'comments/delete_comment.html' %}
         {% endif %}
     </div>
     

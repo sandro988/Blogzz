@@ -1,0 +1,29 @@
+<form 
+    id="comment-delete-form"
+    class="comment-delete-form"
+    method="POST"
+    hx-post="{% url 'delete_comment' blog.id comment.id %}"
+    hx-target="#comment-section"
+    hx-swap="innerHTML"
+    hx-trigger="submit"
+    >
+
+    {% csrf_token %}
+    <p>Are you sure you want to delete <span>"{{ comment }}..."?</span></p>
+    <div class="delete-page-submit-btn-div">
+        <button type="submit" class="delete-comment-btn">Delete</button>
+        
+        <!-- For canceling the deletion of comment -->
+        <button 
+            type="reset" 
+            hx-get="{% url 'blog_detail' blog.id %}"
+            hx-target="#comment-delete-form"
+            hx-swap="delete"
+            name="comment-delete-cancel-btn"
+            class="comment-delete-cancel-btn"
+            value="Canceled deletion"
+        >
+        Cancel
+        </button>
+    </div>
+</form>

@@ -1,8 +1,43 @@
+import uuid
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from blogs.tests.test_forms import TestsData
 from comments.models import Comment
+
+
+class CommentTestsData(TestsData):
+    """
+    This class inherits everything from TestsData, as it is still useful in comment tests,
+    Additionally, we are creating the data for testing the update and delete forms.
+    """
+
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+
+        # Creating non author user
+        cls.User = get_user_model()
+        cls.User.objects.create_user(
+            email="not_an_author_user@email.com",
+            username="not_an_author_user",
+            password="not_an_author_user_password",
+        )
+
+        # Creating comment
+        cls.comment = Comment.objects.create(
+            blog=cls.blog,
+            comment_author=cls.user,
+            comment_body="First comment on 'Test blog'",
+        )
+
+        cls.form_data = {
+            "comment_body": "Updated comment",
+        }
+
+        cls.form_data_from_non_author_user = {
+            "comment_body": "I am not author of this comment",
+        }
 
 
 class CreateCommentViewFormTests(TestsData, TestCase):
@@ -44,34 +79,7 @@ class CreateCommentViewFormTests(TestsData, TestCase):
         )
 
 
-class UpdateCommentViewFormTests(TestsData, TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        super().setUpTestData()
-
-        # Creating non author user
-        cls.User = get_user_model()
-        cls.User.objects.create_user(
-            email="not_an_author_user@email.com",
-            username="not_an_author_user",
-            password="not_an_author_user_password",
-        )
-
-        # Creating comment
-        cls.comment = Comment.objects.create(
-            blog=cls.blog,
-            comment_author=cls.user,
-            comment_body="First comment on 'Test blog'",
-        )
-
-        cls.form_data = {
-            "comment_body": "Updated comment",
-        }
-
-        cls.form_data_from_non_author_user = {
-            "comment_body": "I am not author of this comment",
-        }
-
+class UpdateCommentViewFormTests(CommentTestsData, TestCase):
     def test_update_comment_with_form_data(self):
         self.client.login(email="test_user@email.com", password="test_user_password")
         response = self.client.post(
@@ -130,4 +138,80 @@ class UpdateCommentViewFormTests(TestsData, TestCase):
         self.assertRedirects(
             response,
             f"{reverse('account_login')}?next={reverse('update_comment', kwargs={'blog_pk': self.blog.pk, 'comment_pk': self.comment.pk})}",
+        )
+
+
+class DeleteCommentViewFormTests(CommentTestsData, TestCase):
+    def test_delete_comment_form(self):
+        self.client.login(email="test_user@email.com", password="test_user_password")
+
+        # Deleting the comment that exists
+        response = self.client.post(
+            reverse(
+                "delete_comment",
+                kwargs={"blog_pk": self.blog.pk, "comment_pk": self.comment.pk},
+            )
+        )
+
+        # Deleting the comment that does not exist
+        comment_does_not_exist_response = self.client.post(
+            reverse(
+                "delete_comment",
+                kwargs={
+                    "blog_pk": self.blog.pk,
+                    "comment_pk": str(uuid.uuid4()),
+                },
+            )
+        )
+
+        # deleting the comment of a blog that does not exist
+        blog_does_not_exist_response = self.client.post(
+            reverse(
+                "delete_comment",
+                kwargs={
+                    "blog_pk": str(uuid.uuid4()),
+                    "comment_pk": self.comment.pk,
+                },
+            )
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(
+            response, reverse("blog_detail", kwargs={"pk": self.blog.pk})
+        )
+        self.assertEqual(
+            Comment.objects.count(), 0
+        )  # Checking that comment has been deleted
+        self.assertEqual(comment_does_not_exist_response.status_code, 404)
+        self.assertEqual(blog_does_not_exist_response.status_code, 404)
+
+    def test_delete_comment_form_for_logged_out_user(self):
+        comment_delete_page_url = reverse(
+            "delete_comment",
+            kwargs={"blog_pk": self.blog.pk, "comment_pk": self.comment.pk},
+        )
+
+        response = self.client.post(comment_delete_page_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(
+            Comment.objects.last().comment_body, "First comment on 'Test blog'"
+        )
+        self.assertRedirects(
+            response, f"{reverse('account_login')}?next={comment_delete_page_url}"
+        )
+
+    def test_delete_comment_form_when_user_is_not_author(self):
+        self.client.login(
+            email="not_an_author_user@email.com", password="not_an_author_user_password"
+        )
+        comment_delete_page_url = reverse(
+            "delete_comment",
+            kwargs={"blog_pk": self.blog.pk, "comment_pk": self.comment.pk},
+        )
+        
+        response = self.client.post(comment_delete_page_url)
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(Comment.objects.count(), 1)
+        self.assertEqual(
+            Comment.objects.last().comment_body, "First comment on 'Test blog'"
         )

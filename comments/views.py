@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
@@ -81,6 +81,38 @@ class UpdateCommentView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def get_template_names(self):
         if self.request.htmx:
             return "comments/update_comment.html"
+        return "blogs/blogs_detail.html"
+
+    def test_func(self):
+        object = self.get_object()
+        return object.comment_author == self.request.user
+
+
+class DeleteCommentView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+
+    model = Blog
+    template_name = "comments/delete_comment.html"
+    login_url = "account_login"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["blog"] = self.get_object().blog
+        context["comment_to_be_deleted"] = self.get_object()
+        context["create_page_form"] = CommentCreationForm()
+        return context
+
+    def get_object(self, queryset=None):
+        blog_pk = self.kwargs["blog_pk"]
+        comment_pk = self.kwargs["comment_pk"]
+        comment = get_object_or_404(Comment, pk=comment_pk, blog_id=blog_pk)
+        return comment
+
+    def get_success_url(self):
+        return reverse_lazy("blog_detail", kwargs={"pk": self.kwargs["blog_pk"]})
+
+    def get_template_names(self):
+        if self.request.htmx:
+            return "comments/delete_comment.html"
         return "blogs/blogs_detail.html"
 
     def test_func(self):

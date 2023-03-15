@@ -1,5 +1,5 @@
 <form 
-    class="comment-form"
+    class="comment-update-form"
     method="POST"
     hx-post="{% url 'update_comment' blog.id comment.id %}"
     hx-target="#comment-section"
@@ -12,12 +12,13 @@
     <button type="submit" name="comment-update-btn" class="comment-update-btn">
         Submit
     </button>
-    <!--For canceling the update on comment-->
+    <!--For canceling the update on comment -->
     <button 
         type="reset"
         hx-get="{% url 'blog_detail' blog.id %}"
         name="comment-update-cancel-btn" 
         class="comemnt-update-cancel-btn"
+        value="Canceled update"
     >
     Cancel
     </button>
