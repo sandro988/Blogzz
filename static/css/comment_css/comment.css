@@ -1,0 +1,13 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.upvote-active path {
+    fill: #6a9bee;
+}
+
+.downvote-active path {
+    fill: #6a9bee;
+}

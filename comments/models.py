@@ -25,6 +25,10 @@ class Comment(models.Model):
         get_user_model(), related_name="upvote", default=None, blank=True
     )
     comment_upvotes_count = models.IntegerField(default="0")
+    # Did not implement 'comment_downvotes_count' because i only need to keep track of the number of upvotes
+    comment_downvotes = models.ManyToManyField(
+        get_user_model(), related_name="downvote", default=None, blank=True
+    )
 
     class Meta:
         ordering = ("-comment_created",)

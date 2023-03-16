@@ -11,6 +11,7 @@ class CommentCreationForm(forms.ModelForm):
             "comment_parent",
             "comment_upvotes",
             "comment_upvotes_count",
+            "comment_downvotes",
         ]
 
 
@@ -23,4 +24,5 @@ class CommentUpdateForm(CommentCreationForm):
             "comment_parent",
             "comment_upvotes",
             "comment_upvotes_count",
+            "comment_downvotes",
         ]
