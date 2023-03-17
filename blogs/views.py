@@ -9,7 +9,7 @@ from django.views.generic import (
 )
 from .models import Blog, Category
 from .forms import BlogForm
-from comments.forms import CommentCreationForm
+from comments.forms import CommentForm
 from django.urls import reverse_lazy
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
@@ -92,7 +92,7 @@ class BlogsDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(BlogsDetailView, self).get_context_data(**kwargs)
-        context["create_page_form"] = CommentCreationForm()
+        context["create_page_form"] = CommentForm()
         return context
 
 

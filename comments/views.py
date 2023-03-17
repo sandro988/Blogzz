@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse_lazy
 from blogs.models import Blog, Category
 from .models import Comment
-from .forms import CommentCreationForm, CommentUpdateForm
+from .forms import CommentForm
 
 
 class CommentDetailView(LoginRequiredMixin, DetailView):
@@ -24,7 +24,7 @@ class CommentDetailView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context["categories"] = Category.objects.all()[:10]
         context["popular_blogs"] = Blog.get_popular_blogs()
-        context["create_page_form"] = CommentCreationForm()
+        context["create_page_form"] = CommentForm()
         context["blog"] = self.blog
         return context
 
@@ -35,7 +35,7 @@ class CreateCommentView(LoginRequiredMixin, CreateView):
     """
 
     model = Comment
-    form_class = CommentCreationForm
+    form_class = CommentForm
     template_name = "blogs/blogs_detail.html"
     login_url = "account_login"
 
@@ -81,7 +81,7 @@ class CreateCommentView(LoginRequiredMixin, CreateView):
 
 class UpdateCommentView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Comment
-    form_class = CommentUpdateForm
+    form_class = CommentForm
     template_name = "blogs/blogs_detail.html"
     login_url = "account_login"
 
@@ -95,7 +95,7 @@ class UpdateCommentView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         context["blog"] = self.get_object().blog
         context["comment_to_be_updated"] = self.get_object()
         context["update_page_form"] = self.get_form()
-        context["create_page_form"] = CommentCreationForm()
+        context["create_page_form"] = CommentForm()
         return context
 
     def get_object(self, queryset=None):
@@ -127,7 +127,7 @@ class DeleteCommentView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         context = super().get_context_data(**kwargs)
         context["blog"] = self.get_object().blog
         context["comment_to_be_deleted"] = self.get_object()
-        context["create_page_form"] = CommentCreationForm()
+        context["create_page_form"] = CommentForm()
         return context
 
     def get_object(self, queryset=None):
