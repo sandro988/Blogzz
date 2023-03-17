@@ -25,6 +25,12 @@
             {{ comment.comment_body }}
         </p>
         {% include "comments/upvote_downvote_comment.html" %}
+        <button 
+            hx-get="{% url 'create_reply' blog.id comment.id %}"
+            hx-target="#comment-div-{{ comment.id }}"
+            hx-swap="beforeend">
+            Reply
+        </button> 
         {{ comment.id }}
 
         <!-- 

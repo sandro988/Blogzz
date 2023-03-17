@@ -15,9 +15,14 @@ urlpatterns = [
         name="comment_detail",
     ),
     path(
-        "comment/create_comment/<uuid:pk>/",  # here pk is the primary key of a blog.
+        "comment/create_comment/<uuid:blog_pk>/",
         CreateCommentView.as_view(),
         name="create_comment",
+    ),
+    path(
+        "comment/reply/<uuid:blog_pk>/<uuid:comment_pk>/",
+        CreateCommentView.as_view(),
+        name="create_reply",
     ),
     path(
         "comment/update_comment/<uuid:blog_pk>/<uuid:comment_pk>/",

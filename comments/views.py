@@ -30,25 +30,53 @@ class CommentDetailView(LoginRequiredMixin, DetailView):
 
 
 class CreateCommentView(LoginRequiredMixin, CreateView):
+    """
+    View implemented for creating new comments or replies to already existing comments.
+    """
+
     model = Comment
     form_class = CommentCreationForm
     template_name = "blogs/blogs_detail.html"
     login_url = "account_login"
 
+    def get_object(self, queryset=None):
+        # If the request will come from a 'reply_comment' then we get the parent comment
+        # and use it in form_valid as a parent of reply, but if the request comes from a
+        # 'create_comment' then we set the parent comment to None.
+
+        blog = get_object_or_404(Blog, pk=self.kwargs["blog_pk"])
+        result = {"blog": blog, "comment": None}
+        if self.kwargs.get("comment_pk"):
+            parent_comment = get_object_or_404(
+                Comment, pk=self.kwargs["comment_pk"], blog_id=self.kwargs["blog_pk"]
+            )
+            result["comment"] = parent_comment
+
+        return result
+
     def form_valid(self, form):
         form.instance.comment_author = self.request.user
-        form.instance.blog_id = self.kwargs["pk"]
+        form.instance.blog_id = self.kwargs["blog_pk"]
+        form.instance.comment_parent = self.get_object().get("comment")
 
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["blog"] = get_object_or_404(Blog, pk=self.kwargs["pk"])
+        context["blog"] = self.get_object().get("blog")
+        context["comment"] = self.get_object().get("comment")
         context["create_page_form"] = self.get_form()
+
         return context
 
     def get_success_url(self):
-        return reverse_lazy("blog_detail", kwargs={"pk": self.kwargs["pk"]})
+        return reverse_lazy("blog_detail", kwargs={"pk": self.kwargs["blog_pk"]})
+
+    def get_template_names(self):
+        if self.request.htmx:
+            return "comments/reply_to_comment.html"
+
+        return "blogs/blogs_detail.html"
 
 
 class UpdateCommentView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):

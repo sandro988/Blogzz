@@ -46,10 +46,12 @@ class CreateCommentViewFormTests(TestsData, TestCase):
         self.form_data = {
             "comment_body": "First comment",
         }
+        self.reply_form_data = {"comment_body": "Reply to first comment"}
 
     def test_create_comment_with_form_data(self):
         response = self.client.post(
-            reverse("create_comment", kwargs={"pk": self.blog.pk}), data=self.form_data
+            reverse("create_comment", kwargs={"blog_pk": self.blog.pk}),
+            data=self.form_data,
         )
 
         self.assertEqual(response.status_code, 302)
@@ -63,11 +65,57 @@ class CreateCommentViewFormTests(TestsData, TestCase):
         self.assertEqual(new_comment.comment_author.email, "test_user@email.com")
         self.assertIsNone(new_comment.comment_parent)
 
+    def test_create_reply_with_form_data(self):
+        # Creating parent comment
+        response_for_comment = self.client.post(
+            reverse("create_comment", kwargs={"blog_pk": self.blog.pk}),
+            data=self.form_data,
+        )
+        parent_comment = Comment.objects.last().pk
+        # Creating reply
+        response_for_reply = self.client.post(
+            reverse(
+                "create_reply",
+                kwargs={"blog_pk": self.blog.pk, "comment_pk": parent_comment},
+            ),
+            data=self.reply_form_data,
+        )
+
+        self.assertEqual(response_for_reply.status_code, 302)
+        self.assertRedirects(
+            response_for_reply, reverse("blog_detail", kwargs={"pk": self.blog.pk})
+        )
+        self.assertEqual(Comment.objects.count(), 2)
+        # Checking that reply's comment_parent was set correctly.
+        self.assertEqual(Comment.objects.first().comment_parent, Comment.objects.last())
+
+    def test_create_reply_with_invalid_parent_comment_pk(self):
+        # Trying to create a parent comment and a reply to it.
+        response_for_comment = self.client.post(
+            reverse("create_comment", kwargs={"blog_pk": self.blog.pk}),
+            data=self.form_data,
+        )
+        response_for_reply = self.client.post(
+            reverse(
+                "create_reply",
+                kwargs={"blog_pk": self.blog.pk, "comment_pk": str(uuid.uuid4())},
+            ),
+            data=self.reply_form_data,
+        )
+
+        self.assertEqual(response_for_reply.status_code, 404)
+        # Checking that the reply has not been created
+        self.assertEqual(Comment.objects.count(), 1)
+        self.assertNotEqual(
+            Comment.objects.last().comment_body, "Reply to first comment"
+        )
+
     def test_create_comment_with_logged_out_user(self):
         self.client.logout()
 
         response = self.client.post(
-            reverse("create_comment", kwargs={"pk": self.blog.pk}), data=self.form_data
+            reverse("create_comment", kwargs={"blog_pk": self.blog.pk}),
+            data=self.form_data,
         )
 
         self.assertEqual(response.status_code, 302)
@@ -75,7 +123,7 @@ class CreateCommentViewFormTests(TestsData, TestCase):
         self.assertEqual(Comment.objects.count(), 0)
         self.assertRedirects(
             response,
-            f"{reverse('account_login')}?next={reverse('create_comment', kwargs={'pk': self.blog.pk})}",
+            f"{reverse('account_login')}?next={reverse('create_comment', kwargs={'blog_pk': self.blog.pk})}",
         )
 
 

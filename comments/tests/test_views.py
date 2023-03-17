@@ -60,7 +60,18 @@ class CreateCommentViewTests(CommentTestsData, TestCase):
 
     def test_create_comment_view(self):
         response = self.client.get(
-            reverse("create_comment", kwargs={"pk": self.blog.pk})
+            reverse("create_comment", kwargs={"blog_pk": self.blog.pk})
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "blogs/blogs_detail.html")
+
+    def test_create_reply_view(self):
+        response = self.client.get(
+            reverse(
+                "create_reply",
+                kwargs={"blog_pk": self.blog.pk, "comment_pk": self.comment.pk},
+            )
         )
 
         self.assertEqual(response.status_code, 200)
@@ -70,13 +81,13 @@ class CreateCommentViewTests(CommentTestsData, TestCase):
         self.client.logout()
 
         response = self.client.get(
-            reverse("create_comment", kwargs={"pk": self.blog.pk})
+            reverse("create_comment", kwargs={"blog_pk": self.blog.pk})
         )
 
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(
             response,
-            f"{reverse('account_login')}?next={reverse('create_comment', kwargs={'pk': self.blog.pk})}",
+            f"{reverse('account_login')}?next={reverse('create_comment', kwargs={'blog_pk': self.blog.pk})}",
         )
 
 
