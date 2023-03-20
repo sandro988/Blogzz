@@ -2,24 +2,27 @@
     class="comment-update-form"
     method="POST"
     hx-post="{% url 'update_comment' blog.id comment.id %}"
-    hx-target="#comment-section"
+    hx-target="#comment-list"
     hx-swap="innerHTML"
     hx-trigger="submit">
 
     {% csrf_token %}
     {{ update_page_form.as_p }}
-    <!-- For updating the comment -->
-    <button type="submit" name="comment-update-btn" class="comment-update-btn">
-        Submit
-    </button>
-    <!--For canceling the update on comment -->
-    <button 
-        type="reset"
-        hx-get="{% url 'blog_detail' blog.id %}"
-        name="comment-update-cancel-btn" 
-        class="comemnt-update-cancel-btn"
-        value="Canceled update"
-    >
-    Cancel
-    </button>
+
+    <div class="comment-update-btns">
+        <!-- For updating the comment -->
+        <button type="submit" name="comment-update-btn" class="comment-update-btn">
+            Submit
+        </button>
+        <!--For canceling the update on comment -->
+        <button 
+            type="reset"
+            hx-get="{% url 'blog_detail' blog.id %}"
+            name="comment-update-cancel-btn" 
+            class="comemnt-update-cancel-btn"
+            value="Canceled update"
+        >
+        Cancel
+        </button>
+    </div>
 </form>

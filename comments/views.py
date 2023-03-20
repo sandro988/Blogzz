@@ -27,7 +27,7 @@ class CommentDetailView(LoginRequiredMixin, DetailView):
         context["create_page_form"] = CommentForm()
         context["blog"] = self.blog
         return context
-
+    
 
 class CreateCommentView(LoginRequiredMixin, CreateView):
     """

@@ -2,22 +2,26 @@
     class="comment-form comment-reply-form"
     method="POST"
     hx-post="{% url 'create_reply' blog.id comment.id %}"
-    hx-target="#comment-section"
+    hx-target="#comment-list"
     hx-swap="innerHTML"
 >
     {% csrf_token %} {{ form.as_p }}
-    <!-- For Replying to the comment -->
-    <button type="submit" name="reply-submit-btn" class="reply-submit-btn">
-        Reply
-    </button>
-    <!--For canceling the reply on comment -->
-    <button 
-        type="reset"
-        hx-get="{% url 'blog_detail' blog.id %}"
-        name="comment-reply-cancel-btn" 
-        class="comemnt-reply-cancel-btn"
-        value="Canceled reply"
-    >
-    Cancel
-    </button>
+
+    <div class="comment-reply-btns">
+
+        <!-- For Replying to the comment -->
+        <button type="submit" name="reply-submit-btn" class="reply-submit-btn">
+            Reply
+        </button>
+        <!--For canceling the reply on comment -->
+        <button 
+            type="reset"
+            hx-get="{% url 'blog_detail' blog.id %}"
+            name="comment-reply-cancel-btn" 
+            class="comemnt-reply-cancel-btn"
+            value="Canceled reply"
+        >
+            Cancel
+        </button>
+    </div>
 </form>
