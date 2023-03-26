@@ -1,0 +1,62 @@
+<div id="comment-div-{{ comment.id }}">
+    <div class="comment-header">
+        <div class="user-info">
+            <img
+                class="comment-author-image skeleton-placeholder"
+                src="{{ comment.comment_author.get_profile_picture }}"
+                loading="lazy"
+                alt="{{ comment.comment_author }}'s profile picture"
+            />
+            <p>{{ comment.comment_author }}<span class="comment-publish-time"> &bull; {{ comment.comment_created|timesince }} ago</span></p>
+        </div>
+
+        <!-- Edit and delete buttons that will be seen only by the comment authors.-->
+        <div class="comment-options-div prevent-propagation">
+            {% if request.user == comment.comment_author %}
+                <svg class="comment-options-div-trigger {{ comment.id }} trigger-{{ comment.id }} prevent-propagation" xmlns="http://www.w3.org/2000/svg" fill="#000000" viewBox="0 0 256 256"><path class="prevent-propagation" d="M156,128a28,28,0,1,1-28-28A28,28,0,0,1,156,128ZM128,76a28,28,0,1,0-28-28A28,28,0,0,0,128,76Zm0,104a28,28,0,1,0,28,28A28,28,0,0,0,128,180Z"></path></svg>
+                <div class="comment-options-div-buttons options-div-id-{{ comment.id }} prevent-propagation">
+                    <button 
+                        class="edit-comment-btn prevent-propagation"
+                        hx-get="{% url 'update_comment' blog.id comment.id %}"
+                        hx-target="#comment-div-{{ comment.id }}"
+                        hx-swap="innerHTML">
+                        Edit
+                    </button>  
+                    <button 
+                        class="delete-comment-btn prevent-propagation"
+                        hx-get="{% url 'delete_comment' blog.id comment.id %}"
+                        hx-target="#comment-delete-modal-div"
+                        hx-swap="afterbegin">
+                        Delete
+                    </button>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="comment-main">
+        <!-- Body of the comment -->
+        <p id="comment-{{ comment.id }}" class="comment-{{ comment.id }} comment-body">
+            {{ comment.comment_body }}
+        </p>
+    </div>
+    <div class="comment-footer">
+        {% include "comments/upvote_downvote_comment.html" %}
+        <button 
+            class="comment-reply-btn"
+            hx-get="{% url 'create_reply' blog.id comment.id %}"
+            hx-target="#comment-div-{{ comment.id }}"
+            hx-swap="beforeend">
+            Reply
+        </button> 
+    </div>
+
+    <!-- 
+        Including the form for updating/deleting the individual comment, this will 
+        be used if the users manually enters the url for updating/deleting the comment.
+    -->
+    {% if comment == comment_to_be_updated %}
+        {% include 'comments/update_comment.html' %}
+    {% elif comment == comment_to_be_deleted %} 
+        {% include 'comments/delete_comment.html' %}
+    {% endif %}
+</div>

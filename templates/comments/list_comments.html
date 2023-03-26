@@ -4,13 +4,28 @@
     <div class="comments-header">
         <h3>Comments</h3>
     </div>
-    {% for comment in blog.comments.all %}
-        {% if comment.comment_parent is None %}
-            <div class="comment">
-                {% include "comments/comment_recursive.html" with comment=comment %}
-            </div>
-        {% endif %}
-    {% empty %}
-        <h3>No comments for this blog yet.</h3>
-    {% endfor %}
+
+    
+    {% if continue_thread_comment %}
+        {% with depth=continue_thread_comment.comment_depth|add:5 %}
+            {% for comment in continue_thread_comment.get_replies %}
+                <div class="comment">
+                    {% include "comments/comment_recursive.html" with comment=comment depth=depth %}
+                </div>
+            {% endfor %}
+        {% endwith %}
+    {% else %}
+        {% for comment in blog.comments.all %}
+            {% if comment.comment_parent is None %}
+                {% with depth=comment.comment_depth|add:5 %}
+                    <div class="comment">
+                        {% include "comments/comment_recursive.html" with comment=comment depth=depth%}
+                    </div>
+                {% endwith %}
+            {% endif %}
+        {% empty %}
+            <h3>No comments for this blog yet.</h3>
+        {% endfor %}
+    {% endif %}
+
 </div>

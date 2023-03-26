@@ -4,8 +4,8 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import get_object_or_404, render, redirect
-from django.urls import reverse_lazy
-from blogs.models import Blog, Category
+from django.urls import reverse_lazy, reverse
+from blogs.models import Blog
 from .models import Comment
 from .forms import CommentForm
 
@@ -17,17 +17,16 @@ class CommentDetailView(LoginRequiredMixin, DetailView):
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         blog = self.object.blog
+
         url = blog.get_absolute_url() + f"#comment-{self.object.pk}"
         return HttpResponseRedirect(url)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["categories"] = Category.objects.all()[:10]
-        context["popular_blogs"] = Blog.get_popular_blogs()
         context["create_page_form"] = CommentForm()
         context["blog"] = self.blog
         return context
-    
+
 
 class CreateCommentView(LoginRequiredMixin, CreateView):
     """
@@ -210,3 +209,38 @@ class DownvoteCommentView(UpvoteCommentView):
 
         context = self.get_context_data(**kwargs)
         return render(request, self.template_name, context=context)
+
+
+class ContinueCommentThreadView(LoginRequiredMixin, DetailView):
+    """
+    This view is used to display the continuation of a comment thread when the depth of the replies exceeds 6.
+    Depth refers to the number of levels of replies to a comment.
+
+    Functionality:
+        - Fetches the comment with a depth greater than 6 using the 'comment_pk' and 'blog_pk' URL parameters.
+        - Passes the 'continue_thread_comment' object to the context, which is then used in the 'list_comments'
+        template to display only the replies to this comment.
+        - Renders the 'blogs/blogs_detail.html' template with the 'CommentForm' for creating new comments.
+
+    Example Usage:
+        - A comment has 10 levels of replies.
+        - The blog page displays the first 6 levels of replies and a 'Continue Thread' button.
+        - Clicking on the 'Continue Thread' button redirects the user to this view, which displays the remaining 4 levels of replies to that comment.
+    """
+
+    model = Comment
+    template_name = "blogs/blogs_detail.html"
+
+    def get_object(self, queryset=None):
+        continue_thread_comment = get_object_or_404(
+            Comment, pk=self.kwargs["comment_pk"], blog_id=self.kwargs["blog_pk"]
+        )
+
+        return continue_thread_comment
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["continue_thread_comment"] = self.get_object()
+        context["blog"] = self.get_object().blog
+        context["create_page_form"] = CommentForm()
+        return context

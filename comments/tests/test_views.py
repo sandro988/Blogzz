@@ -175,3 +175,71 @@ class DeleteCommentViewTests(CommentTestsData, TestCase):
 
         self.assertEqual(response.status_code, 403)
         self.assertTemplateNotUsed(response, "comments/delete_comment.html")
+
+
+class ContinueCommentThreadViewTests(CommentTestsData, TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+
+        # Creating ten nested replies for a comment
+        for nested_reply in range(10):
+            reply = Comment.objects.create(
+                blog=cls.blog,
+                comment_author=cls.user,
+                comment_body=f"reply {nested_reply + 1}",
+                comment_parent=Comment.objects.first(),
+            )
+
+    def test_blog_detail_view_contains_continue_thread_button(self):
+        self.client.login(email="test_user@email.com", password="test_user_password")
+        response = self.client.get(self.blog.get_absolute_url())
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "blogs/blogs_detail.html")
+        self.assertContains(response, "Continue Thread")
+
+        # Checking that the page contains comment with low depth and does not contain the comment that has depth more than 6.
+        self.assertNotContains(response, "reply 7")
+        self.assertContains(response, "reply 5")
+
+    def test_continue_comment_thread_view(self):
+        self.client.login(email="test_user@email.com", password="test_user_password")
+        continue_thread_comment = Comment.objects.get(comment_body="reply 6")
+        response = self.client.get(
+            reverse(
+                "continue_thread",
+                kwargs={
+                    "blog_pk": self.blog.pk,
+                    "comment_pk": continue_thread_comment.pk,
+                },
+            )
+        )
+
+        self.assertEqual(response.status_code, 200)
+        # This page should not contain the 'Continue Thread' button, because there are only 11 comments total and
+        # this page should contain 7th, 8th, 9th, 10th and 11nth comments, which means that the depth of the
+        # comments on this page is not higher than 6.
+        self.assertNotContains(response, "Continue Thread")
+        # Checking that this page does not contain the 'continue_thread_comment' that we created above.
+        self.assertNotContains(response, "reply 6")
+        # Checking that this page contains replies of 'continue_thread_comment'.
+        self.assertContains(response, "reply 7")
+
+    def test_continue_comment_thread_view_for_logged_out_user(self):
+        continue_thread_comment = Comment.objects.get(comment_body="reply 6")
+        response = self.client.get(
+            reverse(
+                "continue_thread",
+                kwargs={
+                    "blog_pk": self.blog.pk,
+                    "comment_pk": continue_thread_comment.pk,
+                },
+            )
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(
+            response,
+            f"{reverse('account_login')}?next={reverse('continue_thread', kwargs={'blog_pk': self.blog.pk, 'comment_pk': continue_thread_comment.pk,},)}",
+        )

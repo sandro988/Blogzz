@@ -21,6 +21,7 @@ class CommentModelTests(SetUpDataForBlogAndCommentModels):
         )
         self.assertEqual(str(self.comment), "First comment on 'Test blog'")
         self.assertTrue(Comment.objects.first().is_parent)
+        self.assertEqual(self.comment.comment_depth, 1)
 
     def test_comment_model_for_replies(self):
         # Creating reply for comment that we created above
@@ -33,6 +34,7 @@ class CommentModelTests(SetUpDataForBlogAndCommentModels):
 
         self.assertEqual(Comment.objects.count(), 2)
         self.assertEqual(str(reply), "First reply")
+        self.assertEqual(reply.comment_depth, 2)
         # Checking that the parent of this reply is the comment that we created in setUpTestData
         self.assertEqual(reply.comment_parent, self.comment)
         # Checking that the get_replies method of the Comment model functions correctly

@@ -4,8 +4,6 @@ from django.urls import reverse
 from django.db import models
 from blogs.models import Blog
 
-# Create your models here.
-
 
 class Comment(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
@@ -29,9 +27,16 @@ class Comment(models.Model):
     comment_downvotes = models.ManyToManyField(
         get_user_model(), related_name="downvote", default=None, blank=True
     )
+    comment_depth = models.IntegerField(default=1)
 
     class Meta:
         ordering = ("-comment_created",)
+
+    def save(self, *args, **kwargs):
+        # If comment is a reply we get the depth of its parent comment and increase it by one
+        if self.comment_parent is not None:
+            self.comment_depth = self.comment_parent.comment_depth + 1
+        super(Comment, self).save(*args, **kwargs)
 
     def __str__(self) -> str:
         return self.comment_body[:50]
