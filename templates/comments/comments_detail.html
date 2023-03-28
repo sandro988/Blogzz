@@ -1,0 +1,30 @@
+<!-- This template will output the comment and all of its replies -->
+{% extends "blogs/blogs_detail.html" %}
+
+{% block comment_section %}
+    <div class="comment-section">
+        <div class="create-comment-container">
+            {% include "comments/create_comment.html" %}
+        </div>
+
+        <div id="comment-list">
+
+            <div class="comments" id="comments">
+                <div class="comment-delete-modal-div prevent-propagation-for-comment-deletion" id="comment-delete-modal-div"></div>
+            
+                <div class="comments-header">
+                    <h3>Comments</h3>
+                </div>
+
+                {% include "comments/individual_comment.html" %} 
+                {% with depth=comment.comment_depth|add:5 %} 
+                    {% for comment in comment.replies.all %}
+                        <div class="comment">
+                            {% include "comments/comment_recursive.html" with comment=comment depth=depth %}
+                        </div>
+                    {% endfor %} 
+                {% endwith %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -42,7 +42,7 @@ class HomePageView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         """
         If user tries to search specific blogs, we get the search value and return blogs that contain
-        the search value eather in their title or category.
+        the search value either in their title or category.
 
         If user tries to search something and clicks on one of the featured topics, we get the search
         value and lookup any blog with that category name.

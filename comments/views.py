@@ -1,10 +1,9 @@
-from django.http import HttpResponseRedirect, JsonResponse
 from django.views import View
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import get_object_or_404, render, redirect
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from blogs.models import Blog
 from .models import Comment
 from .forms import CommentForm
@@ -12,20 +11,19 @@ from .forms import CommentForm
 
 class CommentDetailView(LoginRequiredMixin, DetailView):
     model = Comment
-    template_name = "blogs/blogs_detail.html"
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        blog = self.object.blog
-
-        url = blog.get_absolute_url() + f"#comment-{self.object.pk}"
-        return HttpResponseRedirect(url)
+    context_object_name = "comment"
+    login_url = "account_login"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["create_page_form"] = CommentForm()
-        context["blog"] = self.blog
+        context["blog"] = self.get_object().blog
         return context
+
+    def get_template_names(self):
+        if self.request.htmx:
+            return "comments/list_comments.html"
+        return "comments/comments_detail.html"
 
 
 class CreateCommentView(LoginRequiredMixin, CreateView):
@@ -35,7 +33,6 @@ class CreateCommentView(LoginRequiredMixin, CreateView):
 
     model = Comment
     form_class = CommentForm
-    template_name = "blogs/blogs_detail.html"
     login_url = "account_login"
 
     def get_object(self, queryset=None):
@@ -81,7 +78,6 @@ class CreateCommentView(LoginRequiredMixin, CreateView):
 class UpdateCommentView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Comment
     form_class = CommentForm
-    template_name = "blogs/blogs_detail.html"
     login_url = "account_login"
 
     def form_valid(self, form):
@@ -119,7 +115,6 @@ class UpdateCommentView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 class DeleteCommentView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     model = Blog
-    template_name = "comments/delete_comment.html"
     login_url = "account_login"
 
     def get_context_data(self, **kwargs):

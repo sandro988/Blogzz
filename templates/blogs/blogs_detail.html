@@ -39,14 +39,16 @@
                 </div>
             </div>
             
-            <div class="comment-section">
-                <div class="create-comment-container">
-                    {% include "comments/create_comment.html" %}
+            {% block comment_section %}
+                <div class="comment-section">
+                    <div class="create-comment-container">
+                        {% include "comments/create_comment.html" %}
+                    </div>
+                    <div id="comment-list">
+                        {% include "comments/list_comments.html" %}
+                    </div>
                 </div>
-                <div id="comment-list">
-                    {% include "comments/list_comments.html" %}
-                </div>
-            </div>
+            {% endblock comment_section %}
             
             <!-- This overlay will be activated when user clicks search field -->
             <div class="search-overlay"></div>

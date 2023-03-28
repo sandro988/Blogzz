@@ -13,7 +13,7 @@
                     {% include "comments/comment_recursive.html" with comment=comment depth=depth %}
                 </div>
             {% endfor %}
-        {% endwith %}
+        {% endwith %}   
     {% else %}
         {% for comment in blog.comments.all %}
             {% if comment.comment_parent is None %}

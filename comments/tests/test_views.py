@@ -33,16 +33,10 @@ class CommentDetailViewTests(CommentTestsData, TestCase):
             reverse("comment_detail", kwargs={"pk": self.comment.pk})
         )
 
-        # Redirect to the blog_detail page and scroll down to the comment
-        self.assertEqual(response.status_code, 302)
-        self.assertRedirects(
-            response,
-            reverse("blog_detail", kwargs={"pk": self.blog.pk})
-            + f"#comment-{self.comment.pk}",
-        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "comments/comments_detail.html")
 
     def test_comment_detail_view_with_logged_out_user(self):
-        self.client.logout()
         response = self.client.get(
             reverse("comment_detail", kwargs={"pk": self.comment.pk})
         )
