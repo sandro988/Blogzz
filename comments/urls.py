@@ -4,8 +4,7 @@ from .views import (
     CommentDetailView,
     UpdateCommentView,
     DeleteCommentView,
-    UpvoteCommentView,
-    DownvoteCommentView,
+    CommentVoteView,
     ContinueCommentThreadView,
 )
 
@@ -36,14 +35,9 @@ urlpatterns = [
         name="delete_comment",
     ),
     path(
-        "comment/upvote_comment/<uuid:blog_pk>/<uuid:comment_pk>/",
-        UpvoteCommentView.as_view(),
-        name="upvote_comment",
-    ),
-    path(
-        "comment/downvote_comment/<uuid:blog_pk>/<uuid:comment_pk>/",
-        DownvoteCommentView.as_view(),
-        name="downvote_comment",
+        "comment/vote_comment/<uuid:blog_pk>/<uuid:comment_pk>/",
+        CommentVoteView.as_view(),
+        name="vote_comment",
     ),
     path(
         "comment/continue_thread/<uuid:blog_pk>/<uuid:comment_pk>/",

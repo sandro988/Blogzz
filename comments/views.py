@@ -143,7 +143,7 @@ class DeleteCommentView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return object.comment_author == self.request.user
 
 
-class UpvoteCommentView(LoginRequiredMixin, View):
+class CommentVoteView(LoginRequiredMixin, View):
     template_name = "comments/upvote_downvote_comment.html"
 
     def post(self, request, *args, **kwargs):
@@ -152,7 +152,10 @@ class UpvoteCommentView(LoginRequiredMixin, View):
         user = request.user
         comment = get_object_or_404(Comment, pk=comment_pk, blog_id=blog_pk)
 
-        comment.upvote_comment(user)
+        if request.POST.get("upvote-comment"):
+            comment.upvote_comment(user)
+        elif request.POST.get("downvote-comment"):
+            comment.downvote_comment(user)
 
         context = self.get_context_data(**kwargs)
         return render(request, self.template_name, context=context)
@@ -168,19 +171,6 @@ class UpvoteCommentView(LoginRequiredMixin, View):
         context["comment"] = comment
         context["blog"] = comment.blog
         return context
-
-
-class DownvoteCommentView(UpvoteCommentView):
-    def post(self, request, *args, **kwargs):
-        blog_pk = kwargs["blog_pk"]
-        comment_pk = kwargs["comment_pk"]
-        user = request.user
-        comment = get_object_or_404(Comment, pk=comment_pk, blog_id=blog_pk)
-
-        comment.downvote_comment(user)
-
-        context = self.get_context_data(**kwargs)
-        return render(request, self.template_name, context=context)
 
 
 class ContinueCommentThreadView(LoginRequiredMixin, DetailView):

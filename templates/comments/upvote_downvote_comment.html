@@ -1,5 +1,8 @@
 <div class="upvotes-div">
-    <form method="POST" class="upvotes-form" id="upvote-form-{{ comment.id }}">
+    <form method="POST" class="upvotes-form" id="upvote-form-{{ comment.id }}"
+    hx-post="{% url 'vote_comment' blog.id comment.id %}"
+    hx-target="#upvote-form-{{ comment.id }}"
+    hx-swap="innerHTML">
         {% csrf_token %}
 
         <div class="upvote-downvote-container">
@@ -10,10 +13,7 @@
                     type="submit"
                     aria-label="upvote-button"
                     class="upvote-button {% if request.user in comment.comment_upvotes.all %}upvote-active{% endif %}"
-                    hx-post="{% url 'upvote_comment' blog.id comment.id %}"
-                    hx-target="#upvote-form-{{ comment.id }}"
-                    hx-swap="innerHTML"
-                    name="upvote-downvote"
+                    name="upvote-comment"
                     value="upvote"
                 >
                     <svg class="upvote-svg" xmlns="http://www.w3.org/2000/svg" fill="#000000" viewBox="0 0 256 256"><path d="M231.39,123.06A8,8,0,0,1,224,128H184v80a16,16,0,0,1-16,16H88a16,16,0,0,1-16-16V128H32a8,8,0,0,1-5.66-13.66l96-96a8,8,0,0,1,11.32,0l96,96A8,8,0,0,1,231.39,123.06Z"></path></svg>
@@ -32,10 +32,7 @@
                     type="submit"
                     aria-label="downvote-button"
                     class="downvote-button {% if request.user in comment.comment_downvotes.all %}downvote-active{% endif %}"
-                    hx-post="{% url 'downvote_comment' blog.id comment.id %}"
-                    hx-target="#upvote-form-{{ comment.id }}"
-                    hx-swap="innerHTML"
-                    name="upvote-downvote"
+                    name="downvote-comment"
                     value="downvote"
                 >
                     <svg class="downvote-svg" xmlns="http://www.w3.org/2000/svg" fill="#000000" viewBox="0 0 256 256"><path d="M229.66,141.66l-96,96a8,8,0,0,1-11.32,0l-96-96A8,8,0,0,1,32,128H72V48A16,16,0,0,1,88,32h80a16,16,0,0,1,16,16v80h40a8,8,0,0,1,5.66,13.66Z"></path></svg>
