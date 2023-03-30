@@ -23,10 +23,10 @@ class Comment(models.Model):
         get_user_model(), related_name="upvote", default=None, blank=True
     )
     comment_upvotes_count = models.IntegerField(default="0")
-    # Did not implement 'comment_downvotes_count' because i only need to keep track of the number of upvotes
     comment_downvotes = models.ManyToManyField(
         get_user_model(), related_name="downvote", default=None, blank=True
     )
+    comment_downvotes_count = models.IntegerField(default="0")
     comment_depth = models.IntegerField(default=1)
 
     class Meta:
@@ -50,3 +50,32 @@ class Comment(models.Model):
     @property
     def is_parent(self):
         return self.comment_parent is None
+
+    def upvote_comment(self, user):
+        if user in self.comment_upvotes.all():
+            self.comment_upvotes.remove(user)
+            self.comment_upvotes_count -= 1
+        elif user in self.comment_downvotes.all():
+            self.comment_downvotes.remove(user)
+            self.comment_downvotes_count -= 1
+            self.comment_upvotes.add(user)
+            self.comment_upvotes_count += 1
+        else:
+            self.comment_upvotes.add(user)
+            self.comment_upvotes_count += 1
+
+        self.save()
+
+    def downvote_comment(self, user):
+        if user in self.comment_upvotes.all():
+            self.comment_upvotes.remove(user)
+            self.comment_upvotes_count -= 1
+            self.comment_downvotes.add(user)
+            self.comment_downvotes_count += 1
+        elif user in self.comment_downvotes.all():
+            self.comment_downvotes.remove(user)
+            self.comment_downvotes_count -= 1
+        else:
+            self.comment_downvotes.add(user)
+            self.comment_downvotes_count += 1
+        self.save()

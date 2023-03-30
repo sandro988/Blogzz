@@ -152,18 +152,7 @@ class UpvoteCommentView(LoginRequiredMixin, View):
         user = request.user
         comment = get_object_or_404(Comment, pk=comment_pk, blog_id=blog_pk)
 
-        if user in comment.comment_upvotes.all():
-            comment.comment_upvotes.remove(user)
-            comment.comment_upvotes_count -= 1
-        elif user in comment.comment_downvotes.all():
-            comment.comment_downvotes.remove(user)
-            comment.comment_upvotes.add(user)
-            comment.comment_upvotes_count += 1
-        else:
-            comment.comment_upvotes.add(user)
-            comment.comment_upvotes_count += 1
-
-        comment.save()
+        comment.upvote_comment(user)
 
         context = self.get_context_data(**kwargs)
         return render(request, self.template_name, context=context)
@@ -178,7 +167,6 @@ class UpvoteCommentView(LoginRequiredMixin, View):
         comment = get_object_or_404(Comment, pk=comment_pk, blog_id=blog_pk)
         context["comment"] = comment
         context["blog"] = comment.blog
-        context["upvote_count"] = comment.comment_upvotes_count
         return context
 
 
@@ -189,18 +177,7 @@ class DownvoteCommentView(UpvoteCommentView):
         user = request.user
         comment = get_object_or_404(Comment, pk=comment_pk, blog_id=blog_pk)
 
-        if user in comment.comment_upvotes.all():
-            comment.comment_upvotes.remove(user)
-            comment.comment_downvotes.add(user)
-            comment.comment_upvotes_count -= 1
-        elif user in comment.comment_downvotes.all():
-            comment.comment_downvotes.remove(user)
-            comment.comment_upvotes_count += 1
-        else:
-            comment.comment_downvotes.add(user)
-            comment.comment_upvotes_count -= 1
-
-        comment.save()
+        comment.downvote_comment(user)
 
         context = self.get_context_data(**kwargs)
         return render(request, self.template_name, context=context)

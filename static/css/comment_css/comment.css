@@ -248,14 +248,20 @@
 }
 
 .comment-footer,
-.upvotes-form {
+.upvote-downvote-container,
+.upvote-container,
+.downvote-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.upvotes-form {
+.upvote-downvote-container {
     gap: 10px;
+}
+
+.upvote-container, .downvote-container {
+    gap: 5px;
 }
 
 .upvote-button,

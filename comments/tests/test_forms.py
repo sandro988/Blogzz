@@ -280,7 +280,7 @@ class UpvoteCommentViewFormTests(CommentTestsData, TestCase):
         self.assertEqual(response_for_upvote.status_code, 200)
         self.assertEqual(Comment.objects.last().comment_upvotes_count, 1)
 
-        # User clicks the upvote button again which results in downvote
+        # User clicks the upvote button again
         response_for_downvote = self.client.post(
             reverse(
                 "upvote_comment",
@@ -331,7 +331,7 @@ class DownvoteCommentFormTests(CommentTestsData, TestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(Comment.objects.last().comment_upvotes_count, -1)
+        self.assertEqual(Comment.objects.last().comment_downvotes_count, 1)
 
         # User clicks the downvote button again
         response = self.client.post(
@@ -342,7 +342,7 @@ class DownvoteCommentFormTests(CommentTestsData, TestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(Comment.objects.last().comment_upvotes_count, 0)
+        self.assertEqual(Comment.objects.last().comment_downvotes_count, 0)
 
         # User first upvotes the comment and than clicks the downvote button
         response_for_upvote = self.client.post(
@@ -361,6 +361,7 @@ class DownvoteCommentFormTests(CommentTestsData, TestCase):
             )
         )
         self.assertEqual(Comment.objects.last().comment_upvotes_count, 0)
+        self.assertEqual(Comment.objects.last().comment_downvotes_count, 1)
 
     def test_downvote_functionality_for_logged_out_user(self):
         response = self.client.post(
