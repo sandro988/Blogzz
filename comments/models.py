@@ -79,3 +79,19 @@ class Comment(models.Model):
             self.comment_downvotes.add(user)
             self.comment_downvotes_count += 1
         self.save()
+
+    def count_comments_and_replies(self):
+        """
+        This method recursively counts the number of comments and their replies.
+        """
+
+        count = 0
+
+        for reply in self.replies.all():
+            count += 1
+            count += reply.count_comments_and_replies()
+
+        return count
+
+    def get_reply_count(self):
+        return self.replies.count()

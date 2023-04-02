@@ -30,7 +30,7 @@ urlpatterns = [
         name="update_comment",
     ),
     path(
-        "comment/delete_comment/<uuid:blog_pk>/<uuid:comment_pk>/",
+        "comment/delete_comment/<uuid:pk>/",
         DeleteCommentView.as_view(),
         name="delete_comment",
     ),

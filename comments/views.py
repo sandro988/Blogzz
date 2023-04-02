@@ -4,9 +4,11 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse_lazy
+from django.http import Http404
 from blogs.models import Blog
 from .models import Comment
 from .forms import CommentForm
+from .utils import redirect_to_continue_thread_page, get_comment_from_next_url
 
 
 class CommentDetailView(LoginRequiredMixin, DetailView):
@@ -114,7 +116,7 @@ class UpdateCommentView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class DeleteCommentView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
-    model = Blog
+    model = Comment
     login_url = "account_login"
 
     def get_context_data(self, **kwargs):
@@ -122,16 +124,28 @@ class DeleteCommentView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         context["blog"] = self.get_object().blog
         context["comment_to_be_deleted"] = self.get_object()
         context["create_page_form"] = CommentForm()
+
+        # If user clicks the delete button from the continue_thread page then we will pass 'continue_thread_url' variable to templates
+        # so that in get_success_url we redirect user to continue_thread page instead of redirecting them to detail page of
+        # a blog, this will ensure that user stays on continue_thread page after deleting replies of continue_thread comment.
+        context["continue_thread_url"] = self.request.GET.get("next")
+
+        # We are using this context variable to determine how many replies does the continue_thread comment have, so that when user
+        # deletes one of them we can determine if we should add hx-push-url parameter to the form or not in the delete_comment.html
+        context["continue_thread_comment"] = get_comment_from_next_url(
+            self.request.GET.get("next")
+        )
+
         return context
 
-    def get_object(self, queryset=None):
-        blog_pk = self.kwargs["blog_pk"]
-        comment_pk = self.kwargs["comment_pk"]
-        comment = get_object_or_404(Comment, pk=comment_pk, blog_id=blog_pk)
-        return comment
-
     def get_success_url(self):
-        return reverse_lazy("blog_detail", kwargs={"pk": self.kwargs["blog_pk"]})
+        next = self.request.POST.get("next")
+        redirect_url = redirect_to_continue_thread_page(next, self.get_object())
+
+        if redirect_url:
+            return redirect_url
+
+        return reverse_lazy("blog_detail", kwargs={"pk": self.get_object().blog.id})
 
     def get_template_names(self):
         if self.request.htmx:
@@ -182,7 +196,7 @@ class ContinueCommentThreadView(LoginRequiredMixin, DetailView):
         - Fetches the comment with a depth greater than 6 using the 'comment_pk' and 'blog_pk' URL parameters.
         - Passes the 'continue_thread_comment' object to the context, which is then used in the 'list_comments'
         template to display only the replies to this comment.
-        - Renders the 'blogs/blogs_detail.html' template with the 'CommentForm' for creating new comments.
+        - Raises a 404 error if the comment has no replies.
 
     Example Usage:
         - A comment has 10 levels of replies.
@@ -191,7 +205,12 @@ class ContinueCommentThreadView(LoginRequiredMixin, DetailView):
     """
 
     model = Comment
-    template_name = "blogs/blogs_detail.html"
+
+    def get(self, request, *args, **kwargs):
+        if self.get_object().replies.count() == 0:
+            raise Http404("This comment has no replies.")
+
+        return super().get(request, *args, **kwargs)
 
     def get_object(self, queryset=None):
         continue_thread_comment = get_object_or_404(
@@ -206,3 +225,8 @@ class ContinueCommentThreadView(LoginRequiredMixin, DetailView):
         context["blog"] = self.get_object().blog
         context["create_page_form"] = CommentForm()
         return context
+
+    def get_template_names(self):
+        if self.request.htmx:
+            return "comments/list_comments.html"
+        return "blogs/blogs_detail.html"

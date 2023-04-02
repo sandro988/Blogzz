@@ -21,12 +21,18 @@
                         hx-target="#comment-div-{{ comment.id }}"
                         hx-swap="innerHTML">
                         Edit
-                    </button>  
+                    </button> 
+                    
+                    <!-- 
+                        In hx-include we are passing name parameter, which will be used in view to know where we should redirect users after they successfully delete the comment 
+                        name parameter can either be a full url path or a None, in case it is none we will redirect users to blog detail view.
+                    -->
                     <button 
                         class="delete-comment-btn prevent-propagation"
-                        hx-get="{% url 'delete_comment' blog.id comment.id %}"
+                        hx-get="{% url 'delete_comment' comment.id %}"
                         hx-target="#comment-delete-modal-div"
-                        hx-swap="afterbegin">
+                        hx-swap="afterbegin"
+                        hx-include="[comment-data='next-{{ comment.id }}']">
                         Delete
                     </button>
                 </div>
@@ -49,7 +55,6 @@
             Reply
         </button> 
     </div>
-
     <!-- 
         Including the form for updating/deleting the individual comment, this will 
         be used if the users manually enters the url for updating/deleting the comment.
@@ -58,5 +63,11 @@
         {% include 'comments/update_comment.html' %}
     {% elif comment == comment_to_be_deleted %} 
         {% include 'comments/delete_comment.html' %}
+    {% endif %}
+
+
+    <!-- Checking if we user is on continue_thread page -->
+    {% if "continue_thread" in request.path%}
+        <input type="hidden" comment-data="next-{{ comment.id }}" value="{{ request.path }}" name="next">
     {% endif %}
 </div>

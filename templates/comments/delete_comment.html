@@ -1,11 +1,22 @@
+<!-- 
+    Regarding the if statement in form tag: 
+    If the user is on continue_thread page we check if the continue_thread_comment has only one reply with count_comments_and_replies method that
+    recursively counts the number of comments and their replies and if it does it means that the comment that user intends to delete is the only 
+    comment with or without replies on continue_thread page, which means that we should redirect users to blog_detail page after they delete the comment, 
+    because of this we are using hx-push-url to change the url to blog_detail.
+-->
+
 <form
     id="comment-delete-form"
     class="comment-delete-form prevent-propagation-for-comment-deletion"
     method="POST"
-    hx-post="{% url 'delete_comment' blog.id comment.id %}"
+    hx-post="{% url 'delete_comment' comment.id %}"
     hx-target="#comment-list"
     hx-swap="innerHTML"
     hx-trigger="submit"
+    {% if continue_thread_url and continue_thread_comment.count_comments_and_replies == 1 %}
+        hx-push-url="{% url 'blog_detail' blog.id %}"
+    {% endif %}
 >
     {% csrf_token %}
     <p>Are you sure you want to delete <span>"{{ comment }}..."?</span></p>
@@ -29,5 +40,10 @@
         >
             Cancel
         </button>
+
+        <!-- This input will only be present if users try to delete comments from continue_thread page -->
+        {% if continue_thread_url %}
+            <input type="hidden" name="next" value="{{ continue_thread_url }}">
+        {% endif %}
     </div>
 </form>

@@ -197,7 +197,7 @@ class DeleteCommentViewFormTests(CommentTestsData, TestCase):
         response = self.client.post(
             reverse(
                 "delete_comment",
-                kwargs={"blog_pk": self.blog.pk, "comment_pk": self.comment.pk},
+                kwargs={"pk": self.comment.pk},
             )
         )
 
@@ -206,8 +206,7 @@ class DeleteCommentViewFormTests(CommentTestsData, TestCase):
             reverse(
                 "delete_comment",
                 kwargs={
-                    "blog_pk": self.blog.pk,
-                    "comment_pk": str(uuid.uuid4()),
+                    "pk": str(uuid.uuid4()),
                 },
             )
         )
@@ -217,8 +216,7 @@ class DeleteCommentViewFormTests(CommentTestsData, TestCase):
             reverse(
                 "delete_comment",
                 kwargs={
-                    "blog_pk": str(uuid.uuid4()),
-                    "comment_pk": self.comment.pk,
+                    "pk": self.comment.pk,
                 },
             )
         )
@@ -236,7 +234,7 @@ class DeleteCommentViewFormTests(CommentTestsData, TestCase):
     def test_delete_comment_form_for_logged_out_user(self):
         comment_delete_page_url = reverse(
             "delete_comment",
-            kwargs={"blog_pk": self.blog.pk, "comment_pk": self.comment.pk},
+            kwargs={"pk": self.comment.pk},
         )
 
         response = self.client.post(comment_delete_page_url)
@@ -254,7 +252,7 @@ class DeleteCommentViewFormTests(CommentTestsData, TestCase):
         )
         comment_delete_page_url = reverse(
             "delete_comment",
-            kwargs={"blog_pk": self.blog.pk, "comment_pk": self.comment.pk},
+            kwargs={"pk": self.comment.pk},
         )
 
         response = self.client.post(comment_delete_page_url)
