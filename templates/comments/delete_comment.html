@@ -1,9 +1,8 @@
 <!-- 
     Regarding the if statement in form tag: 
-    If the user is on continue_thread page we check if the continue_thread_comment has only one reply with count_comments_and_replies method that
-    recursively counts the number of comments and their replies and if it does it means that the comment that user intends to delete is the only 
-    comment with or without replies on continue_thread page, which means that we should redirect users to blog_detail page after they delete the comment, 
-    because of this we are using hx-push-url to change the url to blog_detail.
+        If the user is on continue_thread page we check if the continue_thread_comment has only one reply with or without the replies and if the comment 
+        that has to be deleted is that exact reply than we should redirect user to "blog_detail" page, so because of this we are using the hx-push-url 
+        to change the url from "continue_thread" to "blog_detail".
 -->
 
 <form
@@ -14,7 +13,7 @@
     hx-target="#comment-list"
     hx-swap="innerHTML"
     hx-trigger="submit"
-    {% if continue_thread_url and continue_thread_comment.count_comments_and_replies == 1 %}
+    {% if continue_thread_comment.replies.count == 1 and comment_to_be_deleted == continue_thread_comment.replies.first %}
         hx-push-url="{% url 'blog_detail' blog.id %}"
     {% endif %}
 >

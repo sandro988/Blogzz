@@ -24,5 +24,10 @@
         >
         Cancel
         </button>
+
+        <!-- This input will only be present if users try to update comments from continue_thread page -->
+        {% if continue_thread_url %}
+            <input type="hidden" name="next" value="{{ continue_thread_url }}">
+        {% endif %}
     </div>
 </form>

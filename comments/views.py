@@ -8,7 +8,7 @@ from django.http import Http404
 from blogs.models import Blog
 from .models import Comment
 from .forms import CommentForm
-from .utils import redirect_to_continue_thread_page, get_comment_from_next_url
+from .utils import get_comment_from_next_url
 
 
 class CommentDetailView(LoginRequiredMixin, DetailView):
@@ -109,7 +109,8 @@ class UpdateCommentView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     Methods:
         get_context_data: Adds extra context to the view, we are adding the blog to which the comment belongs to, the comment to be updated,
-            and forms for updating the comment and creating the comment.
+            forms for updating the comment and creating the comment, and continue_thread_url which will be used if user clicks on edit button
+            on "continue_thread" page, so that after they edit a comment they get redirected back to the "continue_thread" page and not blog_detail page.
         get_success_url: Returns the URL to redirect to after a successful update of a comment.
         get_template_names: Returns the appropriate template based on whether the request is made via HTMX or not.
         test_func: Checks if the current user is the author of the comment being updated.
@@ -125,9 +126,24 @@ class UpdateCommentView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         context["comment_to_be_updated"] = self.get_object()
         context["update_page_form"] = self.get_form()
         context["create_page_form"] = self.get_form()
+
+        # If user clicks the edit button from the continue_thread page then we will pass 'continue_thread_url' variable to templates
+        # so that in get_success_url we redirect user to continue_thread page instead of redirecting them to detail page of
+        # a blog, this will ensure that user stays on continue_thread page after updating replies of continue_thread comment.
+        context["continue_thread_url"] = self.request.GET.get("next")
+
         return context
 
     def get_success_url(self):
+        next = self.request.POST.get("next")
+
+        if next:
+            comment = get_comment_from_next_url(next)
+            return reverse_lazy(
+                "continue_thread",
+                kwargs={"pk": comment.pk},
+            )
+
         return reverse_lazy("blog_detail", kwargs={"pk": self.get_object().blog.id})
 
     def get_template_names(self):
@@ -156,6 +172,7 @@ class DeleteCommentView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             it will redirect users back to the "continue_thread" page, otherwise they will be redirected to "blog_detail" page.
         get_template_names: Returns the appropriate template based on whether the request is made via HTMX or not.
         test_func: Checks if the current user is the author of the comment being deleted.
+        redirect_to_continue_thread_page: This method determines where the user should be redirected if they deleted comment on "continue_thread" page.
 
     Returns:
         The view renders a confirmation page to the user, asking them to confirm the deletion of
@@ -178,9 +195,9 @@ class DeleteCommentView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         context["continue_thread_url"] = self.request.GET.get("next")
 
         # We are using this context variable to determine how many replies does the continue_thread comment have, so that when user
-        # deletes one of them we can determine if we should add hx-push-url parameter to the form or not in the delete_comment.html
-        # if the comment has no more replies and is the only comment on continue_thread page, we will add hx-push-url in form so that
-        # the url changes to blog_detail url.
+        # deletes one of them we can determine if we should add hx-push-url parameter to the form or not in the delete_comment.html template.
+        # If the comment that user wants to delete is the only reply of continue_thread_comment with or without its own replies than we add 
+        # hx-push-url parameter to the delete form.
         context["continue_thread_comment"] = get_comment_from_next_url(
             self.request.GET.get("next")
         )
@@ -189,10 +206,8 @@ class DeleteCommentView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def get_success_url(self):
         next = self.request.POST.get("next")
-        redirect_url = redirect_to_continue_thread_page(next, self.get_object())
-
-        if redirect_url:
-            return redirect_url
+        if next:
+            return self.redirect_to_continue_thread_page(next, self.get_object())
 
         return reverse_lazy("blog_detail", kwargs={"pk": self.get_object().blog.id})
 
@@ -204,6 +219,29 @@ class DeleteCommentView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         object = self.get_object()
         return object.comment_author == self.request.user
+
+    def redirect_to_continue_thread_page(self, url: str, comment_to_delete: Comment):
+
+        continue_thread_comment = get_comment_from_next_url(url)
+        # Number of replies and nested replies on 'continue_thread' page.
+        continue_thread_comment_replies = (
+            continue_thread_comment.count_comments_and_replies()
+        )
+
+        # If the comment that user inteds to delete is the only comment on "continue_thread" page
+        # and it is the first reply of continue_thread_comment we delete the comment and redirect to "blog_detail" page
+        # otherwise we redirect back to "continue_thread" page.
+
+        if (
+            comment_to_delete == continue_thread_comment.get_replies().first()
+            and continue_thread_comment.get_reply_count() == 1
+        ):
+            return reverse_lazy("blog_detail", kwargs={"pk": self.get_object().blog.id})
+
+        return reverse_lazy(
+            "continue_thread",
+            kwargs={"pk": continue_thread_comment.pk},
+        )
 
 
 class CommentVoteView(LoginRequiredMixin, View):

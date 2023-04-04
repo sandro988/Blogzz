@@ -19,7 +19,11 @@
                         class="edit-comment-btn prevent-propagation"
                         hx-get="{% url 'update_comment' comment.id %}"
                         hx-target="#comment-div-{{ comment.id }}"
-                        hx-swap="innerHTML">
+                        hx-swap="innerHTML"
+                        {% if "continue_thread" in request.path %}
+                            hx-include="[comment-data='next-{{ comment.id }}']"
+                        {% endif %}
+                    >
                         Edit
                     </button> 
                     
@@ -32,7 +36,10 @@
                         hx-get="{% url 'delete_comment' comment.id %}"
                         hx-target="#comment-delete-modal-div"
                         hx-swap="afterbegin"
-                        hx-include="[comment-data='next-{{ comment.id }}']">
+                        {% if "continue_thread" in request.path %}
+                            hx-include="[comment-data='next-{{ comment.id }}']"
+                        {% endif %}
+                    >
                         Delete
                     </button>
                 </div>
@@ -66,8 +73,8 @@
     {% endif %}
 
 
-    <!-- Checking if we user is on continue_thread page -->
-    {% if "continue_thread" in request.path%}
+    <!-- Checking if the user is on continue_thread page -->
+    {% if "continue_thread" in request.path %}
         <input type="hidden" comment-data="next-{{ comment.id }}" value="{{ request.path }}" name="next">
     {% endif %}
 </div>
