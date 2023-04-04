@@ -20,8 +20,7 @@ def redirect_to_continue_thread_page(next_url: str, comment_to_delete: Comment):
 
     if next_url:
         next_url_info = resolve(next_url)
-        blog_pk = next_url_info.kwargs.get("blog_pk")
-        comment_pk = next_url_info.kwargs.get("comment_pk")
+        comment_pk = next_url_info.kwargs.get("pk")
         comment = Comment.objects.get(id=comment_pk)
         # Number of replies on 'continue_thread' page.
         number_of_replies = comment.count_comments_and_replies()
@@ -34,7 +33,7 @@ def redirect_to_continue_thread_page(next_url: str, comment_to_delete: Comment):
         elif number_of_replies > 1:
             return reverse_lazy(
                 "continue_thread",
-                kwargs={"blog_pk": blog_pk, "comment_pk": comment_pk},
+                kwargs={"pk": comment_pk},
             )
 
     return None
@@ -44,7 +43,7 @@ def get_comment_from_next_url(url: str):
     if url is None:
         return None
     next_url_info = resolve(url)
-    comment_pk = next_url_info.kwargs.get("comment_pk")
+    comment_pk = next_url_info.kwargs.get("pk")
     comment = Comment.objects.get(id=comment_pk)
 
     return comment

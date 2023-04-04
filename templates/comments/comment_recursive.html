@@ -13,6 +13,6 @@
             {% include "comments/comment_recursive.html" with comment=comment %}
         {% endfor %}
     {% elif comment.comment_depth > depth and comment.replies.count >= 1 %}
-        <a href="{% url 'continue_thread' blog.id comment.id %}">Continue Thread</a>
+        <a href="{% url 'continue_thread' comment.id %}">Continue Thread</a>
     {% endif %}
 </div>

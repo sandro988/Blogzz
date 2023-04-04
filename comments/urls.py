@@ -10,37 +10,37 @@ from .views import (
 
 urlpatterns = [
     path(
-        "comment/<uuid:pk>/",
+        "<uuid:pk>/",
         CommentDetailView.as_view(),
         name="comment_detail",
     ),
     path(
-        "comment/create_comment/<uuid:blog_pk>/",
+        "create_comment/<uuid:blog_pk>/",
         CreateCommentView.as_view(),
         name="create_comment",
     ),
     path(
-        "comment/reply/<uuid:blog_pk>/<uuid:comment_pk>/",
+        "reply/<uuid:blog_pk>/<uuid:comment_pk>/",
         CreateCommentView.as_view(),
         name="create_reply",
     ),
     path(
-        "comment/update_comment/<uuid:blog_pk>/<uuid:comment_pk>/",
+        "update_comment/<uuid:pk>/",
         UpdateCommentView.as_view(),
         name="update_comment",
     ),
     path(
-        "comment/delete_comment/<uuid:pk>/",
+        "delete_comment/<uuid:pk>/",
         DeleteCommentView.as_view(),
         name="delete_comment",
     ),
     path(
-        "comment/vote_comment/<uuid:blog_pk>/<uuid:comment_pk>/",
+        "vote_comment/<uuid:pk>/",
         CommentVoteView.as_view(),
         name="vote_comment",
     ),
     path(
-        "comment/continue_thread/<uuid:blog_pk>/<uuid:comment_pk>/",
+        "continue_thread/<uuid:pk>/",
         ContinueCommentThreadView.as_view(),
         name="continue_thread",
     ),

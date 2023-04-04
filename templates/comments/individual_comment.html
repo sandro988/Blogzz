@@ -17,7 +17,7 @@
                 <div class="comment-options-div-buttons options-div-id-{{ comment.id }} prevent-propagation">
                     <button 
                         class="edit-comment-btn prevent-propagation"
-                        hx-get="{% url 'update_comment' blog.id comment.id %}"
+                        hx-get="{% url 'update_comment' comment.id %}"
                         hx-target="#comment-div-{{ comment.id }}"
                         hx-swap="innerHTML">
                         Edit

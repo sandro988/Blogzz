@@ -24,5 +24,5 @@ urlpatterns = [
     # Locally created apps
     path("", include("core.urls")),
     path("", include("blogs.urls")),
-    path("", include("comments.urls")),
+    path("comment/", include("comments.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -92,7 +92,7 @@ class UpdateCommentViewTests(CommentTestsData, TestCase):
         response = self.client.get(
             reverse(
                 "update_comment",
-                kwargs={"blog_pk": self.blog.pk, "comment_pk": self.comment.pk},
+                kwargs={"pk": self.comment.pk},
             )
         )
 
@@ -104,14 +104,14 @@ class UpdateCommentViewTests(CommentTestsData, TestCase):
         response = self.client.get(
             reverse(
                 "update_comment",
-                kwargs={"blog_pk": self.blog.pk, "comment_pk": self.comment.pk},
+                kwargs={"pk": self.comment.pk},
             )
         )
 
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(
             response,
-            f"{reverse('account_login')}?next={reverse('update_comment', kwargs={'blog_pk': self.blog.pk, 'comment_pk': self.comment.pk})}",
+            f"{reverse('account_login')}?next={reverse('update_comment', kwargs={'pk': self.comment.pk})}",
         )
 
     def test_update_comment_view_with_non_author_user(self):
@@ -122,7 +122,7 @@ class UpdateCommentViewTests(CommentTestsData, TestCase):
         response = self.client.get(
             reverse(
                 "update_comment",
-                kwargs={"blog_pk": self.blog.pk, "comment_pk": self.comment.pk},
+                kwargs={"pk": self.comment.pk},
             )
         )
 
@@ -205,8 +205,7 @@ class ContinueCommentThreadViewTests(CommentTestsData, TestCase):
             reverse(
                 "continue_thread",
                 kwargs={
-                    "blog_pk": self.blog.pk,
-                    "comment_pk": continue_thread_comment.pk,
+                    "pk": continue_thread_comment.pk,
                 },
             )
         )
@@ -225,7 +224,7 @@ class ContinueCommentThreadViewTests(CommentTestsData, TestCase):
         response = self.client.get(
             reverse(
                 "continue_thread",
-                kwargs={"blog_pk": self.blog.pk, "comment_pk": str(uuid.uuid4())},
+                kwargs={"pk": str(uuid.uuid4())},
             )
         )
 
@@ -237,8 +236,7 @@ class ContinueCommentThreadViewTests(CommentTestsData, TestCase):
             reverse(
                 "continue_thread",
                 kwargs={
-                    "blog_pk": self.blog.pk,
-                    "comment_pk": continue_thread_comment.pk,
+                    "pk": continue_thread_comment.pk,
                 },
             )
         )
@@ -246,7 +244,7 @@ class ContinueCommentThreadViewTests(CommentTestsData, TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(
             response,
-            f"{reverse('account_login')}?next={reverse('continue_thread', kwargs={'blog_pk': self.blog.pk, 'comment_pk': continue_thread_comment.pk,},)}",
+            f"{reverse('account_login')}?next={reverse('continue_thread', kwargs={'pk': continue_thread_comment.pk,},)}",
         )
 
     def test_delete_comment_on_continue_comment_thread_view(self):
@@ -270,8 +268,7 @@ class ContinueCommentThreadViewTests(CommentTestsData, TestCase):
                 "next": reverse(
                     "continue_thread",
                     kwargs={
-                        "blog_pk": self.blog.pk,
-                        "comment_pk": continue_thread_comment.pk,
+                        "pk": continue_thread_comment.pk,
                     },
                 )
             },
@@ -286,8 +283,7 @@ class ContinueCommentThreadViewTests(CommentTestsData, TestCase):
             reverse(
                 "continue_thread",
                 kwargs={
-                    "blog_pk": self.blog.pk,
-                    "comment_pk": continue_thread_comment.pk,
+                    "pk": continue_thread_comment.pk,
                 },
             ),
         )
@@ -307,8 +303,7 @@ class ContinueCommentThreadViewTests(CommentTestsData, TestCase):
                 "next": reverse(
                     "continue_thread",
                     kwargs={
-                        "blog_pk": self.blog.pk,
-                        "comment_pk": continue_thread_comment.pk,
+                        "pk": continue_thread_comment.pk,
                     },
                 )
             },

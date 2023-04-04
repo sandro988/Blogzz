@@ -469,8 +469,7 @@ class LikeBlogViewFormTests(TestsData, TestCase):
         # User sends a GET request instead of a POST
         response = self.client.get(reverse("like_blog", kwargs={"pk": self.blog.id}))
 
-        self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse("home"))
+        self.assertEqual(response.status_code, 405)
 
     def test_like_functionality_for_logged_out_user(self):
 

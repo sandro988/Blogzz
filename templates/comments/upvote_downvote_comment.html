@@ -1,6 +1,6 @@
 <div class="upvotes-div">
     <form method="POST" class="upvotes-form" id="upvote-form-{{ comment.id }}"
-    hx-post="{% url 'vote_comment' blog.id comment.id %}"
+    hx-post="{% url 'vote_comment' comment.id %}"
     hx-target="#upvote-form-{{ comment.id }}"
     hx-swap="innerHTML">
         {% csrf_token %}

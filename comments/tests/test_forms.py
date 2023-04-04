@@ -133,7 +133,7 @@ class UpdateCommentViewFormTests(CommentTestsData, TestCase):
         response = self.client.post(
             reverse(
                 "update_comment",
-                kwargs={"blog_pk": self.blog.pk, "comment_pk": self.comment.pk},
+                kwargs={"pk": self.comment.pk},
             ),
             data=self.form_data,
         )
@@ -156,7 +156,7 @@ class UpdateCommentViewFormTests(CommentTestsData, TestCase):
         response = self.client.post(
             reverse(
                 "update_comment",
-                kwargs={"blog_pk": self.blog.pk, "comment_pk": self.comment.pk},
+                kwargs={"pk": self.comment.pk},
             ),
             data=self.form_data_from_non_author_user,
         )
@@ -175,7 +175,7 @@ class UpdateCommentViewFormTests(CommentTestsData, TestCase):
         response = self.client.post(
             reverse(
                 "update_comment",
-                kwargs={"blog_pk": self.blog.pk, "comment_pk": self.comment.pk},
+                kwargs={"pk": self.comment.pk},
             ),
             data=self.form_data,
         )
@@ -185,7 +185,7 @@ class UpdateCommentViewFormTests(CommentTestsData, TestCase):
         self.assertNotEqual(Comment.objects.last().comment_body, "Updated comment")
         self.assertRedirects(
             response,
-            f"{reverse('account_login')}?next={reverse('update_comment', kwargs={'blog_pk': self.blog.pk, 'comment_pk': self.comment.pk})}",
+            f"{reverse('account_login')}?next={reverse('update_comment', kwargs={'pk': self.comment.pk})}",
         )
 
 
@@ -271,7 +271,7 @@ class VoteCommentViewFormTests(CommentTestsData, TestCase):
         response_for_upvote = self.client.post(
             reverse(
                 "vote_comment",
-                kwargs={"blog_pk": self.blog.pk, "comment_pk": self.comment.pk},
+                kwargs={"pk": self.comment.pk},
             ),
             {"upvote-comment": "upvote"},
         )
@@ -283,7 +283,7 @@ class VoteCommentViewFormTests(CommentTestsData, TestCase):
         response_for_downvote = self.client.post(
             reverse(
                 "vote_comment",
-                kwargs={"blog_pk": self.blog.pk, "comment_pk": self.comment.pk},
+                kwargs={"pk": self.comment.pk},
             ),
             {"upvote-comment": "upvote"},
         )
@@ -294,20 +294,17 @@ class VoteCommentViewFormTests(CommentTestsData, TestCase):
         response = self.client.get(
             reverse(
                 "vote_comment",
-                kwargs={"blog_pk": self.blog.pk, "comment_pk": self.comment.pk},
+                kwargs={"pk": self.comment.pk},
             ),
             {"upvote-comment": "upvote"},
         )
-        self.assertEqual(response.status_code, 302)
-        self.assertRedirects(
-            response, reverse("blog_detail", kwargs={"pk": self.blog.pk})
-        )
+        self.assertEqual(response.status_code, 405)
 
     def test_upvote_functionality_for_logged_out_user(self):
         response = self.client.post(
             reverse(
                 "vote_comment",
-                kwargs={"blog_pk": self.blog.pk, "comment_pk": self.comment.pk},
+                kwargs={"pk": self.comment.pk},
             ),
             {"upvote-comment": "upvote"},
         )
@@ -315,7 +312,7 @@ class VoteCommentViewFormTests(CommentTestsData, TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(
             response,
-            f"{reverse('account_login')}?next={reverse('vote_comment', kwargs={'blog_pk': self.blog.pk, 'comment_pk': self.comment.pk})}",
+            f"{reverse('account_login')}?next={reverse('vote_comment', kwargs={'pk': self.comment.pk})}",
         )
         self.assertEqual(Comment.objects.last().comment_upvotes_count, 0)
 
@@ -326,7 +323,7 @@ class VoteCommentViewFormTests(CommentTestsData, TestCase):
         response = self.client.post(
             reverse(
                 "vote_comment",
-                kwargs={"blog_pk": self.blog.pk, "comment_pk": self.comment.pk},
+                kwargs={"pk": self.comment.pk},
             ),
             {"downvote-comment": "downvote"},
         )
@@ -338,7 +335,7 @@ class VoteCommentViewFormTests(CommentTestsData, TestCase):
         response = self.client.post(
             reverse(
                 "vote_comment",
-                kwargs={"blog_pk": self.blog.pk, "comment_pk": self.comment.pk},
+                kwargs={"pk": self.comment.pk},
             ),
             {"downvote-comment": "downvote"},
         )
@@ -350,7 +347,7 @@ class VoteCommentViewFormTests(CommentTestsData, TestCase):
         response_for_upvote = self.client.post(
             reverse(
                 "vote_comment",
-                kwargs={"blog_pk": self.blog.pk, "comment_pk": self.comment.pk},
+                kwargs={"pk": self.comment.pk},
             ),
             {"upvote-comment": "upvote"},
         )
@@ -360,7 +357,7 @@ class VoteCommentViewFormTests(CommentTestsData, TestCase):
         response_for_downvote = self.client.post(
             reverse(
                 "vote_comment",
-                kwargs={"blog_pk": self.blog.pk, "comment_pk": self.comment.pk},
+                kwargs={"pk": self.comment.pk},
             ),
             {"downvote-comment": "downvote"},
         )
@@ -371,7 +368,7 @@ class VoteCommentViewFormTests(CommentTestsData, TestCase):
         response = self.client.post(
             reverse(
                 "vote_comment",
-                kwargs={"blog_pk": self.blog.pk, "comment_pk": self.comment.pk},
+                kwargs={"pk": self.comment.pk},
             ),
             {"downvote-comment": "downvote"},
         )
@@ -379,6 +376,6 @@ class VoteCommentViewFormTests(CommentTestsData, TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(
             response,
-            f"{reverse('account_login')}?next={reverse('vote_comment', kwargs={'blog_pk': self.blog.pk, 'comment_pk': self.comment.pk})}",
+            f"{reverse('account_login')}?next={reverse('vote_comment', kwargs={'pk': self.comment.pk})}",
         )
         self.assertEqual(Comment.objects.last().comment_upvotes_count, 0)

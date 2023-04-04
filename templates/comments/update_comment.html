@@ -1,7 +1,7 @@
 <form 
     class="comment-update-form"
     method="POST"
-    hx-post="{% url 'update_comment' blog.id comment.id %}"
+    hx-post="{% url 'update_comment' comment.id %}"
     hx-target="#comment-list"
     hx-swap="innerHTML"
     hx-trigger="submit">

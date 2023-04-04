@@ -214,6 +214,9 @@ class DeleteBlogView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 class LikeBlogView(LoginRequiredMixin, View):
     """View created for handling liking and unliking of a blog"""
 
+    login_url = "account_login"
+    http_method_names = ["post"]
+
     def post(self, request, *args, **kwargs):
         """
         Handles the post request to like or unlike a blog.
@@ -238,6 +241,3 @@ class LikeBlogView(LoginRequiredMixin, View):
 
         blog.save()
         return JsonResponse(blog.blog_likes_count, safe=False)
-
-    def get(self, request, *args, **kwargs):
-        return redirect("home")
