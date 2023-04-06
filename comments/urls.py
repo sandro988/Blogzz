@@ -20,7 +20,7 @@ urlpatterns = [
         name="create_comment",
     ),
     path(
-        "reply/<uuid:blog_pk>/<uuid:comment_pk>/",
+        "reply/<uuid:comment_pk>/",
         CreateCommentView.as_view(),
         name="create_reply",
     ),

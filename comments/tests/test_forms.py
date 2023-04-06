@@ -31,15 +31,6 @@ class CommentTestsData(TestsData):
             comment_body="First comment on 'Test blog'",
         )
 
-        # Creating ten nested replies for a comment
-        for nested_reply in range(10):
-            reply = Comment.objects.create(
-                blog=cls.blog,
-                comment_author=cls.user,
-                comment_body=f"reply {nested_reply + 1}",
-                comment_parent=Comment.objects.first(),
-            )
-
         cls.form_data = {
             "comment_body": "Updated comment",
         }
@@ -85,7 +76,7 @@ class CreateCommentViewFormTests(TestsData, TestCase):
         response_for_reply = self.client.post(
             reverse(
                 "create_reply",
-                kwargs={"blog_pk": self.blog.pk, "comment_pk": parent_comment},
+                kwargs={"comment_pk": parent_comment},
             ),
             data=self.reply_form_data,
         )
@@ -107,7 +98,7 @@ class CreateCommentViewFormTests(TestsData, TestCase):
         response_for_reply = self.client.post(
             reverse(
                 "create_reply",
-                kwargs={"blog_pk": self.blog.pk, "comment_pk": str(uuid.uuid4())},
+                kwargs={"comment_pk": str(uuid.uuid4())},
             ),
             data=self.reply_form_data,
         )
@@ -197,42 +188,6 @@ class UpdateCommentViewFormTests(CommentTestsData, TestCase):
             f"{reverse('account_login')}?next={reverse('update_comment', kwargs={'pk': self.comment.pk})}",
         )
 
-    def test_update_comment_on_continue_comment_thread_view(self):
-        self.client.login(email="test_user@email.com", password="test_user_password")
-        continue_thread_comment = Comment.objects.get(comment_body="reply 6")
-        comment_to_update = Comment.objects.get(comment_body="reply 10")
-
-        update_comment_url = reverse(
-            "update_comment",
-            kwargs={
-                "pk": comment_to_update.pk,
-            },
-        )
-
-        response = self.client.post(
-            update_comment_url,
-            {
-                "next": reverse(
-                    "continue_thread",
-                    kwargs={
-                        "pk": continue_thread_comment.pk,
-                    },
-                ),
-                **self.form_data,
-            },
-        )
-
-        self.assertEqual(response.status_code, 302)
-        # Checking that the comment was updated.
-        self.assertTrue(
-            Comment.objects.get(pk=comment_to_update.pk).comment_body, "Updated comment"
-        )
-        # Checking that we get redirected back to continue_thread page.
-        self.assertRedirects(
-            response,
-            reverse("continue_thread", kwargs={"pk": continue_thread_comment.pk}),
-        )
-
 
 class DeleteCommentViewFormTests(CommentTestsData, TestCase):
     def test_delete_comment_form(self):
@@ -303,79 +258,11 @@ class DeleteCommentViewFormTests(CommentTestsData, TestCase):
         response = self.client.post(comment_delete_page_url)
         self.assertEqual(response.status_code, 403)
         self.assertEqual(
-            Comment.objects.count(), 11
+            Comment.objects.count(), 1
         )  # It is 11 because we have also created 10 replies in "CommentTestsData"
         self.assertEqual(
             Comment.objects.last().comment_body, "First comment on 'Test blog'"
         )
-
-    def test_delete_comment_on_continue_comment_thread_view(self):
-        self.client.login(email="test_user@email.com", password="test_user_password")
-        continue_thread_comment = Comment.objects.get(comment_body="reply 6")
-
-        # If for example we picked the comment with the body of reply 7, all of its child comments
-        # would also be deleted, and that would result in redirect to blog_detail, not to the continue_thread page.
-        # So here we are taking the 10th comment to test where will the user be redirected to after they delete this comment.
-        comment_to_delete = Comment.objects.get(comment_body="reply 10")
-        delete_comment_url = reverse(
-            "delete_comment",
-            kwargs={
-                "pk": comment_to_delete.pk,
-            },
-        )
-
-        response = self.client.post(
-            delete_comment_url,
-            {
-                "next": reverse(
-                    "continue_thread",
-                    kwargs={
-                        "pk": continue_thread_comment.pk,
-                    },
-                )
-            },
-        )
-
-        # Checking that the comment does not exist anymore.
-        self.assertFalse(Comment.objects.filter(pk=comment_to_delete.pk).exists())
-
-        # Checking that we get redirected back to continue_thread page.
-        self.assertRedirects(
-            response,
-            reverse(
-                "continue_thread",
-                kwargs={
-                    "pk": continue_thread_comment.pk,
-                },
-            ),
-        )
-
-        # Deleting first and the only comment on continue_thread page
-        comment_to_delete = Comment.objects.get(comment_body="reply 7")
-        delete_comment_url = reverse(
-            "delete_comment",
-            kwargs={
-                "pk": comment_to_delete.pk,
-            },
-        )
-
-        response = self.client.post(
-            delete_comment_url,
-            {
-                "next": reverse(
-                    "continue_thread",
-                    kwargs={
-                        "pk": continue_thread_comment.pk,
-                    },
-                )
-            },
-        )
-
-        # Checking that we get redirect to the blog_detail page and that the comment has been deleted
-        self.assertRedirects(
-            response, reverse("blog_detail", kwargs={"pk": self.blog.pk})
-        )
-        self.assertFalse(Comment.objects.filter(pk=comment_to_delete.pk).exists())
 
 
 class VoteCommentViewFormTests(CommentTestsData, TestCase):
@@ -494,3 +381,162 @@ class VoteCommentViewFormTests(CommentTestsData, TestCase):
             f"{reverse('account_login')}?next={reverse('vote_comment', kwargs={'pk': self.comment.pk})}",
         )
         self.assertEqual(Comment.objects.last().comment_upvotes_count, 0)
+
+
+class TestFormsOnContinueThreadView(CommentTestsData, TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+
+        # Creating ten nested replies for a comment
+        for nested_reply in range(10):
+            Comment.objects.create(
+                blog=cls.blog,
+                comment_author=cls.user,
+                comment_body=f"reply {nested_reply + 1}",
+                comment_parent=Comment.objects.first(),
+            )
+
+        cls.reply_form_data = {
+            "comment_body": "Reply to comment on 'continue_thread' page"
+        }
+
+    def test_reply_functionality_on_continue_thread_view(self):
+        self.client.login(email="test_user@email.com", password="test_user_password")
+        continue_thread_comment = Comment.objects.get(comment_body="reply 6")
+        parent_comment = Comment.objects.get(comment_body="reply 8")
+        comment_reply_url = reverse(
+            "create_reply", kwargs={"comment_pk": parent_comment.pk}
+        )
+
+        response = self.client.post(
+            comment_reply_url,
+            {
+                "next": reverse(
+                    "continue_thread",
+                    kwargs={
+                        "pk": continue_thread_comment.pk,
+                    },
+                ),
+                **self.reply_form_data,
+            },
+        )
+
+        self.assertEqual(response.status_code, 302)
+        new_reply = Comment.objects.get(
+            comment_body="Reply to comment on 'continue_thread' page"
+        )
+        self.assertIsNotNone(new_reply)
+        self.assertEqual(
+            new_reply.comment_body, "Reply to comment on 'continue_thread' page"
+        )
+
+        # Checking that we get redirected back to continue_thread page.
+        self.assertRedirects(
+            response,
+            reverse("continue_thread", kwargs={"pk": continue_thread_comment.pk}),
+        )
+
+    def test_update_comment_on_continue_comment_thread_view(self):
+        self.client.login(email="test_user@email.com", password="test_user_password")
+        continue_thread_comment = Comment.objects.get(comment_body="reply 6")
+        comment_to_update = Comment.objects.get(comment_body="reply 10")
+
+        update_comment_url = reverse(
+            "update_comment",
+            kwargs={
+                "pk": comment_to_update.pk,
+            },
+        )
+
+        response = self.client.post(
+            update_comment_url,
+            {
+                "next": reverse(
+                    "continue_thread",
+                    kwargs={
+                        "pk": continue_thread_comment.pk,
+                    },
+                ),
+                **self.form_data,
+            },
+        )
+
+        self.assertEqual(response.status_code, 302)
+        # Checking that the comment was updated.
+        self.assertTrue(
+            Comment.objects.get(pk=comment_to_update.pk).comment_body, "Updated comment"
+        )
+        # Checking that we get redirected back to continue_thread page.
+        self.assertRedirects(
+            response,
+            reverse("continue_thread", kwargs={"pk": continue_thread_comment.pk}),
+        )
+
+    def test_delete_comment_on_continue_comment_thread_view(self):
+        self.client.login(email="test_user@email.com", password="test_user_password")
+        continue_thread_comment = Comment.objects.get(comment_body="reply 6")
+
+        # If for example we picked the comment with the body of reply 7, all of its child comments
+        # would also be deleted, and that would result in redirect to blog_detail, not to the continue_thread page.
+        # So here we are taking the 10th comment to test where will the user be redirected to after they delete this comment.
+        comment_to_delete = Comment.objects.get(comment_body="reply 10")
+        delete_comment_url = reverse(
+            "delete_comment",
+            kwargs={
+                "pk": comment_to_delete.pk,
+            },
+        )
+
+        response = self.client.post(
+            delete_comment_url,
+            {
+                "next": reverse(
+                    "continue_thread",
+                    kwargs={
+                        "pk": continue_thread_comment.pk,
+                    },
+                )
+            },
+        )
+
+        # Checking that the comment does not exist anymore.
+        self.assertFalse(Comment.objects.filter(pk=comment_to_delete.pk).exists())
+
+        # Checking that we get redirected back to continue_thread page.
+        self.assertRedirects(
+            response,
+            reverse(
+                "continue_thread",
+                kwargs={
+                    "pk": continue_thread_comment.pk,
+                },
+            ),
+        )
+
+        # Deleting first and the only comment on continue_thread page
+        comment_to_delete = Comment.objects.get(comment_body="reply 7")
+        delete_comment_url = reverse(
+            "delete_comment",
+            kwargs={
+                "pk": comment_to_delete.pk,
+            },
+        )
+
+        response = self.client.post(
+            delete_comment_url,
+            {
+                "next": reverse(
+                    "continue_thread",
+                    kwargs={
+                        "pk": continue_thread_comment.pk,
+                    },
+                )
+            },
+        )
+
+        # Checking that we get redirect to the blog_detail page and that the comment has been deleted
+        self.assertRedirects(
+            response, reverse("blog_detail", kwargs={"pk": self.blog.pk})
+        )
+        self.assertFalse(Comment.objects.filter(pk=comment_to_delete.pk).exists())

@@ -65,7 +65,7 @@ class CreateCommentViewTests(CommentTestsData, TestCase):
         response = self.client.get(
             reverse(
                 "create_reply",
-                kwargs={"blog_pk": self.blog.pk, "comment_pk": self.comment.pk},
+                kwargs={"comment_pk": self.comment.pk},
             )
         )
 

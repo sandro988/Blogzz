@@ -1,7 +1,7 @@
 <form
     class="comment-form comment-reply-form"
     method="POST"
-    hx-post="{% url 'create_reply' blog.id comment.id %}"
+    hx-post="{% url 'create_reply' comment.id %}"
     hx-target="#comment-list"
     hx-swap="innerHTML"
 >
@@ -23,5 +23,10 @@
         >
             Cancel
         </button>
+
+        <!-- This input will only be present if users try to reply to comments from continue_thread page -->
+        {% if continue_thread_url %}
+            <input type="hidden" name="next" value="{{ continue_thread_url }}">
+        {% endif %}
     </div>
 </form>

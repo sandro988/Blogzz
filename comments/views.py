@@ -52,7 +52,8 @@ class CreateCommentView(LoginRequiredMixin, CreateView):
             Redirects the user to the "get_success_url()" method on success.
         get_context_data: Adds context variables to the view's template context. Adds the
             associated blog and parent comment to the context, as well as the "CommentForm" form for creating
-            new comments.
+            new comments and continue_thread_url variable, which will be used to determine where should users be redirected
+            if they replied to a comment from "continue_thread" page.
         get_success_url: Returns the URL to redirect to after a successful comment creation. In this
             case, it redirects the user to the "blog_detail" view for the associated blog.
         get_template_names: Returns the appropriate template based on whether the request is made via HTMX or not.
@@ -66,19 +67,21 @@ class CreateCommentView(LoginRequiredMixin, CreateView):
     login_url = "account_login"
 
     def get_object(self):
-        blog = get_object_or_404(Blog, pk=self.kwargs["blog_pk"])
-        result = {"blog": blog, "comment": None}
-        if self.kwargs.get("comment_pk"):
-            parent_comment = get_object_or_404(
-                Comment, pk=self.kwargs["comment_pk"], blog_id=self.kwargs["blog_pk"]
-            )
+        result = {"blog": None, "comment": None}
+
+        if self.kwargs.get("blog_pk"):
+            blog = get_object_or_404(Blog, pk=self.kwargs["blog_pk"])
+            result["blog"] = blog
+        elif self.kwargs.get("comment_pk"):
+            parent_comment = get_object_or_404(Comment, pk=self.kwargs["comment_pk"])
             result["comment"] = parent_comment
+            result["blog"] = parent_comment.blog
 
         return result
 
     def form_valid(self, form):
         form.instance.comment_author = self.request.user
-        form.instance.blog_id = self.kwargs["blog_pk"]
+        form.instance.blog_id = self.get_object().get("blog").id
         form.instance.comment_parent = self.get_object().get("comment")
 
         return super().form_valid(form)
@@ -88,11 +91,23 @@ class CreateCommentView(LoginRequiredMixin, CreateView):
         context["blog"] = self.get_object().get("blog")
         context["comment"] = self.get_object().get("comment")
         context["create_page_form"] = self.get_form()
+        context["continue_thread_url"] = self.request.GET.get("next")
 
         return context
 
     def get_success_url(self):
-        return reverse_lazy("blog_detail", kwargs={"pk": self.kwargs["blog_pk"]})
+        next = self.request.POST.get("next")
+
+        if next:
+            comment = get_comment_from_next_url(next)
+            return reverse_lazy(
+                "continue_thread",
+                kwargs={"pk": comment.pk},
+            )
+
+        return reverse_lazy(
+            "blog_detail", kwargs={"pk": self.get_object().get("blog").id}
+        )
 
     def get_template_names(self):
         if self.request.htmx:
@@ -126,10 +141,6 @@ class UpdateCommentView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         context["comment_to_be_updated"] = self.get_object()
         context["update_page_form"] = self.get_form()
         context["create_page_form"] = self.get_form()
-
-        # If user clicks the edit button from the continue_thread page then we will pass 'continue_thread_url' variable to templates
-        # so that in get_success_url we redirect user to continue_thread page instead of redirecting them to detail page of
-        # a blog, this will ensure that user stays on continue_thread page after updating replies of continue_thread comment.
         context["continue_thread_url"] = self.request.GET.get("next")
 
         return context
@@ -188,15 +199,11 @@ class DeleteCommentView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         context["blog"] = self.get_object().blog
         context["comment_to_be_deleted"] = self.get_object()
         context["create_page_form"] = CommentForm()
-
-        # If user clicks the delete button from the continue_thread page then we will pass 'continue_thread_url' variable to templates
-        # so that in get_success_url we redirect user to continue_thread page instead of redirecting them to detail page of
-        # a blog, this will ensure that user stays on continue_thread page after deleting replies of continue_thread comment.
         context["continue_thread_url"] = self.request.GET.get("next")
 
         # We are using this context variable to determine how many replies does the continue_thread comment have, so that when user
         # deletes one of them we can determine if we should add hx-push-url parameter to the form or not in the delete_comment.html template.
-        # If the comment that user wants to delete is the only reply of continue_thread_comment with or without its own replies than we add 
+        # If the comment that user wants to delete is the only reply of continue_thread_comment with or without its own replies than we add
         # hx-push-url parameter to the delete form.
         context["continue_thread_comment"] = get_comment_from_next_url(
             self.request.GET.get("next")
