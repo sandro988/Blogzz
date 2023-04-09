@@ -19,23 +19,18 @@ class CommentDetailView(LoginRequiredMixin, DetailView):
 
     Methods:
         get_context_data: Adds extra context to the view, we are adding a form for creating comments and a blog to which the comment belongs.
-        get_template_names: Returns the appropriate template based on whether the request is made via HTMX or not.
     """
 
     model = Comment
     context_object_name = "comment"
     login_url = "account_login"
+    template_name = "comments/comments_detail.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["create_page_form"] = CommentForm()
         context["blog"] = self.get_object().blog
         return context
-
-    def get_template_names(self):
-        if self.request.htmx:
-            return "comments/list_comments.html"
-        return "comments/comments_detail.html"
 
 
 class CreateCommentView(LoginRequiredMixin, CreateView):

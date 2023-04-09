@@ -1,3 +1,4 @@
+{% load comment_extras %}
 <div id="comment-div-{{ comment.id }}">
     <div class="comment-header">
         <div class="user-info">
@@ -7,7 +8,7 @@
                 loading="lazy"
                 alt="{{ comment.comment_author }}'s profile picture"
             />
-            <p>{{ comment.comment_author }}<span class="comment-publish-time"> &bull; {{ comment.comment_created|timesince }} ago</span></p>
+            <p>{{ comment.comment_author }}<span class="comment-publish-time"> &bull; {{ comment.comment_created|custom_timesince }}</span></p>
         </div>
 
         <!-- Edit and delete buttons that will be seen only by the comment authors.-->
@@ -60,11 +61,13 @@
             hx-target="#comment-div-{{ comment.id }}"
             hx-swap="beforeend"
             {% if "continue_thread" in request.path %}
-                hx-include="[comment-data='next-{{ comment.id }}']"
+            hx-include="[comment-data='next-{{ comment.id }}']"
             {% endif %}
-        >
+            >
+            <svg class="reply-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><path d="M71.58,144,32,176V48a8,8,0,0,1,8-8H168a8,8,0,0,1,8,8v88a8,8,0,0,1-8,8Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><path d="M80,144v40a8,8,0,0,0,8,8h96.42L224,224V96a8,8,0,0,0-8-8H176" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/></svg>
             Reply
         </button> 
+        
     </div>
     <!-- 
         Including the form for updating/deleting the individual comment, this will 

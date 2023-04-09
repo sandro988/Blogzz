@@ -2,7 +2,7 @@
     <div class="comment-delete-modal-div prevent-propagation-for-comment-deletion" id="comment-delete-modal-div"></div>
 
     <div class="comments-header">
-        <h3>Comments</h3>
+        <h3>{{ blog.comments.count }} Comments</h3>
     </div>
 
     
@@ -24,7 +24,7 @@
                 {% endwith %}
             {% endif %}
         {% empty %}
-            <h3>No comments for this blog yet.</h3>
+            {% include "comments/partials/empty_comment_section.html" %}
         {% endfor %}
     {% endif %}
 
