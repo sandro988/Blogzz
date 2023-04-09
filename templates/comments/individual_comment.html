@@ -77,8 +77,9 @@
         {% include 'comments/update_comment.html' %}
     {% elif comment == comment_to_be_deleted %} 
         {% include 'comments/delete_comment.html' %}
+    {% elif comment == comment_to_reply_to %}
+        {% include 'comments/reply_to_comment.html'%}
     {% endif %}
-
 
     <!-- Checking if the user is on continue_thread page -->
     {% if "continue_thread" in request.path %}

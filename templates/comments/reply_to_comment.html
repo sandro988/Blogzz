@@ -4,6 +4,9 @@
     hx-post="{% url 'create_reply' comment.id %}"
     hx-target="#comment-list"
     hx-swap="innerHTML"
+    {% if not continue_thread_url %}
+        hx-push-url="{% url 'blog_detail' blog.id %}"
+    {% endif %}
 >
     {% csrf_token %} {{ form.as_p }}
 

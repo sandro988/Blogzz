@@ -1,4 +1,4 @@
-from django import template 
+from django import template
 from django.utils import timezone
 
 register = template.Library()
@@ -7,8 +7,8 @@ register = template.Library()
 def custom_timesince(value):
     now = timezone.now()
     if timezone.is_naive(value):
-        value = timezone.make_aware(value, timezone.get_current_timezone())  # Make naive datetime object timezone-aware
-    diff = now - value 
+        value = timezone.make_aware(value, timezone.get_current_timezone())
+    diff = now - value
     if diff < timezone.timedelta(minutes=1):
         return "1m"
     elif diff < timezone.timedelta(hours=1):
@@ -23,6 +23,6 @@ def custom_timesince(value):
         return str(int(diff.total_seconds() / 2592000)) + "M"
     else:
         return str(int(diff.total_seconds() / 31536000)) + "y"
-        
-    
+
+
 register.filter("custom_timesince", custom_timesince)

@@ -8,7 +8,7 @@ from django.http import Http404
 from blogs.models import Blog
 from .models import Comment
 from .forms import CommentForm
-from .utils import get_comment_from_next_url
+from .utils import get_comment_from_next_url, get_sorted_comments, get_sorted_replies
 
 
 class CommentDetailView(LoginRequiredMixin, DetailView):
@@ -30,6 +30,10 @@ class CommentDetailView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context["create_page_form"] = CommentForm()
         context["blog"] = self.get_object().blog
+        context["comments"] = get_sorted_replies(
+            self.get_object(), self.request.GET.get("sort")
+        )
+        context["comment_from_comment_detail"] = self.get_object()
         return context
 
 
@@ -85,9 +89,10 @@ class CreateCommentView(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context["blog"] = self.get_object().get("blog")
         context["comment"] = self.get_object().get("comment")
+        context["comments"] = self.get_object().get("blog").comments.all()
+        context["comment_to_reply_to"] = self.get_object().get("comment")
         context["create_page_form"] = self.get_form()
         context["continue_thread_url"] = self.request.GET.get("next")
-
         return context
 
     def get_success_url(self):
@@ -137,6 +142,7 @@ class UpdateCommentView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         context["update_page_form"] = self.get_form()
         context["create_page_form"] = self.get_form()
         context["continue_thread_url"] = self.request.GET.get("next")
+        context["comments"] = self.get_object().blog.comments.all()
 
         return context
 
@@ -195,6 +201,7 @@ class DeleteCommentView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         context["comment_to_be_deleted"] = self.get_object()
         context["create_page_form"] = CommentForm()
         context["continue_thread_url"] = self.request.GET.get("next")
+        context["comments"] = self.get_object().blog.comments.all()
 
         # We are using this context variable to determine how many replies does the continue_thread comment have, so that when user
         # deletes one of them we can determine if we should add hx-push-url parameter to the form or not in the delete_comment.html template.
@@ -323,6 +330,10 @@ class ContinueCommentThreadView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["continue_thread_comment"] = self.get_object()
+        context["continue_thread_replies"] = get_sorted_comments(
+            Comment.objects.filter(comment_parent=self.object.pk),
+            self.request.GET.get("sort"),
+        )
         context["blog"] = self.get_object().blog
         context["create_page_form"] = CommentForm()
         return context

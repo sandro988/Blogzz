@@ -4,7 +4,11 @@
     hx-post="{% url 'update_comment' comment.id %}"
     hx-target="#comment-list"
     hx-swap="innerHTML"
-    hx-trigger="submit">
+    hx-trigger="submit"
+    {% if not continue_thread_url %}
+        hx-push-url="{% url 'blog_detail' blog.id %}"
+    {% endif %}
+    >
 
     {% csrf_token %}
     {{ update_page_form.as_p }}

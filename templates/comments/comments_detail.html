@@ -13,12 +13,13 @@
                 <div class="comment-delete-modal-div prevent-propagation-for-comment-deletion" id="comment-delete-modal-div"></div>
             
                 <div class="comments-header">
-                    <h3>Comments</h3>
+                    <h3>{{ comment.count_comment_and_replies }} Replies </h3>
+                    {% include "comments/partials/sort_comments.html" %}
                 </div>
 
                 {% include "comments/individual_comment.html" %} 
                 {% with depth=comment.comment_depth|add:5 %} 
-                    {% for comment in comment.replies.all %}
+                    {% for comment in comments %}
                         <div class="comment">
                             {% include "comments/comment_recursive.html" with comment=comment depth=depth %}
                         </div>

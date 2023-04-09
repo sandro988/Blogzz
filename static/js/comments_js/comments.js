@@ -9,6 +9,8 @@ let commentDeleteBtns; // Delete buttons in options container
 let cancelCommentDeletionBtns;
 let commentDeleteFormBtns; // Delete buttons in delete form
 let commentDeleteOverlay;
+let commentSortBtn = document.querySelector(".sort-by-btn");
+let sortOptions = document.querySelector(".sort-by-form");
 
 // In the comment section there are few suggestion comments, they are just buttons
 // that users can click on, after they click them, value of a clicked button
@@ -150,6 +152,19 @@ document.addEventListener("mousedown", (e) => {
         }
         commentDeleteModalContainer.replaceChildren();
     }
+
+    // For comment sorting options
+
+    if (
+        e.target.classList.contains(
+            "prevent-propagation-for-comment-sort-options"
+        )
+    ) {
+        e.stopPropagation;
+    } else {
+        let commentSortOptions = document.querySelector(".sort-by-form");
+        commentSortOptions.classList.remove("sort-by-form-active");
+    }
 });
 
 function eventListenerForDeleteButtons() {
@@ -194,6 +209,15 @@ function eventListenerOnEscapeKey() {
     });
 }
 
+function eventListenerForCommentSortButton() {
+    commentSortBtn = document.querySelector(".sort-by-btn");
+    commentSortBtn.addEventListener("click", function () {
+        sortOptions = document.querySelector(".sort-by-form");
+        sortOptions.classList.toggle("sort-by-form-active");
+    });
+}
+
 eventListenerForOptionButtons();
 eventListenerForDeleteButtons();
 eventListenerOnEscapeKey();
+eventListenerForCommentSortButton();

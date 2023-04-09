@@ -540,3 +540,59 @@ class TestFormsOnContinueThreadView(CommentTestsData, TestCase):
             response, reverse("blog_detail", kwargs={"pk": self.blog.pk})
         )
         self.assertFalse(Comment.objects.filter(pk=comment_to_delete.pk).exists())
+
+
+class SortCommentsFormTests(CommentTestsData, TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+
+        cls.newer_comment = Comment.objects.create(
+            blog=cls.blog,
+            comment_author=cls.user,
+            comment_body="Second comment on 'Test blog'",
+        )
+
+    def test_sorting_comments_by_oldest(self):
+        self.client.login(email="test_user@email.com", password="test_user_password")
+        blog_detail_url = reverse("blog_detail", kwargs={"pk": self.blog.pk})
+        response = self.client.get(blog_detail_url, {"sort": "oldest"})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "blogs/blogs_detail.html")
+        comments = response.context["comments"]
+        self.assertEqual(comments[0], self.comment)
+        self.assertEqual(comments[1], self.newer_comment)
+
+    def test_sorting_comments_by_newest(self):
+        self.client.login(email="test_user@email.com", password="test_user_password")
+        blog_detail_url = reverse("blog_detail", kwargs={"pk": self.blog.pk})
+        response = self.client.get(blog_detail_url, {"sort": "newest"})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "blogs/blogs_detail.html")
+        comments = response.context["comments"]
+        self.assertEqual(comments[0], self.newer_comment)
+        self.assertEqual(comments[1], self.comment)
+
+    def test_sorting_comments_by_popularity(self):
+        self.client.login(email="test_user@email.com", password="test_user_password")
+        # User upvotes the comment
+        response_for_upvote = self.client.post(
+            reverse(
+                "vote_comment",
+                kwargs={"pk": self.comment.pk},
+            ),
+            {"upvote-comment": "upvote"},
+        )
+
+        blog_detail_url = reverse("blog_detail", kwargs={"pk": self.blog.pk})
+        response = self.client.get(blog_detail_url, {"sort": "popular"})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "blogs/blogs_detail.html")
+
+        # We upvoted first comment, so it should be outputed first as it will have more upvotes than the second comment.
+        comments = response.context["comments"]
+        self.assertEqual(comments[0], self.comment)
+        self.assertEqual(comments[1], self.newer_comment)

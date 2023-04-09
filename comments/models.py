@@ -22,11 +22,11 @@ class Comment(models.Model):
     comment_upvotes = models.ManyToManyField(
         get_user_model(), related_name="upvote", default=None, blank=True
     )
-    comment_upvotes_count = models.IntegerField(default="0")
+    comment_upvotes_count = models.IntegerField(default=0)
     comment_downvotes = models.ManyToManyField(
         get_user_model(), related_name="downvote", default=None, blank=True
     )
-    comment_downvotes_count = models.IntegerField(default="0")
+    comment_downvotes_count = models.IntegerField(default=0)
     comment_depth = models.IntegerField(default=1)
 
     class Meta:

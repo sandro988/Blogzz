@@ -3,19 +3,20 @@
 
     <div class="comments-header">
         <h3>{{ blog.comments.count }} Comments</h3>
+        {% include "comments/partials/sort_comments.html" %}
     </div>
 
     
     {% if continue_thread_comment %}
         {% with depth=continue_thread_comment.comment_depth|add:5 %}
-            {% for comment in continue_thread_comment.get_replies %}
+            {% for comment in continue_thread_replies %}
                 <div class="comment">
                     {% include "comments/comment_recursive.html" with comment=comment depth=depth %}
                 </div>
             {% endfor %}
         {% endwith %}   
     {% else %}
-        {% for comment in blog.comments.all %}
+        {% for comment in comments %}
             {% if comment.comment_parent is None %}
                 {% with depth=comment.comment_depth|add:5 %}
                     <div class="comment">

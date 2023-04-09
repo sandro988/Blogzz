@@ -15,6 +15,8 @@
     hx-trigger="submit"
     {% if continue_thread_comment.replies.count == 1 and comment_to_be_deleted == continue_thread_comment.replies.first %}
         hx-push-url="{% url 'blog_detail' blog.id %}"
+    {% elif not continue_thread_url %}
+        hx-push-url="{% url 'blog_detail' blog.id %}"
     {% endif %}
 >
     {% csrf_token %}
