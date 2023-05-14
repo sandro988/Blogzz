@@ -18,7 +18,11 @@
                 <div class="comment-options-div-buttons options-div-id-{{ comment.id }} prevent-propagation">
                     <button 
                         class="edit-comment-btn prevent-propagation"
-                        hx-get="{% url 'update_comment' comment.id %}"
+                        {% if request.GET.sort %}
+                            hx-get="{% url 'update_comment' comment.id %}?sort={{ request.GET.sort }}"
+                        {% else %}
+                            hx-get="{% url 'update_comment' comment.id %}"
+                        {% endif %}
                         hx-target="#comment-div-{{ comment.id }}"
                         hx-swap="innerHTML"
                         {% if "continue_thread" in request.path %}
@@ -34,7 +38,11 @@
                     -->
                     <button 
                         class="delete-comment-btn prevent-propagation"
-                        hx-get="{% url 'delete_comment' comment.id %}"
+                        {% if request.GET.sort %}
+                            hx-get="{% url 'delete_comment' comment.id %}?sort={{ request.GET.sort }}"
+                        {% else %}
+                            hx-get="{% url 'delete_comment' comment.id %}"
+                        {% endif %}
                         hx-target="#comment-delete-modal-div"
                         hx-swap="afterbegin"
                         {% if "continue_thread" in request.path %}
@@ -55,9 +63,21 @@
     </div>
     <div class="comment-footer">
         {% include "comments/upvote_downvote_comment.html" %}
+
+        <!-- 
+            I included an if statement that checks if request.GET.sort is None or not because when the user clicks this button
+            it should also contain a sort query parameter if it was applied before, and if I don't 
+            use this if statement, then the GET request will be sent to 'create_reply' without previously
+            applied query param and I won't be able to return sorted comments from the get_success_url method of
+            CreateCommentView view. Same logic will be used above for Edit and Delete buttons.
+        -->
         <button 
             class="comment-reply-btn"
-            hx-get="{% url 'create_reply' comment.id %}"
+            {% if request.GET.sort %}
+                hx-get="{% url 'create_reply' comment.id %}?sort={{ request.GET.sort }}"
+            {% else %}
+                hx-get="{% url 'create_reply' comment.id %}"
+            {% endif %}
             hx-target="#reply-form-container-{{ comment.id }}"
             hx-swap="innerHTML"
             {% if "continue_thread" in request.path %}

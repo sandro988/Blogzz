@@ -5,7 +5,7 @@
     hx-target="#comment-list"
     hx-swap="innerHTML"
     {% if not continue_thread_url %}
-        hx-push-url="{% url 'blog_detail' blog.id %}"
+        hx-push-url="{% url 'blog_detail' blog.id %}?sort=oldest"
     {% endif %}
 >
     {% csrf_token %} {{ form.as_p }}
@@ -32,4 +32,8 @@
             <input type="hidden" name="next" value="{{ continue_thread_url }}">
         {% endif %}
     </div>
+
+    {% if request.GET.sort %}
+        <input type="hidden" name="sort" value="{{ request.GET.sort }}">
+    {% endif %}
 </form>

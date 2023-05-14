@@ -2,6 +2,7 @@ import uuid
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
+from django.http import QueryDict
 from blogs.tests.test_forms import TestsData
 from comments.models import Comment
 
@@ -126,6 +127,41 @@ class CreateCommentViewFormTests(TestsData, TestCase):
             f"{reverse('account_login')}?next={reverse('create_comment', kwargs={'blog_pk': self.blog.pk})}",
         )
 
+    def test_sorting_works_after_comment_creation(self):
+        # URL for the blog detail page
+        blog_detail_url = reverse("blog_detail", kwargs={"pk": self.blog.pk})
+
+        # First comment - This will be an older comment.
+        comment1 = Comment.objects.create(
+            blog=self.blog,
+            comment_author=self.user,
+            comment_body="First comment - This should be older.",
+        )
+
+        # Data for second comment - This will be a newer comment.
+        comment2 = {"comment_body": "Second comment - This should be newer."}
+
+        # Creating a new comment with sort query parameter set to 'oldest' and checking that the request was successful
+        response = self.client.post(
+            reverse("create_comment", kwargs={"blog_pk": self.blog.pk}),
+            data={**comment2, "sort": "oldest"},
+            follow=True,
+        )
+        self.assertEqual(
+            response.status_code, 200
+        )  # status code is 200 because we set follow to True.
+
+        # Ensuring that the sorting parameter is present in the the URL after redirection.
+        self.assertEqual("sort=oldest", response.request["QUERY_STRING"])
+
+        # Ensruing that we get redirected back to blog_detail_url with sort query parameter set to 'oldest'.
+        expected_url = f"{blog_detail_url}?sort=oldest"
+        self.assertRedirects(response, expected_url)
+
+        # Ensuring that the comment1 is the first one on the page because we created it before comment2.
+        comments = response.context["comments"]
+        self.assertEqual(comments[0], comment1)
+
 
 class UpdateCommentViewFormTests(CommentTestsData, TestCase):
     def test_update_comment_with_form_data(self):
@@ -187,6 +223,44 @@ class UpdateCommentViewFormTests(CommentTestsData, TestCase):
             response,
             f"{reverse('account_login')}?next={reverse('update_comment', kwargs={'pk': self.comment.pk})}",
         )
+
+    def test_sorting_works_after_updating_comment(self):
+        self.client.login(email="test_user@email.com", password="test_user_password")
+
+        # URL for the blog detail page
+        blog_detail_url = reverse("blog_detail", kwargs={"pk": self.blog.pk})
+
+        # Creating newer comment
+        newer_comment = Comment.objects.create(
+            blog=self.blog,
+            comment_author=self.user,
+            comment_body="Second comment on 'Test blog'",
+        )
+
+        # Updating a comment with sort query parameter set to 'newest' and checking that the request was successful
+        response = self.client.post(
+            reverse(
+                "update_comment",
+                kwargs={"pk": self.comment.pk},
+            ),
+            data={**self.form_data, "sort": "newest"},
+            follow=True,
+        )
+        self.assertEqual(
+            response.status_code, 200
+        )  # status code is 200 because we set follow to True.
+
+        # Ensuring that the sorting parameter is present in the the URL after redirection.
+        self.assertEqual("sort=newest", response.request["QUERY_STRING"])
+
+        # Ensruing that we get redirected back to blog_detail_url with sort query parameter set to 'newest'.
+        expected_url = f"{blog_detail_url}?sort=newest"
+        self.assertRedirects(response, expected_url)
+
+        # Ensuring that the 'newer_comment' is the first one on the page because we created it in this
+        # test case and the 'sort' query parameter is set to newest.
+        comments = response.context["comments"]
+        self.assertEqual(comments[0], newer_comment)
 
 
 class DeleteCommentViewFormTests(CommentTestsData, TestCase):
@@ -263,6 +337,61 @@ class DeleteCommentViewFormTests(CommentTestsData, TestCase):
         self.assertEqual(
             Comment.objects.last().comment_body, "First comment on 'Test blog'"
         )
+
+    def test_sorting_works_after_deleting_comment(self):
+        self.client.login(email="test_user@email.com", password="test_user_password")
+
+        # URL for the blog detail page
+        blog_detail_url = reverse("blog_detail", kwargs={"pk": self.blog.pk})
+
+        # Creating two comments, one of which will have an upvote and thus will be more "popular".
+        newer_comment = Comment.objects.create(
+            blog=self.blog,
+            comment_author=self.user,
+            comment_body="Second comment on 'Test blog'",
+        )
+
+        newer_popular_comment = Comment.objects.create(
+            blog=self.blog,
+            comment_author=self.user,
+            comment_body="Third comment on 'Test blog'",
+        )
+
+        # Upvoting the comment and checking that the request was successful
+        response_for_upvote = self.client.post(
+            reverse(
+                "vote_comment",
+                kwargs={"pk": newer_popular_comment.pk},
+            ),
+            {"upvote-comment": "upvote"},
+        )
+        self.assertEqual(response_for_upvote.status_code, 200)
+
+        # Deleting a comment with sort query parameter set to 'popular' and checking that the request was successful
+        response = self.client.post(
+            reverse(
+                "delete_comment",
+                kwargs={"pk": self.comment.pk},
+            ),
+            {"sort": "popular"},
+            follow=True,
+        )
+        self.assertEqual(
+            response.status_code, 200
+        )  # status code is 200 because we set follow to True.
+
+        # Ensuring that the sorting parameter is present in the the URL after redirection.
+        self.assertEqual("sort=popular", response.request["QUERY_STRING"])
+
+        # Ensruing that we get redirected back to blog_detail_url with sort query parameter set to 'popular'.
+        expected_url = f"{blog_detail_url}?sort=popular"
+        self.assertRedirects(response, expected_url)
+
+        # Ensuring that the 'newer_popular_comment' is the first one on the page because the 'sort' query
+        # parameter is set to popular and in this test case we upvoted only the 'newer_popular_comment'.
+        comments = response.context["comments"]
+        self.assertEqual(comments[0], newer_popular_comment)
+        self.assertEqual(comments[1], newer_comment)
 
 
 class VoteCommentViewFormTests(CommentTestsData, TestCase):

@@ -14,6 +14,9 @@
         >
             Comment
         </button>
+        {% if request.GET.sort %}
+            <input type="hidden" name="sort" value="{{ request.GET.sort }}">
+        {% endif %}
     </form>
 
     {% include "comments/partials/create_comment_suggestions.html" %}

@@ -1,7 +1,9 @@
+from urllib.parse import urlencode
 from django.views import View
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from .mixins import SuccessUrlMixin
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse_lazy
 from django.http import Http404
@@ -37,10 +39,12 @@ class CommentDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class CreateCommentView(LoginRequiredMixin, CreateView):
+class CreateCommentView(LoginRequiredMixin, SuccessUrlMixin, CreateView):
     """
     View implemented for creating new comments or replies to already existing comments.
-    It inherits from LoginRequiredMixin to ensure that only authenticated users can access the view.
+    It inherits from LoginRequiredMixin to ensure that only authenticated users can access the view and
+    SuccessUrlMixin to determine if users need to be redirected to continue thread page and what sorting
+    order should the comments have.
 
     Methods:
         get_object: Retrieves the parent comment or blog associated with the request. If
@@ -53,8 +57,7 @@ class CreateCommentView(LoginRequiredMixin, CreateView):
             associated blog and parent comment to the context, as well as the "CommentForm" form for creating
             new comments and continue_thread_url variable, which will be used to determine where should users be redirected
             if they replied to a comment from "continue_thread" page.
-        get_success_url: Returns the URL to redirect to after a successful comment creation. In this
-            case, it redirects the user to the "blog_detail" view for the associated blog.
+        get_detail_url: Returns a URL for the blog detail page, where users will be redirected after successful comment/reply creation.
         get_template_names: Returns the appropriate template based on whether the request is made via HTMX or not.
 
     Raises:
@@ -95,16 +98,7 @@ class CreateCommentView(LoginRequiredMixin, CreateView):
         context["continue_thread_url"] = self.request.GET.get("next")
         return context
 
-    def get_success_url(self):
-        next = self.request.POST.get("next")
-
-        if next:
-            comment = get_comment_from_next_url(next)
-            return reverse_lazy(
-                "continue_thread",
-                kwargs={"pk": comment.pk},
-            )
-
+    def get_detail_url(self):
         return reverse_lazy(
             "blog_detail", kwargs={"pk": self.get_object().get("blog").id}
         )
@@ -116,10 +110,13 @@ class CreateCommentView(LoginRequiredMixin, CreateView):
         return "blogs/blogs_detail.html"
 
 
-class UpdateCommentView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class UpdateCommentView(
+    LoginRequiredMixin, SuccessUrlMixin, UserPassesTestMixin, UpdateView
+):
     """
     View implemented for letting users to update their own comments. It inherits from LoginRequiredMixin
-    to ensure that only authenticated users can access the view, and from
+    to ensure that only authenticated users can access the view, SuccessUrlMixin to determine if users need
+    to be redirected to continue thread page and what sorting order should the comments have and at last from
     UserPassesTestMixin to ensure that only the comment author can delete a comment.
 
     Methods:
@@ -146,18 +143,6 @@ class UpdateCommentView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
         return context
 
-    def get_success_url(self):
-        next = self.request.POST.get("next")
-
-        if next:
-            comment = get_comment_from_next_url(next)
-            return reverse_lazy(
-                "continue_thread",
-                kwargs={"pk": comment.pk},
-            )
-
-        return reverse_lazy("blog_detail", kwargs={"pk": self.get_object().blog.id})
-
     def get_template_names(self):
         if self.request.htmx:
             return "comments/update_comment.html"
@@ -168,10 +153,13 @@ class UpdateCommentView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return object.comment_author == self.request.user
 
 
-class DeleteCommentView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class DeleteCommentView(
+    LoginRequiredMixin, SuccessUrlMixin, UserPassesTestMixin, DeleteView
+):
     """
     View implemented for letting users to delete their own comments. It inherits from LoginRequiredMixin
-    to ensure that only authenticated users can access the view, and from
+    to ensure that only authenticated users can access the view, SuccessUrlMixin to determine if users need
+    to be redirected to continue thread page and what sorting order should the comments have and from
     UserPassesTestMixin to ensure that only the comment author can delete a comment.
 
     Methods:
@@ -215,10 +203,18 @@ class DeleteCommentView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def get_success_url(self):
         next = self.request.POST.get("next")
-        if next:
-            return self.redirect_to_continue_thread_page(next, self.get_object())
+        sort_param = self.request.POST.get("sort")
 
-        return reverse_lazy("blog_detail", kwargs={"pk": self.get_object().blog.id})
+        if next:
+            url = self.redirect_to_continue_thread_page(next, self.get_object())
+        else:
+            url = self.get_detail_url()
+
+        if sort_param:
+            query_params = urlencode({"sort": sort_param})
+            url = f"{url}?{query_params}"
+
+        return url
 
     def get_template_names(self):
         if self.request.htmx:
@@ -229,9 +225,9 @@ class DeleteCommentView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         object = self.get_object()
         return object.comment_author == self.request.user
 
-    def redirect_to_continue_thread_page(self, url: str, comment_to_delete: Comment):
+    def redirect_to_continue_thread_page(self, next: str, comment_to_delete: Comment):
 
-        continue_thread_comment = get_comment_from_next_url(url)
+        continue_thread_comment = get_comment_from_next_url(next)
         # Number of replies and nested replies on 'continue_thread' page.
         continue_thread_comment_replies = (
             continue_thread_comment.count_comments_and_replies()
@@ -245,12 +241,14 @@ class DeleteCommentView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             comment_to_delete == continue_thread_comment.get_replies().first()
             and continue_thread_comment.get_reply_count() == 1
         ):
-            return reverse_lazy("blog_detail", kwargs={"pk": self.get_object().blog.id})
+            url = reverse_lazy("blog_detail", kwargs={"pk": self.get_object().blog.id})
+        else:
+            url = reverse_lazy(
+                "continue_thread",
+                kwargs={"pk": continue_thread_comment.pk},
+            )
 
-        return reverse_lazy(
-            "continue_thread",
-            kwargs={"pk": continue_thread_comment.pk},
-        )
+        return url
 
 
 class CommentVoteView(LoginRequiredMixin, View):
