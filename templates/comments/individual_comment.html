@@ -58,8 +58,8 @@
         <button 
             class="comment-reply-btn"
             hx-get="{% url 'create_reply' comment.id %}"
-            hx-target="#comment-div-{{ comment.id }}"
-            hx-swap="beforeend"
+            hx-target="#reply-form-container-{{ comment.id }}"
+            hx-swap="innerHTML"
             {% if "continue_thread" in request.path %}
             hx-include="[comment-data='next-{{ comment.id }}']"
             {% endif %}
@@ -69,6 +69,7 @@
         </button> 
         
     </div>
+    <div id="reply-form-container-{{ comment.id }}"></div>
     <!-- 
         Including the form for updating/deleting the individual comment, this will 
         be used if the users manually enters the url for updating/deleting the comment.

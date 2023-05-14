@@ -9,8 +9,8 @@ let commentDeleteBtns; // Delete buttons in options container
 let cancelCommentDeletionBtns;
 let commentDeleteFormBtns; // Delete buttons in delete form
 let commentDeleteOverlay;
-let commentSortBtn = document.querySelector(".sort-by-btn");
-let sortOptions = document.querySelector(".sort-by-form");
+// let commentSortBtn = document.querySelector(".sort-by-btn");
+// let sortOptions = document.querySelector(".sort-by-form");
 
 // In the comment section there are few suggestion comments, they are just buttons
 // that users can click on, after they click them, value of a clicked button
@@ -87,6 +87,10 @@ document.addEventListener("htmx:afterRequest", (e) => {
             );
         });
     }
+
+    // if (e.target.classList.contains("comment-reply-btn")) {
+    //     console.log("clicked")
+    // }
 });
 
 // In comment section there is three dot SVG on each comment, by clicking that user gets a
@@ -210,7 +214,10 @@ function eventListenerOnEscapeKey() {
 }
 
 function eventListenerForCommentSortButton() {
-    commentSortBtn = document.querySelector(".sort-by-btn");
+
+    let commentSortBtn = document.querySelector(".sort-by-btn");
+    let sortOptions = document.querySelector(".sort-by-form");
+    
     commentSortBtn.addEventListener("click", function () {
         sortOptions = document.querySelector(".sort-by-form");
         sortOptions.classList.toggle("sort-by-form-active");
