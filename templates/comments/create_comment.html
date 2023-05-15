@@ -5,6 +5,12 @@
         hx-post="{% url 'create_comment' blog.id %}"
         hx-target="#comments"
         hx-swap="innerHTML"
+        {% if request.GET.sort %}
+            hx-push-url="{% url 'blog_detail' blog.id %}?sort={{ request.GET.sort }}"
+        {% else %}
+            hx-push-url="{% url 'blog_detail' blog.id %}"
+        {% endif %}
+        
     >
         {% csrf_token %} {{ create_page_form.as_p }}
         <button

@@ -23,8 +23,12 @@
         <!--For canceling the reply on comment -->
         <button 
             type="reset"
-            {% if request.GET.sort %}
+            {% if request.GET.sort and continue_thread_url%} 
+                hx-get="{{ continue_thread_url }}?sort={{ request.GET.sort }}"
+            {% elif request.GET.sort %}
                 hx-get="{% url 'blog_detail' blog.id %}?sort={{ request.GET.sort }}"
+            {% elif continue_thread_url %}
+                hx-get="{{ continue_thread_url }}"
             {% else %}
                 hx-get="{% url 'blog_detail' blog.id %}"
             {% endif %}

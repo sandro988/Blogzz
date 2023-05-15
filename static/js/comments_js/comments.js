@@ -9,8 +9,6 @@ let commentDeleteBtns; // Delete buttons in options container
 let cancelCommentDeletionBtns;
 let commentDeleteFormBtns; // Delete buttons in delete form
 let commentDeleteOverlay;
-// let commentSortBtn = document.querySelector(".sort-by-btn");
-// let sortOptions = document.querySelector(".sort-by-form");
 
 // In the comment section there are few suggestion comments, they are just buttons
 // that users can click on, after they click them, value of a clicked button
@@ -42,55 +40,6 @@ commentCreationSuggestionTexts.forEach(function (suggestion) {
             commentCreationFormInputField.value = suggestion.value;
         }
     });
-});
-
-// After the comment is submitted the form has to be emptied
-// and suggestion buttons should become white again.
-document.addEventListener("htmx:afterRequest", (e) => {
-    commentCreationFormInputField.value = "";
-    for (let i = 0; i < commentCreationSuggestionTexts.length; i++) {
-        let element = commentCreationSuggestionTexts[i];
-        if (element.classList.contains("chosen-suggestion")) {
-            element.classList.remove("chosen-suggestion");
-        }
-    }
-
-    eventListenerForOptionButtons();
-    eventListenerForDeleteButtons();
-    eventListenerOnEscapeKey();
-
-    // If the HTMX request was initiated by delete button in options container,
-    // we add event listeners to delete and cancel buttons in delete form.
-    if (e.target.classList.contains("delete-comment-btn")) {
-        cancelCommentDeletionBtns = document.querySelector(
-            ".comment-delete-cancel-btn"
-        );
-        commentDeleteFormBtns = document.querySelector(
-            ".form-comment-delete-btn"
-        );
-
-        cancelCommentDeletionBtns.addEventListener("click", function () {
-            commentDeleteModalContainer.classList.remove(
-                "comment-delete-modal-div-active"
-            );
-            commentDeleteOverlay.classList.remove(
-                "delete-comment-overlay-active"
-            );
-        });
-
-        commentDeleteFormBtns.addEventListener("click", function () {
-            commentDeleteModalContainer.classList.remove(
-                "comment-delete-modal-div-active"
-            );
-            commentDeleteOverlay.classList.remove(
-                "delete-comment-overlay-active"
-            );
-        });
-    }
-
-    // if (e.target.classList.contains("comment-reply-btn")) {
-    //     console.log("clicked")
-    // }
 });
 
 // In comment section there is three dot SVG on each comment, by clicking that user gets a
@@ -214,10 +163,9 @@ function eventListenerOnEscapeKey() {
 }
 
 function eventListenerForCommentSortButton() {
-
     let commentSortBtn = document.querySelector(".sort-by-btn");
     let sortOptions = document.querySelector(".sort-by-form");
-    
+
     commentSortBtn.addEventListener("click", function () {
         sortOptions = document.querySelector(".sort-by-form");
         sortOptions.classList.toggle("sort-by-form-active");

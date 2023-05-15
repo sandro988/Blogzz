@@ -92,28 +92,9 @@ window.addEventListener("load", () => {
 document.addEventListener("htmx:beforeRequest", (e) => {
     // In this event listener we are checking if the url where the HTMX request was sent starts with '/home/?page='
     // and if it is we will show the loader and after the masonry is initialized with new blogs we hide the loader.
-    let GETRequest = e.target.getAttribute("hx-get") 
+    let GETRequest = e.target.getAttribute("hx-get");
 
     if (GETRequest && GETRequest.startsWith(infiniteScrollUrl)) {
         loadingIndicator.style.display = "flex";
     }
-});
-
-document.addEventListener("htmx:afterRequest", (e) => {
-    // handling like button clicks
-    if (e.target.closest(".like-button")) {
-        let likeBtn = e.target.closest(".like-button");
-        likeBtn.classList.toggle("heart-active");
-        if (likeBtn.classList.contains("heart-active")) {
-            likeBtn.style.animation = "heartActiveAnimation .5s forwards";
-        } else {
-            likeBtn.style.animation = "none";
-        }
-        return;
-    }
-
-    masonryItems = document.querySelectorAll(".masonry-item");
-    blogThumbnailImages = document.querySelectorAll(".blog-thumbnail-img");
-    let loadThumbnails = imagesLoaded(blogThumbnailImages);
-    loadThumbnails.on("done", onAlways);
 });
