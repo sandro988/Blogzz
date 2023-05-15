@@ -288,15 +288,23 @@
 .upvote-svg,
 .downvote-svg,
 .reply-svg,
-.continue-thread-svg,
-.comment-shrink-btn {
+.continue-thread-svg {
     width: clamp(15px, 2.5vw, 20px);
     height: clamp(15px, 2.5vw, 20px);
     transition: scale 0.15s ease-in-out;
 }
 
+.comment-shrink-btn {
+    width: clamp(15px, 7.5vw, 25px);
+    height: clamp(15px, 7.5vw, 25px);
+    padding: 5px;
+    border-radius: 5px;
+    transition: scale 0.25s ease-in-out, background-color 0.25s ease-in-out;
+}
+
 .comment-shrink-btn path {
     transition: fill 0.15s ease-in-out;
+    fill: black;
 }
 
 .upvote-svg:hover,
@@ -304,6 +312,10 @@
 .comment-shrink-btn:hover {
     scale: 1.2;
     cursor: pointer;
+}
+
+.comment-shrink-btn:hover {
+    background-color: #dfdede;
 }
 
 .upvote-active path,

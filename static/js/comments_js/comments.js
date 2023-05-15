@@ -188,8 +188,7 @@ function handleCommentShrinkButtonClick() {
     let childReply = comment.querySelectorAll(".inner-reply");
     let commentMain = comment.querySelector(".comment-main");
     let commentFooter = comment.querySelector(".comment-footer");
-
-    comment.classList.toggle("comment-shrink-btn-active");
+    this.classList.toggle("comment-shrink-btn-active");
 
     if (childReply) {
         childReply.forEach(function (reply) {
