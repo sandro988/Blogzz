@@ -5,7 +5,11 @@
     hx-target="#comment-list"
     hx-swap="innerHTML"
     {% if not continue_thread_url %}
-        hx-push-url="{% url 'blog_detail' blog.id %}?sort=oldest"
+        {% if request.GET.sort %}
+            hx-push-url="{% url 'blog_detail' blog.id %}?sort={{ request.GET.sort }}"
+        {% else %}
+            hx-push-url="{% url 'blog_detail' blog.id %}"
+        {% endif %}
     {% endif %}
 >
     {% csrf_token %} {{ form.as_p }}
@@ -19,7 +23,11 @@
         <!--For canceling the reply on comment -->
         <button 
             type="reset"
-            hx-get="{% url 'blog_detail' blog.id %}"
+            {% if request.GET.sort %}
+                hx-get="{% url 'blog_detail' blog.id %}?sort={{ request.GET.sort }}"
+            {% else %}
+                hx-get="{% url 'blog_detail' blog.id %}"
+            {% endif %}
             name="comment-reply-cancel-btn" 
             class="comemnt-reply-cancel-btn"
             value="Canceled reply"
