@@ -288,19 +288,26 @@
 .upvote-svg,
 .downvote-svg,
 .reply-svg,
-.continue-thread-svg {
+.continue-thread-svg,
+.comment-shrink-btn {
     width: clamp(15px, 2.5vw, 20px);
     height: clamp(15px, 2.5vw, 20px);
     transition: scale 0.15s ease-in-out;
 }
 
+.comment-shrink-btn path {
+    transition: fill 0.15s ease-in-out;
+}
+
 .upvote-svg:hover,
-.downvote-svg:hover {
+.downvote-svg:hover,
+.comment-shrink-btn:hover {
     scale: 1.2;
     cursor: pointer;
 }
 
-.upvote-active path {
+.upvote-active path,
+.comment-shrink-btn-active path {
     fill: #6a9bee;
 }
 
@@ -454,7 +461,8 @@
     border-radius: 30px;
 }
 
-.upper-placeholder-2, .lower-placeholder-2 {
+.upper-placeholder-2,
+.lower-placeholder-2 {
     width: 100%;
 }
 
@@ -559,5 +567,4 @@
     .empty-comment-footer {
         margin-top: 50px;
     }
-
 }

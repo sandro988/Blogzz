@@ -56,5 +56,6 @@ document.addEventListener("htmx:afterRequest", (e) => {
         eventListenerForOptionButtons();
         eventListenerForDeleteButtons();
         eventListenerOnEscapeKey();
+        eventListenerForCommentShrinkButtons();
     }
 });

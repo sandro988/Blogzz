@@ -9,6 +9,8 @@ let commentDeleteBtns; // Delete buttons in options container
 let cancelCommentDeletionBtns;
 let commentDeleteFormBtns; // Delete buttons in delete form
 let commentDeleteOverlay;
+let commentShrinkBtns;
+let commentShrinkButtonsListenerAdded = false;
 
 // In the comment section there are few suggestion comments, they are just buttons
 // that users can click on, after they click them, value of a clicked button
@@ -172,7 +174,42 @@ function eventListenerForCommentSortButton() {
     });
 }
 
+function eventListenerForCommentShrinkButtons() {
+    commentShrinkBtns = document.querySelectorAll(".comment-shrink-btn");
+    commentShrinkBtns.forEach(function (btn) {
+        btn.addEventListener("click", handleCommentShrinkButtonClick);
+    });
+
+    commentShrinkButtonsListenerAdded = true;
+}
+
+function handleCommentShrinkButtonClick() {
+    let comment = this.closest(".reply");
+    let childReply = comment.querySelectorAll(".inner-reply");
+    let commentMain = comment.querySelector(".comment-main");
+    let commentFooter = comment.querySelector(".comment-footer");
+
+    comment.classList.toggle("comment-shrink-btn-active");
+
+    if (childReply) {
+        childReply.forEach(function (reply) {
+            // Hiding every child replies, a comment can have multiple
+            // nested replies, so we should hide all of them if user clicks
+            // on the shrink button, not just the first one.
+            reply.style.display =
+                reply.style.display === "none" ? "block" : "none";
+        });
+    }
+
+    // Hiding the body of a comment and upvote/downvote/reply buttons
+    commentMain.style.display =
+        commentMain.style.display === "none" ? "block" : "none";
+    commentFooter.style.display =
+        commentFooter.style.display === "none" ? "flex" : "none";
+}
+
 eventListenerForOptionButtons();
 eventListenerForDeleteButtons();
 eventListenerOnEscapeKey();
 eventListenerForCommentSortButton();
+eventListenerForCommentShrinkButtons();
