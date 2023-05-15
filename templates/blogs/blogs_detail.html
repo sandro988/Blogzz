@@ -45,7 +45,7 @@
                         {% include "comments/create_comment.html" %}
                     </div>
                     <div class="comment-list-header">
-                        <h3>{{ blog.comments.count }} Comments</h3>
+                        <h3 id="blog-comments-count" hx-swap-oob="true">{{ blog.comments.count }} Comments</h3>
                         {% include "comments/partials/sort_comments.html" %}
                     </div>
                     <div id="comment-list">

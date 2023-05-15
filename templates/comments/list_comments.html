@@ -24,4 +24,23 @@
         {% endfor %}
     {% endif %}
 
+    
+    <div class="blog-comments-count-container-oob">
+        <!--
+            This container is included here so that when users delete or create a new comment, the comment count increases or decreases.
+            In one of the previous commits I moved out 'comment-list-header' container out from this template and moved it into
+            'blogs_detail.html', so whenever an HTMX request was initiated, the 'BlogDetailView' view returned 'list_comments.html' 
+            which included all of the comments but the comment count stayed the same because it was not a part of the 'list_comments.html'
+            template, but now with the hx-swap-oob attribute we can load comments after a successful HTMX request and update 
+            the comment count header as well.
+            I am also setting the 'visibility' property of the 'blog-comments-count-container-oob' container to hidden in 'comments.css', 
+            so that when users initially go to the blog detail page there is no second comment count header at the bottom of the comments.
+        -->
+        <h3 
+            id="blog-comments-count" 
+            hx-swap-oob="true"
+        >
+            {{ blog.comments.count }} Comments
+        </h3>
+    </div>
 </div>
