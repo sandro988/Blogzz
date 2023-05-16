@@ -10,14 +10,16 @@ let cancelCommentDeletionBtns;
 let commentDeleteFormBtns; // Delete buttons in delete form
 let commentDeleteOverlay;
 let commentShrinkBtns;
+let readContentBtns;
 let commentShrinkButtonsListenerAdded = false;
-
-// In the comment section there are few suggestion comments, they are just buttons
-// that users can click on, after they click them, value of a clicked button
-// will be inputted in the comment form and users can submit this new comment,
-// basically this suggestions are like shortcuts for creating comments.
+let showMoreOrLessContentButtonListenerAdded = false;
 
 commentCreationSuggestionTexts.forEach(function (suggestion) {
+    // In the comment section there are few suggestion comments, they are just buttons
+    // that users can click on, after they click them, value of a clicked button
+    // will be inputted in the comment form and users can submit this new comment,
+    // basically this suggestions are like shortcuts for creating comments.
+
     suggestion.addEventListener("click", function () {
         for (let i = 0; i < commentCreationSuggestionTexts.length; i++) {
             let element = commentCreationSuggestionTexts[i];
@@ -44,12 +46,12 @@ commentCreationSuggestionTexts.forEach(function (suggestion) {
     });
 });
 
-// In comment section there is three dot SVG on each comment, by clicking that user gets a
-// container with edit and delete buttons and in this function i am adding event listeners
-// to all those SVG's, this function will also be rerun after the successful HTMX request(
-// when users edit their comments, delete them, reply and etc).
-
 function eventListenerForOptionButtons() {
+    // In comment section there is three dot SVG on each comment, by clicking that user gets a
+    // container with edit and delete buttons and in this function i am adding event listeners
+    // to all those SVG's, this function will also be rerun after the successful HTMX request(
+    // when users edit their comments, delete them, reply and etc).
+
     commentOptionsBtn = document.querySelectorAll(
         ".comment-options-div-trigger"
     );
@@ -64,12 +66,11 @@ function eventListenerForOptionButtons() {
     });
 }
 
-// if the container for delete and edit buttons is visible, it should disappear if user clicks
-// on any other container on a page other than the ones that have classname of "prevent-propagation"
-
 document.addEventListener("mousedown", (e) => {
-    // For comment options container
+    // if the container for delete and edit buttons is visible, it should disappear if user clicks
+    // on any other container on a page other than the ones that have classname of "prevent-propagation"
 
+    // For comment options container
     if (e.target.classList.contains("prevent-propagation")) {
         e.stopPropagation();
     } else {
@@ -83,7 +84,6 @@ document.addEventListener("mousedown", (e) => {
     }
 
     // For comment delete modal
-
     if (
         e.target.classList.contains("prevent-propagation-for-comment-deletion")
     ) {
@@ -207,8 +207,47 @@ function handleCommentShrinkButtonClick() {
         commentFooter.style.display === "none" ? "flex" : "none";
 }
 
+function eventListenerForShowMoreOrLessButtons() {
+    // If the comment has more than 300 words, the comment will be shortened to 250 words and
+    // 'Show more button will appear after the comment by clicking on it the user will be able to
+    // see a full comment, also after clicking the 'Show more' button there will appear 'Show less'
+    // button so that users can toggle between full comment content and short comment content.
+    // This is done so that comments with too many words in them don't take extra space and so that
+    // users won't have to scroll too much to see other comments.
+
+    showContentBtns = document.querySelectorAll(".show-content-btn");
+    showContentBtns.forEach(function (btn) {
+        if (btn.classList.contains("show-more-btn")) {
+            btn.addEventListener("click", handleShowMoreButtonClick);
+        } else if (btn.classList.contains("show-less-btn")) {
+            btn.addEventListener("click", handleShowLessButtonClick);
+        }
+    });
+
+    showMoreOrLessContentButtonListenerAdded = true;
+}
+
+function handleShowMoreButtonClick() {
+    let content = this.closest(".comment-content");
+    let shortContent = content.querySelector(".short-content");
+    let fullContent = content.querySelector(".full-content");
+
+    shortContent.style.display = "none";
+    fullContent.style.display = "block";
+}
+
+function handleShowLessButtonClick() {
+    let content = this.closest(".comment-content");
+    let shortContent = content.querySelector(".short-content");
+    let fullContent = content.querySelector(".full-content");
+
+    shortContent.style.display = "block";
+    fullContent.style.display = "none";
+}
+
 eventListenerForOptionButtons();
 eventListenerForDeleteButtons();
 eventListenerOnEscapeKey();
 eventListenerForCommentSortButton();
 eventListenerForCommentShrinkButtons();
+eventListenerForShowMoreOrLessButtons();

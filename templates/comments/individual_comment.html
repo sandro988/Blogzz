@@ -58,9 +58,30 @@
     </div>
     <div class="comment-main">
         <!-- Body of the comment -->
-        <p id="comment-{{ comment.id }}" class="comment-{{ comment.id }} comment-body">
-            {{ comment.comment_body }}
-        </p>
+        {% if comment.comment_body|wordcount > 300 %}
+            <div class="comment-content">
+                <div class="short-content">
+                    <p id="comment-{{ comment.id }}" class="comment-{{ comment.id }} comment-body">
+                        {{ comment.comment_body|truncatewords_html:250 }}
+                        <span class="show-more">
+                            <button class="show-more-btn show-content-btn">Show More</button>
+                        </span>
+                    </p>
+                </div>
+                <div class="full-content" style="display: none;">
+                    <p id="comment-{{ comment.id }}" class="comment-{{ comment.id }} comment-body">
+                        {{ comment.comment_body }}
+                        <span class="show-less">
+                            <button class="show-less-btn show-content-btn">Show less</button>
+                        </span>
+                    </p>
+                </div>
+            </div>
+        {% else %}
+            <p id="comment-{{ comment.id }}" class="comment-{{ comment.id }} comment-body">
+                {{ comment.comment_body }}
+            </p>
+        {% endif %}
     </div>
     <div class="comment-footer">
         {% include "comments/upvote_downvote_comment.html" %}

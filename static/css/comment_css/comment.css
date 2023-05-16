@@ -250,9 +250,27 @@
 }
 
 .comment-body {
-    font-size: clamp(14px, 1vw, 22px);
+    font-size: clamp(14px, 0.8vw, 22px);
     margin: 10px 0;
     line-height: 22px;
+}
+
+.short-content,
+.full-content {
+    display: inline;
+}
+
+.show-content-btn {
+    outline: none;
+    border: none;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: clamp(14px, 0.8vw, 24px);
+    text-decoration: underline;
+}
+
+.show-content-btn:hover {
+    cursor: pointer;
 }
 
 .upvote-downvote-container,
@@ -287,8 +305,7 @@
 
 .upvote-svg,
 .downvote-svg,
-.reply-svg,
-.continue-thread-svg {
+.reply-svg {
     width: clamp(15px, 2.5vw, 20px);
     height: clamp(15px, 2.5vw, 20px);
     transition: scale 0.15s ease-in-out;
@@ -366,25 +383,6 @@
 
 .comment-delete-btns {
     margin-top: 50px;
-}
-
-.continue-thread-btn {
-    display: flex;
-    align-items: center;
-    color: #3f9ade;
-    text-decoration: none;
-    font-size: clamp(14px, 0.9vw, 18px);
-    width: max-content;
-    transition: border-bottom 0.15s ease-in-out;
-    margin: 10px 0 0 0;
-}
-
-.continue-thread-btn:hover {
-    border-bottom: 1px solid #3f9ade;
-}
-
-.continue-thread-svg path {
-    fill: #3f9ade;
 }
 
 .skeleton-placeholder {
@@ -559,6 +557,42 @@
     visibility: hidden;
 }
 
+.back-to-main-thread-btn,
+.continue-thread-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none;
+    color: black;
+    background-color: #dfdede;
+    padding: 5px 15px;
+    margin: 10px 0;
+    width: max-content;
+    border-radius: 50px;
+    font-size: clamp(14px, 0.7vw, 16px);
+    transition: background-color 0.15s ease-in-out;
+}
+
+.continue-thread-btn {
+    justify-content: center;
+    padding: 5px 10px;
+    border-radius: 0;
+    margin: 10px auto;
+    width: 100%;
+}
+
+.back-to-main-thread-btn svg,
+.continue-thread-btn svg {
+    width: clamp(15px, 0.9vw, 25px);
+    height: clamp(15px, 0.9vw, 25px);
+}
+
+.back-to-main-thread-btn:hover,
+.continue-thread-btn:hover {
+    cursor: pointer;
+    background-color: #d3d3d3;
+}
+
 @media only screen and (min-width: 767px) and (max-width: 1100px) {
     .inner-reply {
         margin-left: 20px !important;
@@ -578,5 +612,10 @@
 
     .empty-comment-footer {
         margin-top: 50px;
+    }
+
+    .continue-thread-btn {
+        margin: 10px 0;
+        width: max-content;
     }
 }
