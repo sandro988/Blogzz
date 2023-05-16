@@ -165,7 +165,7 @@
 }
 
 .user-info {
-    gap: 10px;
+    gap: clamp(7px, 1vw, 10px);
     flex-wrap: wrap;
 }
 
@@ -591,6 +591,15 @@
 .continue-thread-btn:hover {
     cursor: pointer;
     background-color: #d3d3d3;
+}
+
+.original-poster-span {
+    color: #6a9bee;
+    font-weight: bold;
+    font-size: clamp(12px, .7vw, 14px) !important;
+    font-family: sans-serif;
+    line-height: 16px;
+    align-self: center;
 }
 
 @media only screen and (min-width: 767px) and (max-width: 1100px) {
