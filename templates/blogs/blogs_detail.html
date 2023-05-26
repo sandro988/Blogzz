@@ -20,7 +20,28 @@
     <main class="blog-detail-container" id="blog-detail-container">
         <div class="blog-detail">
             <div class="blog-detail-header">
-                <h1>{{ blog.blog_title }}</h1>
+                <div class="blog-detail-header-title">
+                    <h1>{{ blog.blog_title }}</h1>
+                    <div class="blog-options-div prevent-blog-propagation">
+                        {% if request.user == blog.author %}
+                            <svg class="blog-options-div-trigger {{ blog.id }} trigger-{{ blog.id }} prevent-blog-propagation" xmlns="http://www.w3.org/2000/svg" fill="#000000" viewBox="0 0 256 256"><path class="prevent-blog-propagation" d="M156,128a28,28,0,1,1-28-28A28,28,0,0,1,156,128ZM128,76a28,28,0,1,0-28-28A28,28,0,0,0,128,76Zm0,104a28,28,0,1,0,28,28A28,28,0,0,0,128,180Z"></path></svg>
+                            <div class="blog-options-div-buttons options-div-id-{{ blog.id }} prevent-blog-propagation">
+                                <a
+                                    class="edit-blog-btn prevent-blog-propagation"
+                                    href="{% url 'update_blog' blog.id %}"
+                                >
+                                    Edit
+                                </a> 
+                                <a
+                                    class="delete-blog-btn prevent-blog-propagation"
+                                    href="{% url 'delete_blog' blog.id %}"
+                                >
+                                    Delete
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
                 <div>
                     <a href="/" class="blog-author-info">
                         <img 
@@ -105,5 +126,6 @@
 {% block js %}
     <script src="{% static 'js/htmx.js' %}" type="text/javascript"></script>
     <script src="{% static 'js/blogs_js/blogs.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/blogs_js/detail_blog.js' %}" type="text/javascript"></script>
     <script src="{% static 'js/comments_js/comments.js' %}" type="text/javascript"></script>
 {% endblock js%}

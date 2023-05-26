@@ -16,12 +16,12 @@
         </div>
 
         <!-- Edit and delete buttons that will be seen only by the comment authors.-->
-        <div class="comment-options-div prevent-propagation">
+        <div class="comment-options-div prevent-comment-propagation">
             {% if request.user == comment.comment_author %}
-                <svg class="comment-options-div-trigger {{ comment.id }} trigger-{{ comment.id }} prevent-propagation" xmlns="http://www.w3.org/2000/svg" fill="#000000" viewBox="0 0 256 256"><path class="prevent-propagation" d="M156,128a28,28,0,1,1-28-28A28,28,0,0,1,156,128ZM128,76a28,28,0,1,0-28-28A28,28,0,0,0,128,76Zm0,104a28,28,0,1,0,28,28A28,28,0,0,0,128,180Z"></path></svg>
-                <div class="comment-options-div-buttons options-div-id-{{ comment.id }} prevent-propagation">
+                <svg class="comment-options-div-trigger {{ comment.id }} trigger-{{ comment.id }} prevent-comment-propagation" xmlns="http://www.w3.org/2000/svg" fill="#000000" viewBox="0 0 256 256"><path class="prevent-comment-propagation" d="M156,128a28,28,0,1,1-28-28A28,28,0,0,1,156,128ZM128,76a28,28,0,1,0-28-28A28,28,0,0,0,128,76Zm0,104a28,28,0,1,0,28,28A28,28,0,0,0,128,180Z"></path></svg>
+                <div class="comment-options-div-buttons options-div-id-{{ comment.id }} prevent-comment-propagation">
                     <button 
-                        class="edit-comment-btn prevent-propagation"
+                        class="edit-comment-btn prevent-comment-propagation"
                         {% if request.GET.sort %}
                             hx-get="{% url 'update_comment' comment.id %}?sort={{ request.GET.sort }}"
                         {% else %}
@@ -41,7 +41,7 @@
                         name parameter can either be a full url path or a None, in case it is none we will redirect users to blog detail view.
                     -->
                     <button 
-                        class="delete-comment-btn prevent-propagation"
+                        class="delete-comment-btn prevent-comment-propagation"
                         {% if request.GET.sort %}
                             hx-get="{% url 'delete_comment' comment.id %}?sort={{ request.GET.sort }}"
                         {% else %}

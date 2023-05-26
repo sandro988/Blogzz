@@ -71,7 +71,7 @@ document.addEventListener("mousedown", (e) => {
     // on any other container on a page other than the ones that have classname of "prevent-propagation"
 
     // For comment options container
-    if (e.target.classList.contains("prevent-propagation")) {
+    if (e.target.classList.contains("prevent-comment-propagation")) {
         e.stopPropagation();
     } else {
         let activeOptions = document.querySelectorAll(
@@ -81,6 +81,17 @@ document.addEventListener("mousedown", (e) => {
         activeOptions.forEach(function (optionDiv) {
             optionDiv.classList.remove("comment-options-div-buttons-active");
         });
+    }
+
+    // For blog options container
+    if (e.target.classList.contains("prevent-blog-propagation")) {
+        e.stopPropagation();
+    } else {
+        let activeOption = document.querySelector(
+            ".blog-options-div-buttons-active"
+        );
+
+        activeOption.classList.remove("blog-options-div-buttons-active");
     }
 
     // For comment delete modal
