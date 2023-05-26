@@ -1,5 +1,6 @@
 {% extends 'blogs/list_blog.html' %}
 {% load static %}
+{% load comment_extras %}
 {% block title %}Blogzz | {{ blog.blog_title }}{% endblock title %}
 
 {% block css %}
@@ -22,6 +23,16 @@
             <div class="blog-detail-header">
                 <div class="blog-detail-header-title">
                     <h1>{{ blog.blog_title }}</h1>
+                </div>
+                <div class="blog-author-info-container">
+                    <a href="/" class="blog-author-info">
+                        <img 
+                        class="blog-author-img skeleton-placeholder"
+                        src="{{ request.user.get_profile_picture }}" 
+                        alt="{{ request.user }}'s profile image">
+                        <p>@{{ blog.author }}</p>
+                    </a>
+                    &bull; <small>{{ blog.blog_created|custom_timesince }}</small>
                     <div class="blog-options-div prevent-blog-propagation">
                         {% if request.user == blog.author %}
                             <svg class="blog-options-div-trigger {{ blog.id }} trigger-{{ blog.id }} prevent-blog-propagation" xmlns="http://www.w3.org/2000/svg" fill="#000000" viewBox="0 0 256 256"><path class="prevent-blog-propagation" d="M156,128a28,28,0,1,1-28-28A28,28,0,0,1,156,128ZM128,76a28,28,0,1,0-28-28A28,28,0,0,0,128,76Zm0,104a28,28,0,1,0,28,28A28,28,0,0,0,128,180Z"></path></svg>
@@ -42,21 +53,58 @@
                         {% endif %}
                     </div>
                 </div>
-                <div>
-                    <a href="/" class="blog-author-info">
-                        <img 
-                        class="blog-author-img skeleton-placeholder"
-                        src="{{ request.user.get_profile_picture }}" 
-                        alt="{{ request.user }}'s profile image">
-                        <p>@{{ blog.author }}</p>
-                    </a>
-                </div>
-                <small>Published {{ blog.blog_created|timesince }} ago</small>
             </div>
             
             <div class="blog-detail-main">
                 <div class="blog-detail-body">
                     {{ blog.blog_body.html | safe}}
+                </div>
+            </div>
+
+            <div class="blog-footer">
+                <div class="likes-div">
+                    <form method="POST" class="likes-form">
+                        {% csrf_token %}
+                        <button
+                            aria-label="like-button"
+                            class="like-button {% if request.user in blog.blog_likes.all %}heart-active{% endif %}"
+                            hx-post="{% url 'like_blog' blog.id %}"
+                            hx-target="#like_count-{{ blog.pk }}"
+                            hx-swap="innerHTML"
+                        >
+                            <svg
+                                class="ph-heart"
+                                viewBox="0 0 32 32"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    d="M22 4C20.8357 4 19.6873 4.27109 18.6459 4.7918C17.6045 5.3125 16.6986 6.06853 16 7C15.0555 5.74071 13.7388 4.8105 12.2363 4.34115C10.7337 3.8718 9.12163 3.8871 7.62829 4.38488C6.13495 4.88266 4.83609 5.83768 3.91568 7.11467C2.99528 8.39166 2.5 9.92588 2.5 11.5C2.5 20.4875 14.9875 27.575 15.5125 27.875C15.6613 27.9586 15.8294 28.0017 16 28C16.1708 28.0029 16.3392 27.9597 16.4875 27.875C18.7871 26.5306 20.944 24.9559 22.925 23.175C27.2875 19.25 29.5 15.325 29.5 11.5C29.5 9.51088 28.7098 7.60322 27.3033 6.1967C25.8968 4.79018 23.9891 4 22 4V4Z"
+                                    fill="black"
+                                />
+                            </svg>
+                        </button>
+    
+                        <span id="like_count-{{ blog.pk }}" class="likes-count"
+                            >{{ blog.blog_likes_count }}</span
+                        >
+                    </form>
+                </div>
+
+                <div class="comments-count-div">
+                    <a href="#comments">
+                        <svg class="ph-comment" xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="#000000" viewBox="0 0 256 256"><path d="M128,28A100,100,0,0,0,40.53,176.5l-11.9,35.69a12,12,0,0,0,15.18,15.18l35.69-11.9A100,100,0,1,0,128,28Zm0,192a92,92,0,0,1-46.07-12.35,4.05,4.05,0,0,0-2-.54,3.93,3.93,0,0,0-1.27.21L41.28,219.78a4,4,0,0,1-5.06-5.06l12.46-37.38a4,4,0,0,0-.33-3.27A92,92,0,1,1,128,220Z"></path></svg>
+                        <span id="blog-comments-svg-counter" class="blog-comments-count">{{ blog.comments.count }}</span>
+                    </a>
+                </div>
+
+                <div class="category-and-read-time-container">
+                    <div class="blog-category">
+                        <a href="{% url 'home' %}?q={{ blog.blog_category_foreignkey }}">{{ blog.blog_category_foreignkey }}</a>
+                    </div>
+                    <div class="blog-read-time">
+                        <p class="read-time">{{ blog.reading_time }}</p>
+                    </div>
                 </div>
             </div>
             

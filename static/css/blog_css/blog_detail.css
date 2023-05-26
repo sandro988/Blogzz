@@ -1,3 +1,8 @@
+html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+}
+
 @font-face {
     font-family: "Limelight";
     src: url("/static/fonts/Limelight-Regular.woff2") format("woff2");
@@ -20,8 +25,15 @@ aside {
 
 .blog-detail-header small {
     margin: 10px 0;
-    display: block;
     font-size: clamp(0.8rem, 1.5vw, 1.2rem);
+    color: gray;
+}
+
+.blog-author-info-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative !important;
 }
 
 .blog-detail-header {
@@ -111,6 +123,20 @@ h1 {
     padding: 15px;
     border-radius: 10px;
     font-size: clamp(1rem, 1vw, 1.4rem);
+    overflow: scroll;
+}
+
+.ql-syntax::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.3);
+}
+
+.ql-syntax::-webkit-scrollbar {
+    width: 6px;
+    background-color: #f5f5f5;
+}
+
+.ql-syntax::-webkit-scrollbar-thumb {
+    background-color: #a6a6a6;
 }
 
 .ql-align-center {
@@ -150,6 +176,10 @@ h1 {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.blog-options-div {
+    margin-left: auto;
 }
 
 .blog-options-div-trigger {
@@ -216,6 +246,123 @@ h1 {
         opacity: 1;
         scale: 1;
     }
+}
+
+.blog-footer {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    margin-top: 50px;
+}
+
+.likes-form {
+    width: max-content;
+    gap: 5px;
+    padding: 2.5px 7.5px;
+    border-radius: 7.5px;
+    transition: 0.25s color ease-in-out, 0.25s background-color ease-in-out;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.likes-count {
+    font-size: clamp(14px, 1.1vw, 1.3rem);
+}
+
+.ph-heart,
+.ph-comment {
+    width: clamp(1.2rem, 1.5vw, 2.2rem);
+    height: clamp(1.2rem, 1.5vw, 1.7rem);
+    transition: all 0.25s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.like-button {
+    width: max-content;
+    height: max-content;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    transition: all 0.25s ease-in-out;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.likes-div:hover,
+.likes-count:hover {
+    cursor: default;
+}
+
+.like-button:hover,
+.comments-count-div a svg:hover {
+    cursor: pointer;
+    scale: 1.25;
+}
+
+.heart-active path {
+    fill: #e755af;
+}
+
+@keyframes heartActiveAnimation {
+    33.3% {
+        transform: scale(0.5);
+    }
+    66.6% {
+        transform: scale(1.5);
+    }
+    100% {
+        transform: 1;
+    }
+}
+
+.comments-count-div a {
+    text-decoration: none;
+    color: black;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.25s ease-in-out;
+}
+
+.category-and-read-time-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+}
+
+.blog-read-time,
+.blog-category a {
+    padding: 10px 15px;
+    background-color: #dedede;
+    border-radius: 50px;
+    color: rgb(69, 69, 69);
+}
+
+.blog-category {
+    transition: 0.15s scale ease-in-out, 0.15s background-color ease-in-out;
+}
+
+.blog-category a {
+    text-align: center;
+    width: max-content;
+    text-decoration: none;
+}
+
+.blog-category:hover {
+    scale: 1.1;
+    cursor: pointer;
+}
+
+.blog-category:hover a {
+    background-color: #cfcece;
+}
+
+.blog-comments-count-svg-counter-oob {
+    visibility: hidden;
 }
 
 @media only screen and (min-width: 767px) and (max-width: 1100px) {
